@@ -1,0 +1,31 @@
+
+<template name="insertVolunteerForm">
+  {{> quickForm collection="VolunteerForm"
+    id="insertVolunteerForm" type="method" meteormethod="Volunteer.addForm"}}
+</template>
+
+<template name="updateVolunteerForm">
+  {{> quickForm id="updateVolunteerForm"
+    collection="VolunteerForm" type="method-update"
+    meteormethod="Volunteer.updateForm" doc=this}}
+</template>
+
+<template name="volunteerList">
+  {{#if isVolunteer}}
+  {{_ "tasks"}}
+    <p>{{_ "volunteer_wait_for_task"}}</p>
+  <table class="table table-hover">
+    <thead>
+      <tr><th>{{_ "task"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th></tr>
+    </thead>
+    <tbody>
+      {{#each accepted}}
+        <tr><td>{{task}}</td><td>{{timeslot}}</td><td>{{area}}</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+    <p>{{_ "create_volunteer_profile"}}</p>
+  {{/if}}
+
+</template>

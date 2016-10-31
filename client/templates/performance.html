@@ -1,0 +1,69 @@
+
+<template name="insertPerformanceForm">
+  {{#autoForm id="insertPerformanceForm"
+    collection="PerformanceForm" type="method" meteormethod="Performance.addForm" }}
+    <fieldset>
+      {{> afQuickField name="title" }}
+      {{> afQuickField name="ptype" }}
+      {{#if afFieldValueIs name="ptype" value="group"}}
+        {{> afQuickField name="people"}}
+      {{/if}}
+      {{#each afFieldNames omitFields="title,ptype,people"}}
+        {{> afQuickField name=this.name options=afOptionsFromSchema}}
+      {{/each}}
+    </fieldset>
+    <button type="submit" class="btn btn-primary">{{_ "insert"}}</button>
+  {{/autoForm}}
+</template>
+
+<template name="updatePerformanceForm">
+  {{#autoForm id="updatePerformanceForm"
+    collection="PerformanceForm" doc=this
+    type="method-update" meteormethod="Performance.updateForm" }}
+    <fieldset>
+      {{> afQuickField name="title" }}
+      {{> afQuickField name="ptype" }}
+      {{#if afFieldValueIs name="ptype" value="group"}}
+        {{> afQuickField name="people"}}
+      {{/if}}
+      {{#each afFieldNames omitFields="title,ptype,people"}}
+        {{> afQuickField name=this.name options=afOptionsFromSchema}}
+      {{/each}}
+    </fieldset>
+    <button type="submit" class="btn btn-primary">{{_ "update"}}</button>
+  {{/autoForm}}
+</template>
+
+<template name="performanceList">
+  {{_ "accepted"}}
+  <table class="table table-hover">
+    <thead>
+      <tr><th>{{_ "task"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th></tr>
+    </thead>
+    <tbody>
+      {{#each accepted}}
+        <tr><td>{{task}}</td><td>{{timeslot}}</td><td>{{area}}</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{_ "proposed"}}
+  <table class="table table-hover">
+    <thead>
+      <tr><th>{{_ "title"}}</th><th>{{_ "submitted"}}</th><th>{{_ "status"}}</th><th>{{_ "action"}}</th></tr>
+    </thead>
+    <tbody>
+      {{#each pending}}
+        <tr>
+          <td>{{title}}</td>
+          <td>{{createdAt}}</td>
+          <td>??</td>
+          <td>
+            <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
+            <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>

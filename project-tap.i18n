@@ -1,0 +1,4 @@
+{
+    "supported_languages": ["en","fr"],
+    "preloaded_langs": ["*"]
+}
