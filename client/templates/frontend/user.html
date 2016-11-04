@@ -1,0 +1,56 @@
+<template name="userDashboard">
+  <div class="container-fluid main-container">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="list-group">
+          <div class="list-group-item">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <a href="#" data-template="userProfile">{{_ "profile"}}</a>
+          </div>
+          <div class="list-group-item">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <a href="#" data-template="volunteerList">{{_ "volunteering"}}</a>
+              {{#if isVolunteer}}
+                <div class="badge">
+                  <i data-action="updateVolunteerForm"
+                    class="fa fa-pencil" aria-hidden="true"></i>
+                </div>
+                <div class="badge">
+                  <i data-action="removeVolunteerForm"
+                    class="fa fa-trash" aria-hidden="true"></i>
+                </div>
+              {{else}}
+                <span class="badge">
+                  <i data-action="insertVolunteerForm"
+                    class="fa fa-plus-square" aria-hidden="true"></i>
+                </span>
+              {{/if}}
+          </div>
+          <div class="list-group-item">
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <a href="#" data-template="performanceList">{{_ "performance"}}</a>
+            <span class="badge">
+              <i data-action="insertPerformanceForm"
+                class="fa fa-plus-square" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 content">
+          <div class="panel panel-default">
+            <h1>{{title}}</h1>
+            <div class="panel-body">
+              {{> Template.dynamic template=tab.template data=tab.data}}
+              {{ content}}
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="userProfile">
+  {{> quickForm id="userProfileForm"
+    collection="Meteor.users" doc=this
+    type="update" fields="profile" }}
+</template>

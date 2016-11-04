@@ -34,3 +34,8 @@ Template.userDashboard.events
     # updateActive(event)
     currentTab = $(event.target)
     Session.set "currentTab", {template: currentTab.data('template')}
+
+AutoForm.hooks
+  userProfileForm:
+    onSuccess: () ->
+      Router.go('userDashboard')

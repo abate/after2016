@@ -18,9 +18,25 @@ Router.route '/profile',
       Meteor.users.findOne(Meteor.userId())
 
 Router.route '/dashboard',
-  name: 'dashboard'
+  name: 'userDashboard'
   controller: 'UserController'
   template: 'userDashboard'
+  waitOn: () -> [
+    Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('volunteerResource'),
+    Meteor.subscribe('volunteerForm')
+  ]
+
+Router.route '/admin/translations',
+  name: 'translations'
+  controller: 'AdminController'
+  template: 'translations'
+
+Router.route '/admin/performance',
+  name: 'performanceBackend'
+  controller: 'AdminController'
+  template: 'performanceBackend'
   waitOn: () -> [
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),

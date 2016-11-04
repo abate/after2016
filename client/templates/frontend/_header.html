@@ -21,15 +21,15 @@
                 data-toggle="dropdown" role="button"
                 aria-haspopup="true" aria-expanded="false">{{_ "admin"}}<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li class="{{isActiveRoute 'volunteers'}}">
-                  <a href="{{pathFor 'volunteers'}}">{{_ "volunteers"}}</a>
+                <li class="{{isActiveRoute 'volunteerBackend'}}">
+                  <a href="{{pathFor 'volunteerBackend'}}">{{_ "volunteers"}}</a>
                 </li>
-          		  <li class="{{isActiveRoute 'performances'}}">
-                  <a href="{{pathFor 'performances'}}">{{_ "performances"}}</a>
+          		  <li class="{{isActiveRoute 'performanceBackend'}}">
+                  <a href="{{pathFor 'performanceBackend'}}">{{_ "performances"}}</a>
                 </li>
                 <li role="separator" class="divider"></li>
-                <li class="{{isActiveRoute 'all_users'}}">
-                  <a href="{{pathFor 'all_users'}}">{{_ "all_users"}}</a>
+                <li class="{{isActiveRoute 'usersBackend'}}">
+                  <a href="{{pathFor 'usersBackend'}}">{{_ "all_users"}}</a>
                 </li>
                 <li class="{{isActiveRoute 'translations'}}">
                   <a href="{{pathFor 'translations'}}">{{_ "translations"}}</a>

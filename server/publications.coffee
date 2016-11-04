@@ -20,4 +20,7 @@ Meteor.publish 'performanceResource', () ->
   if Roles.userIsInRole(this.userId, [ 'manager' ])
     PerformanceResource.find()
   else
-    PerformanceResource.find()#{$elemMatch: {people: this.userId}})
+    PerformanceResource.find({userId: this.userId})
+
+Meteor.publish 'settings', () ->
+  Settings.find()

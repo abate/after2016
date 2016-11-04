@@ -19,7 +19,7 @@
 <template name="updatePerformanceForm">
   {{#autoForm id="updatePerformanceForm"
     collection="PerformanceForm" doc=this
-    type="method-update" meteormethod="Performance.updateForm" }}
+    type="method-update" meteormethod="Performance.updateForm" preserveForm=false resetOnSuccess=false }}
     <fieldset>
       {{> afQuickField name="title" }}
       {{> afQuickField name="ptype" }}
@@ -38,11 +38,20 @@
   {{_ "accepted"}}
   <table class="table table-hover">
     <thead>
-      <tr><th>{{_ "task"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th></tr>
+      <tr><th>{{_ "title"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th><th>{{_ "contact"}}</th><th>{{_ "action"}}</th></tr>
     </thead>
     <tbody>
       {{#each accepted}}
-        <tr><td>{{task}}</td><td>{{timeslot}}</td><td>{{area}}</td></tr>
+        <tr>
+          <td>{{performanceTitle performanceId}}</td>
+          <td>{{timeslot}}</td>
+          <td>{{area}}</td>
+          <td>areaRef</td>
+          <td>
+            <i data-id={{performanceId}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
+            <i data-id={{_id}} data-action="bailout" class="fa fa-trash" aria-hidden="true"></i>
+          </td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
@@ -53,17 +62,20 @@
       <tr><th>{{_ "title"}}</th><th>{{_ "submitted"}}</th><th>{{_ "status"}}</th><th>{{_ "action"}}</th></tr>
     </thead>
     <tbody>
-      {{#each pending}}
+      {{#each proposed}}
         <tr>
           <td>{{title}}</td>
           <td>{{createdAt}}</td>
-          <td>??</td>
+          <td>{{status}}</td>
           <td>
-            <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
-            <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
+            {{#if $neq status "bailedout"}}
+              <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
+              <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
+            {{/if}}
           </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
+
 </template>

@@ -1,9 +1,10 @@
 
-BaseController = RouteController.extend(onAfterAction: ->
-  routeName = Router.current().route.getName()
-  $('.nav-active').removeClass 'nav-active'
-  selector = '.nav a[href="/' + routeName + '"]'
-  $(selector).addClass 'nav-active'
+BaseController = RouteController.extend(
+# onAfterAction: ->
+  # routeName = Router.current().route.getName()
+  # $('.nav-active').removeClass 'nav-active'
+  # selector = '.nav a[href="/' + routeName + '"]'
+  # $(selector).addClass 'nav-active'
 )
 
 @AnonymousController = BaseController.extend(
@@ -12,7 +13,9 @@ BaseController = RouteController.extend(onAfterAction: ->
   # waitOn: -> [ ]
 )
 
-AuthenticatedController = AnonymousController.extend()
+AuthenticatedController = AnonymousController.extend(
+  waitOn: -> [ Meteor.subscribe('settings') ]
+)
 @UserController = AuthenticatedController.extend(
   # onAfterAction: ->
 )
@@ -21,11 +24,11 @@ UserController.events 'click [data-action=logout]': ->
   AccountsTemplates.logout()
 
 @AdminController = AuthenticatedController.extend(
-  onBeforeAction: ->
-    if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
-      @next()
-    else
-      @render 'notFound'
+  # onBeforeAction: ->
+  #   if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+  #     @next()
+  #   else
+  #     @render 'notFound'
   # waitOn: ->
   #   userId = Meteor.userId()
   #   if userId [ ]

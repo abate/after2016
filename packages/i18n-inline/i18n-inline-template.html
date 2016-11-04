@@ -1,0 +1,62 @@
+<template name="tr">
+  {{#if enabled }}
+    {{#if edit_translation}}
+      <form class="i18n-form">
+        <input type="hidden" name="id" value={{lang._id}}>
+        <input type="hidden" name="key" value={{lang.key}}>
+        {{#each lang.tr}}
+        <fieldset>
+          <div class="form-group">
+            <label for="{{tag}}">{{name}}</label>
+            <textarea rows="1" class="form-control" name={{tag}} data-tag={{tag}}>{{tr}}
+            </textarea>
+          </div>
+        </fieldset>
+        {{/each}}
+        <button type="submit" class="btn btn-primary">{{_ "submit"}}</button>
+        <button type="cancel" class="btn btn-primary">{{_ "cancel"}}</button>
+      </form>
+    {{else}}
+      {{translation this}}
+      <a data-action="edit">
+        <i class="fa fa-edit" title="{{_ "Edit Translation"}}"></i>
+      </a>
+    {{/if}}
+  {{else}}
+    {{_ this}}
+  {{/if}}
+</template>
+
+<template name="translations">
+  <form class="i18n-translations-form">
+    <button type="submit" class="btn btn-primary">{{_ "submit"}}</button>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <!-- <thead><tr><th>Language</th><th>Text</th></tr></thead> -->
+        {{#each translations}}
+          <tbody>
+            <tr class={{#if complete}}bg-success{{else}}bg-warning{{/if}} data-action="toggle">
+              <td colspan="2">{{key}} - {{path}}
+                <a data-action="remove">
+                  <i class="fa fa-trash" data-key="{{key}}" title="{{_ "Remove Key"}}"></i>
+                </a>
+                <!-- <i class="fa fa-expand" aria-hidden="true"></i> -->
+              </td>
+            </tr>
+            {{#each tr}}
+              <tr style="display: none">
+                <td>{{tag}}</td>
+                <td>
+                  <textarea rows="2" type="text" class="form-control"
+                    data-key="{{../key}}" data-tag="{{tag}}" data-id="{{../_id}}">{{tr}}
+                  </textarea>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        {{/each}}
+      </table>
+    </div>
+    <button type="submit" class="btn btn-primary">{{_ "submit"}}</button>
+  </form>
+</template>
