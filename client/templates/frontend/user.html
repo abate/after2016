@@ -22,11 +22,15 @@
             <a href="#" data-template="performanceList">{{_ "performance"}}</a>
             <span class="badge">{{fa "plus-square" "insertPerformanceForm"}}</span>
           </div>
+          <div class="list-group-item">
+            {{fa "question" ""}}
+            <a href="#" data-template="userHelp">{{_ "help"}}</a>
+          </div>
         </div>
       </div>
       <div class="col-md-9 content">
           <div class="panel panel-default">
-            <h1>{{title}}</h1>
+            <div class="panel-heading">{{title}}</div>
             <div class="panel-body">
               {{> Template.dynamic template=tab.template data=tab.data}}
               {{ content}}
@@ -41,4 +45,8 @@
   {{> quickForm id="userProfileForm"
     collection="Meteor.users" doc=this
     type="update" fields="profile" }}
+</template>
+
+<template name="userHelp">
+  {{#markdown}}{{_ "user_help" }}{{/markdown}}
 </template>

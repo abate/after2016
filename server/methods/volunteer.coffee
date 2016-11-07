@@ -22,8 +22,14 @@ Meteor.methods 'Volunteer.addForm': (doc) ->
 Meteor.methods 'VolunteerBackend.updateResourceForm': (doc,formId) ->
   console.log ["VolunteerBackend.updateResourceForm",doc, formId]
   check(doc,Schemas.VolunteerResource)
-  # check(formId,String)
+  check(formId,String)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    if formId then VolunteerResource.update(formId,doc)
-    else VolunteerResource.insert(doc["$set"])
+    VolunteerResource.update(formId,doc)
+
+Meteor.methods 'VolunteerBackend.insertResourceForm': (doc) ->
+  console.log ["VolunteerBackend.insertResourceForm",doc]
+  check(doc,Schemas.VolunteerResource)
+  userId = Meteor.userId()
+  if Roles.userIsInRole(userId, [ 'manager' ])
+    VolunteerResource.insert(doc)

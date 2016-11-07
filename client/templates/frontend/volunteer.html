@@ -1,4 +1,3 @@
-
 <template name="insertVolunteerForm">
   {{> quickForm collection="VolunteerForm"
     id="insertVolunteerForm" type="method"
@@ -12,21 +11,21 @@
 </template>
 
 <template name="volunteerList">
+  <div class="panel panel-default">
   {{#if isVolunteer}}
-  {{_ "tasks"}}
-    <p>{{_ "volunteer_wait_for_task"}}</p>
-  <table class="table table-hover">
-    <thead>
-      <tr><th>{{_ "task"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th></tr>
-    </thead>
-    <tbody>
-      {{#each accepted}}
-        <tr><td>{{task}}</td><td>{{timeslot}}</td><td>{{area}}</td></tr>
-      {{/each}}
-    </tbody>
-  </table>
+    <!-- <div class="panel-heading">{{_ "tasks"}}</div> -->
+    <div class="panel-body">
+      {{#if hasResource}}
+        {{#markdown}}{{_ "volunteer_has_task"}}{{/markdown}}
+        {{> reactiveTable settings=VolunteerResourceUserTableSettings }}
+      {{else}}
+        {{#markdown}}{{_ "volunteer_wait_for_task"}}{{/markdown}}
+      {{/if}}
+    </div>
   {{else}}
-    <p>{{_ "create_volunteer_profile"}}</p>
+    <div class="panel-body">
+      {{#markdown}}{{_ "create_volunteer_profile"}}{{/markdown}}
+    </div>
   {{/if}}
-
+  </div>
 </template>

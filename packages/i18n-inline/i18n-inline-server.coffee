@@ -6,6 +6,7 @@ fallbackTranslation = {}
 Meteor.publish "i18ninline", () -> I18nInlineCollection.find()
 
 Meteor.startup ->
+  # if Meteor.isDevelopment
   console.log "Initializing i18n-inline"
   i18nfile = "#{assetsPath}/en.i18n.json"
   fallbackTranslation = JSON.parse(fs.readFileSync(i18nfile))
@@ -22,6 +23,7 @@ Meteor.startup ->
     I18nInlineCollection.insert({key:key, tr : v, path: null})
 
 Meteor.methods "i18n-upsert": (key,tag) ->
+  # if Meteor.isDevelopment
   e = I18nInlineCollection.findOne({key:key})
   if ! e
     v = []
@@ -31,6 +33,7 @@ Meteor.methods "i18n-upsert": (key,tag) ->
     I18nInlineCollection.insert({key:key, tr : v})
 
 Meteor.methods "i18n-save": () ->
+  # if Meteor.isDevelopment
   console.log "i18n-save"
   unless fs.existsSync assetsPath
     fs.mkdirSync assetsPath

@@ -25,6 +25,7 @@ Template.volunteerBackend.helpers
   'VolunteerTableSettings': () ->
     collection: VolunteerForm.find()
     # currentPage: Template.instance().currentPage
+    id: "VolunteerTableID"
     class: "table table-bordered table-hover"
     showNavigation: 'auto'
     rowsPerPage: 20
@@ -36,9 +37,11 @@ Template.volunteerBackend.helpers
       { key: 'status', label: (() -> TAPi18n.__("status"))}
     ]
   'VolunteerResourceTableSettings': () ->
-    userId = Template.instance().currentResource.get().userId
+    currentResource = Template.instance().currentResource.get()
+    userId = if currentResource.data then currentResource.data.userId else null
     collection: VolunteerResource.find({userId: userId})
     # currentPage: Template.instance().currentPage
+    id: "VolunteerResourceTableID"
     class: "table table-bordered table-hover"
     showNavigation: 'never'
     rowsPerPage: 20
@@ -57,7 +60,14 @@ Template.volunteerBackend.helpers
       },
     ]
 Template.volunteerBackend.events
-  'click .reactive-table tbody tr': (event, template) ->
+  'click #VolunteerTableID.reactive-table tbody tr': (event, template) ->
+    template.currentResource.set {
+      template: "insertVolunteerResourceForm",
+      data: {userId : this.userId}}
+
+  'click #VolunteerResourceTableID.reactive-table tbody tr': (event, template) ->
+    console.log "AAA"
     data = VolunteerResource.findOne({userId: this.userId})
-    if data then template.currentResource.set data
-    else template.currentResource.set {userId : this._id}
+    template.currentResource.set {
+      template: "updateVolunteerResourceForm",
+      data: data}

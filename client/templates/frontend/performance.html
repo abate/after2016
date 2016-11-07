@@ -19,7 +19,7 @@
 <template name="updatePerformanceForm">
   {{#autoForm id="updatePerformanceForm"
     collection="PerformanceForm" doc=this
-    type="method-update" meteormethod="Performance.updateForm" preserveForm=false resetOnSuccess=false }}
+    type="method-update" meteormethod="Performance.updateForm" preserveForm=false resetOnSuccess=true }}
     <fieldset>
       {{> afQuickField name="title" }}
       {{> afQuickField name="ptype" }}
@@ -35,47 +35,52 @@
 </template>
 
 <template name="performanceList">
-  {{_ "accepted"}}
-  <table class="table table-hover">
-    <thead>
-      <tr><th>{{_ "title"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th><th>{{_ "contact"}}</th><th>{{_ "action"}}</th></tr>
-    </thead>
-    <tbody>
-      {{#each accepted}}
-        <tr>
-          <td>{{performanceTitle performanceId}}</td>
-          <td>{{timeslot}}</td>
-          <td>{{area}}</td>
-          <td>areaRef</td>
-          <td>
-            <i data-id={{performanceId}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
-            <i data-id={{_id}} data-action="bailout" class="fa fa-trash" aria-hidden="true"></i>
-          </td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {{#markdown}}{{_ "performance_wait_for_answer"}}{{/markdown}}
+      {{_ "accepted"}}
+      <table class="table table-hover">
+        <thead>
+          <tr><th>{{_ "title"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th><th>{{_ "contact"}}</th><th>{{_ "action"}}</th></tr>
+        </thead>
+        <tbody>
+          {{#each accepted}}
+            <tr>
+              <td>{{performanceTitle performanceId}}</td>
+              <td>{{timeslot}}</td>
+              <td>{{area}}</td>
+              <td>areaRef</td>
+              <td>
+                <i data-id={{performanceId}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
+                <i data-id={{_id}} data-action="bailout" class="fa fa-trash" aria-hidden="true"></i>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
 
-  {{_ "proposed"}}
-  <table class="table table-hover">
-    <thead>
-      <tr><th>{{_ "title"}}</th><th>{{_ "submitted"}}</th><th>{{_ "status"}}</th><th>{{_ "action"}}</th></tr>
-    </thead>
-    <tbody>
-      {{#each proposed}}
-        <tr>
-          <td>{{title}}</td>
-          <td>{{createdAt}}</td>
-          <td>{{status}}</td>
-          <td>
-            {{#if $neq status "bailedout"}}
-              <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
-              <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
-            {{/if}}
-          </td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+      {{_ "proposed"}}
+      <table class="table table-hover">
+        <thead>
+          <tr><th>{{_ "title"}}</th><th>{{_ "submitted"}}</th><th>{{_ "status"}}</th><th>{{_ "action"}}</th></tr>
+        </thead>
+        <tbody>
+          {{#each proposed}}
+            <tr>
+              <td>{{title}}</td>
+              <td>{{createdAt}}</td>
+              <td>{{status}}</td>
+              <td>
+                {{#if $neq status "bailedout"}}
+                  <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
+                  <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </template>

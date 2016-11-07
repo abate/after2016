@@ -1,5 +1,5 @@
 Template.userDashboard.onCreated () ->
-  Session.set("currentTab",{template:"profile"})
+  Session.set("currentTab",{template:"userHelp"})
 
 Template.userDashboard.helpers
   "tab": () -> Session.get("currentTab")
@@ -29,6 +29,11 @@ Template.userDashboard.events
   'click [data-action="insertPerformanceForm"]': (event, template) ->
     # updateActive(event)
     Session.set "currentTab", { template: "insertPerformanceForm" }
+
+  'click [data-template="userProfile"]': (event, template) ->
+    # updateActive(event)
+    event.stopImmediatePropagation()
+    Session.set "currentTab", {template: "userProfile", data: Meteor.user()}
 
   'click [data-template]': (event, template) ->
     # updateActive(event)

@@ -14,8 +14,14 @@ BaseController = RouteController.extend(
 )
 
 AuthenticatedController = AnonymousController.extend(
+  onBeforeAction: ->
+    if Meteor.userId()
+      @next()
+    else
+      @render 'notFound'
   waitOn: -> [ Meteor.subscribe('settings') ]
 )
+
 @UserController = AuthenticatedController.extend(
   # onAfterAction: ->
 )
@@ -24,11 +30,11 @@ UserController.events 'click [data-action=logout]': ->
   AccountsTemplates.logout()
 
 @AdminController = AuthenticatedController.extend(
-  # onBeforeAction: ->
-  #   if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
-  #     @next()
-  #   else
-  #     @render 'notFound'
+  onBeforeAction: ->
+    if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+      @next()
+    else
+      @render 'notFound'
   # waitOn: ->
   #   userId = Meteor.userId()
   #   if userId [ ]

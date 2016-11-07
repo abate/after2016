@@ -25,10 +25,10 @@ Schemas.VolunteerResource = new SimpleSchema(
     type: [String]
     label: () -> TAPi18n.__("timeslot")
     optional: true
-    custom: () ->
-      isLead = this.field('role').value == 'lead'
-      isCoLead = this.field('role').value == 'colead'
-      if !(isLead or isCoLead) then "required"
+    # custom: () ->
+    #   isLead = this.field('role').value == 'lead'
+    #   isCoLead = this.field('role').value == 'colead'
+    #   if !(isLead or isCoLead) then "required"
     autoform:
       options: () ->
         settings = Settings.findOne()
