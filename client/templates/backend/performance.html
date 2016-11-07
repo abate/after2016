@@ -1,5 +1,5 @@
-<template name="updateResourceForm">
-  {{#autoForm meteormethod="PerformanceBackend.updateResourceForm" type="method-update"
+<template name="updatePerformanceResourceForm">
+  {{#autoForm meteormethod="PerformanceBackend.updatePerformanceResourceForm" type="method-update"
     id="insertPerformanceResourceForm" collection="PerformanceResource" doc=this preserveForm=false resetOnSuccess=false}}
     {{> afQuickField name="performanceId" value=this.performanceId }}
     <div class="form-inline">
@@ -27,7 +27,7 @@
         {{#if currentPerformance.title }}
           <div class="row well">
           <h1>{{currentPerformance.title}}</h1>
-            {{> Template.dynamic template="updateResourceForm" data=currentResource }}
+            {{> Template.dynamic template="updatePerformanceResourceForm" data=currentResource }}
           </div>
           <div class="row">
             <div class="panel panel-default">

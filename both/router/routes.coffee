@@ -40,6 +40,13 @@ Router.route '/admin/performance',
   waitOn: () -> [
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),
+  ]
+
+  Router.route '/admin/volunteer',
+  name: 'volunteerBackend'
+  controller: 'AdminController'
+  template: 'volunteerBackend'
+  waitOn: () -> [
     Meteor.subscribe('volunteerResource'),
     Meteor.subscribe('volunteerForm')
   ]

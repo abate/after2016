@@ -1,0 +1,20 @@
+after:
+    image: ulexus/meteor:v1.4
+    restart: always
+    ports:
+        - "8081:80"
+    links:
+        - mongodb
+    volumes:
+        - /home/after/app/src:/src/app
+    environment:
+        - MONGO_URL=mongodb://mongodb/after
+        - ROOT_URL=http://bnafter2016.mooo.com
+        - DELAY=30
+mongodb:
+    image: mongo
+    ports:
+        - "27017:27017"
+    volumes:
+        - /home/after/app/datadir:/data/db
+

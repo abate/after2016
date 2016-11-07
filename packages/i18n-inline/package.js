@@ -23,10 +23,11 @@ Package.onUse(function(api) {
   api.add_files('i18n-inline.coffee',"server");
   api.add_files('i18n-inline.coffee',"client",{bare: true});
 
-  api.add_files("i18n-inline-tap.i18n", ["client", "server"]);
-  api.add_files([
-    "i18n/en.i18n.json"
-  ], ["client", "server"]);
+//  api.add_files("i18n-inline-tap.i18n", ["client", "server"]);
+
+//  api.add_files([
+//    "i18n/en.i18n.json"
+//  ], ["client", "server"]);
 
   api.export('I18nInline');
 });

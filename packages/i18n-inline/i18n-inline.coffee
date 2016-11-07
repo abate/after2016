@@ -6,19 +6,18 @@ I18nInlineCollection.allow
   'remove' : () -> true
   'insert' : () -> true
 
-I18nInline = ->
-  tr: (key) ->
-    if Meteor.isClient
-      path = null
-      if Router.current() &&  Router.current().lookupTemplate() != 'translations'
-        path = Router.current().route.path(this)
-      if ! I18nInlineCollection.findOne({key:key})
-        Meteor.call "i18n-upsert", key, tag, path
+TAPold__ = TAPi18n.__
 
-      user = Meteor.user()
-      tag = if user then user.profile.language else "en"
-      TAPi18n.__(key,lang=tag)
+I18nInline = ->
+  tr: (key,lang="en") ->
+    if Meteor.isClient
+      if ! I18nInlineCollection.findOne({key:key})
+        Meteor.call "i18n-upsert", key, lang
+      TAPold__(key,lang)
     else
       key
 
 I18nInline = new I18nInline()
+
+TAPi18n.__ = (key,lang="en") ->
+  I18nInline.tr(key,lang)

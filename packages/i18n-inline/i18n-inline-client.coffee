@@ -8,12 +8,10 @@ String::strip = -> if String::trim? then @trim() else @replace /^\s+|\s+$/g, ""
 
 Meteor.subscribe "i18ninline"
 
-Template.deregisterHelper "_"
-# Template.registerHelper "_", (key, args...) ->
-#   console.log "AA"
-#   # Meteor.settings["i18nInline"] == true
-#   # Blaze.renderWithData(Template.tr,key,Template.instance().firstNode)
-#   I18nInline.tr(key)
+Meteor.startup  =>
+  Template.deregisterHelper "_"
+  Template.registerHelper "_", (key) ->
+    I18nInline.tr(key)
 
 Template.translations.helpers
   "translations": () ->

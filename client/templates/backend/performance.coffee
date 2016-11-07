@@ -6,7 +6,7 @@ Template.performanceBackend.onCreated () ->
 
 AutoForm.debug()
 
-Template.updateResourceForm.helpers
+Template.updatePerformanceResourceForm.helpers
   'username': () ->
     user = Meteor.user()
     "#{user.profile.firstName}"

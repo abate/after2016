@@ -4,35 +4,23 @@
       <div class="col-md-3">
         <div class="list-group">
           <div class="list-group-item">
-            <i class="fa fa-user" aria-hidden="true"></i>
+            {{fa "user" ""}}
             <a href="#" data-template="userProfile">{{_ "profile"}}</a>
           </div>
           <div class="list-group-item">
-            <i class="fa fa-heart" aria-hidden="true"></i>
+            {{fa "heart" ""}}
             <a href="#" data-template="volunteerList">{{_ "volunteering"}}</a>
               {{#if isVolunteer}}
-                <div class="badge">
-                  <i data-action="updateVolunteerForm"
-                    class="fa fa-pencil" aria-hidden="true"></i>
-                </div>
-                <div class="badge">
-                  <i data-action="removeVolunteerForm"
-                    class="fa fa-trash" aria-hidden="true"></i>
-                </div>
+                <span class="badge">{{fa "pencil" "updateVolunteerForm"}}</span>
+                <span class="badge">{{fa "trash" "removeVolunteerForm"}}</span>
               {{else}}
-                <span class="badge">
-                  <i data-action="insertVolunteerForm"
-                    class="fa fa-plus-square" aria-hidden="true"></i>
-                </span>
+                <span class="badge">{{fa "plus-square" "insertVolunteerForm"}}</span>
               {{/if}}
           </div>
           <div class="list-group-item">
-            <i class="fa fa-star" aria-hidden="true"></i>
+            {{fa "star" ""}}
             <a href="#" data-template="performanceList">{{_ "performance"}}</a>
-            <span class="badge">
-              <i data-action="insertPerformanceForm"
-                class="fa fa-plus-square" aria-hidden="true"></i>
-            </span>
+            <span class="badge">{{fa "plus-square" "insertPerformanceForm"}}</span>
           </div>
         </div>
       </div>

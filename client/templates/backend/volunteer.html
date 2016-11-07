@@ -1,0 +1,36 @@
+<template name="updateVolunteerResourceForm">
+  {{#autoForm meteormethod="VolunteerBackend.updateResourceForm" type="method-update"
+    id="updateVolunteerResourceForm" collection="VolunteerResource" doc=this preserveForm=false resetOnSuccess=false}}
+    {{> afQuickField name="userId" value=this.userId}}
+    <div class="form-inline">
+      {{> afQuickField name="role" }}
+      <!-- {{#if afFieldValueIs name="status" value="accepted"}} -->
+        {{> afQuickField name="area" }}
+        {{> afQuickField name="timeslot" }}
+      <!-- {{/if}} -->
+      <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
+    </div>
+    <!-- {{#if afFieldValueIs name="status" value="accepted"}} -->
+      {{> afQuickField name="task" }}
+      <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
+    <!-- {{/if}} -->
+  {{/autoForm}}
+</template>
+
+<template name="volunteerBackend">
+  <div class="container-fluid main-container">
+    <div class="row">
+      <div class="col-md-3">
+        {{> reactiveTable settings=VolunteerTableSettings }}
+      </div>
+      <div class="col-md-8 content">
+        <div class="row well">
+          {{> Template.dynamic template="updateVolunteerResourceForm" data=currentResource }}
+        </div>
+        <div class="row">
+          {{> reactiveTable settings=VolunteerResourceTableSettings }}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

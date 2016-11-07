@@ -27,7 +27,7 @@ Meteor.methods 'Performance.addForm': (doc) ->
   doc.userId = Meteor.userId()
   PerformanceForm.insert(doc)
 
-Meteor.methods 'PerformanceBackend.updateResourceForm': (doc,formId) ->
+Meteor.methods 'PerformanceBackend.updatePerformanceResourceForm': (doc,formId) ->
   console.log ["Performance.updateForm",doc, formId]
   check(doc,Schemas.PerformanceResource)
   # check(formId,String)

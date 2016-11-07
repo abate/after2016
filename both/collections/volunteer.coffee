@@ -4,39 +4,48 @@
 Schemas.VolunteerResource = new SimpleSchema(
   userId:
     type: String
-    autoValue: () -> Meteor.userId()
     autoform:
-      omit: true
+      type: "hidden"
+  role:
+    type: String
+    label: () -> TAPi18n.__("role")
+    optional: true
+    autoform:
+      options: () ->
+        settings = Settings.findOne()
+        _.map(settings.roles,(e) -> {label: TAPi18n.__(e), value: e})
   area:
     type: String
     label: () -> TAPi18n.__("area")
     autoform:
-      type: "select-radio-inline"
       options: () ->
         settings = Settings.findOne()
         _.map(settings.areas,(e) -> {label: TAPi18n.__(e), value: e})
   timeslot:
-    type: String
+    type: [String]
     label: () -> TAPi18n.__("timeslot")
+    optional: true
+    custom: () ->
+      isLead = this.field('role').value == 'lead'
+      isCoLead = this.field('role').value == 'colead'
+      if !(isLead or isCoLead) then "required"
     autoform:
-      # type: "select-radio-inline"
       options: () ->
         settings = Settings.findOne()
         _.map(settings.timeslotsV,(e) -> {label: TAPi18n.__(e), value: e})
-  role:
-    type: [String]
-    label: () -> TAPi18n.__("role")
+  modifiedBy:
+    type: String
     optional: true
+    autoValue: () -> Meteor.userId()
     autoform:
-      type: "select-checkbox-inline"
-      options: () ->
-        settings = Settings.findOne()
-        _.map(settings.roles,(e) -> {label: TAPi18n.__(e), value: e})
+      omit: true
   task:
     type: String
+    label: () -> TAPi18n.__("task")
+    optional: true
     max: 1000
     autoform:
-      rows:6
+      rows:3
 )
 
 VolunteerResource.attachSchema(Schemas.VolunteerResource)

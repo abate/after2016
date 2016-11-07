@@ -21,23 +21,14 @@ Meteor.startup ->
   for own key,v of l
     I18nInlineCollection.insert({key:key, tr : v, path: null})
 
-Meteor.methods "i18n-upsert": (key,tag,path) ->
+Meteor.methods "i18n-upsert": (key,tag) ->
   e = I18nInlineCollection.findOne({key:key})
   if ! e
     v = []
     for own tag,value of TAPi18n.getLanguages()
       v.push {tag: tag, tr: key}
     console.log "Upsert #{key}"
-    if path
-      I18nInlineCollection.insert({key:key, tr : v, path: path})
-  else
-    # v = []
-    # for own tag, lng of TAPi18n.getLanguages()
-    #   v.push {tag: tag, tr: key}
-    # console.log "Update #{key}"
-    # I18nInlineCollection.update(e._id,{$set: {tr: v}})
-    if !e.path && path
-      I18nInlineCollection.update(e._id,{$set: {path: path}})
+    I18nInlineCollection.insert({key:key, tr : v})
 
 Meteor.methods "i18n-save": () ->
   console.log "i18n-save"
