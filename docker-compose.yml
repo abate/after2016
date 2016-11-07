@@ -1,13 +1,14 @@
 after:
-    image: ulexus/meteor:v1.4
+    image: ulexus/meteor:latest
     restart: always
     ports:
-        - "8081:80"
+        - "8082:80"
     links:
         - mongodb
-    volumes:
-        - /home/after/app/src:/src/app
+#    volumes:
+#        - /home/after/app/src:/src/app
     environment:
+        - REPO=https://github.com/abate/after2016.git
         - MONGO_URL=mongodb://mongodb/after
         - ROOT_URL=http://bnafter2016.mooo.com
         - DELAY=30
