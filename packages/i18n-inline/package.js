@@ -3,9 +3,9 @@ Package.describe({
   version: '0.0.1',
   summary: 'Inline tap:i18n strings editor',
   git: '',
-  documentation: 'README.md'
+  documentation: 'README.md',
+  debugOnly: true
 });
-
 
 Package.onUse(function(api) {
   api.versionsFrom('1.4.1.2');
