@@ -12,20 +12,17 @@
 
 <template name="volunteerList">
   <div class="panel panel-default">
-  {{#if isVolunteer}}
-    <!-- <div class="panel-heading">{{_ "tasks"}}</div> -->
     <div class="panel-body">
-      {{#if hasResource}}
-        {{#markdown}}{{_ "volunteer_has_task"}}{{/markdown}}
-        {{> reactiveTable settings=VolunteerResourceUserTableSettings }}
+      {{#if isVolunteer}}
+          {{#if hasResource}}
+            {{#markdown}}{{_ "volunteer_has_task"}}{{/markdown}}
+            {{> reactiveTable settings=VolunteerResourceUserTableSettings }}
+          {{else}}
+            {{#markdown}}{{_ "volunteer_wait_for_task"}}{{/markdown}}
+          {{/if}}
       {{else}}
-        {{#markdown}}{{_ "volunteer_wait_for_task"}}{{/markdown}}
+          {{#markdown}}{{_ "create_volunteer_profile"}}{{/markdown}}
       {{/if}}
     </div>
-  {{else}}
-    <div class="panel-body">
-      {{#markdown}}{{_ "create_volunteer_profile"}}{{/markdown}}
-    </div>
-  {{/if}}
   </div>
 </template>

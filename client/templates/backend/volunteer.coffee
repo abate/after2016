@@ -3,25 +3,26 @@ Template.volunteerBackend.onCreated () ->
   this.currentResource = new ReactiveVar({})
   # this.currentPage = new ReactiveVar(Session.get('current-page') || 0)
 
-AutoForm.debug()
+getUserName = (userId) ->
+  user = Meteor.users.findOne(userId)
+  if user
+    if (user.profile?.firstName? or user.profile?.lastName?)
+      "#{user.profile.firstName} #{user.profile.lastName}"
+    else user.emails[0].address
 
 Template.updateVolunteerResourceForm.helpers
-  'username': () ->
-    user = Meteor.user()
-    "#{user.profile.firstName}"
+  'username': () -> getUserName(Meteor.user())
 
 rowApplicationStatus = (vol) ->
   if vol.status == "assigned" then "bg-warning"
   else if vol.status == "free" then "bg-success"
   else "bg-warning"
 
-getUserName = (label,perf) ->
-  user = Meteor.users.findOne(perf.userId)
-  "#{user.profile.firstName} #{user.profile.lastName}"
-
 Template.volunteerBackend.helpers
-  'currentResource': () ->
-    Template.instance().currentResource.get()
+  'getUserName': (userId) -> getUserName(userId)
+  'getRoleName': (roleId) -> TAPi18n.__ (AppRoles.findOne(roleId).name)
+  'getSkillName': (skillId) -> TAPi18n.__ (Skills.findOne(skillId).name)
+  'currentResource': () -> Template.instance().currentResource.get()
   'VolunteerTableSettings': () ->
     collection: VolunteerForm.find()
     # currentPage: Template.instance().currentPage
@@ -30,11 +31,15 @@ Template.volunteerBackend.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    rowClass: rowApplicationStatus
+    # rowClass: rowApplicationStatus
     # filters: []
     fields: [
-      { key: 'name', label: (() -> TAPi18n.__("name")), fn: getUserName},
-      { key: 'status', label: (() -> TAPi18n.__("status"))}
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (l,obj,k) -> if obj then getUserName(obj.userId)
+      },
+      # { key: 'status', label: (() -> TAPi18n.__("status"))}
     ]
   'VolunteerResourceTableSettings': () ->
     currentResource = Template.instance().currentResource.get()
@@ -48,26 +53,49 @@ Template.volunteerBackend.helpers
     showRowCount: false
     showFilter: false
     fields: [
-      { key: 'role', label: (() -> TAPi18n.__("role"))},
-      { key: 'area', label: (() -> TAPi18n.__("area"))},
-      { key: 'timeslot', label: (() -> TAPi18n.__("timeslot"))},
-      { key: 'arearef', label: (() -> TAPi18n.__("arearef")), fn: (a,b,c) -> ""},
+      {
+        key: 'roleId',
+        label: (() -> TAPi18n.__("role")),
+        fn: (l,o,k) -> TAPi18n.__ (AppRoles.findOne(l).name)},
+      {
+        key: 'areaId',
+        label: (() -> TAPi18n.__("area")),
+        fn: (l,o,k) -> TAPi18n.__ (Areas.findOne(l).name)},
+      {
+        key: 'timeslot',
+        label: (() -> TAPi18n.__("timeslot"))
+        fn: (l,o,k) -> TAPi18n.__ l},
+      {
+        key: 'arearef',
+        label: (() -> TAPi18n.__("arearef")),
+        fn: (l,o,k) -> getUserName(l) },
       {
         key: 'actions',
         label: (() -> TAPi18n.__("actions")),
-        fn: (a,b,c) ->
-          Blaze._globalHelpers['fa']("trash", "removeVolunteerResource")
+        fn: (a,o,c) ->
+          Spacebars.SafeString (
+            '<i data-action="removeVolunteerResource"
+                data-id="'+ o._id + '" class="fa fa-trash"
+                aria-hidden="true"></i>'
+          )
       },
     ]
+
 Template.volunteerBackend.events
+  'click [data-action="removeVolunteerResource"]': (event, template) ->
+    console.log ["remove ss", $(event.target)]
+    formId = $(event.target).data('id')
+    Meteor.call 'VolunteerBackend.removeResourceForm', formId
+
   'click #VolunteerTableID.reactive-table tbody tr': (event, template) ->
     template.currentResource.set {
+      form: VolunteerForm.findOne({userId: this.userId})
       template: "insertVolunteerResourceForm",
       data: {userId : this.userId}}
 
   'click #VolunteerResourceTableID.reactive-table tbody tr': (event, template) ->
-    console.log "AAA"
     data = VolunteerResource.findOne({userId: this.userId})
     template.currentResource.set {
+      form: VolunteerForm.findOne({userId: this.userId})
       template: "updateVolunteerResourceForm",
       data: data}

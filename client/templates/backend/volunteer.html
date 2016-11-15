@@ -4,12 +4,13 @@
     doc=this preserveForm=false resetOnSuccess=false}}
     {{> afQuickField name="userId" value=this.userId}}
     <div class="form-inline">
-      {{> afQuickField name="role" }}
-      {{> afQuickField name="area" }}
+      {{> afQuickField name="roleId" }}
+      {{> afQuickField name="areaId" }}
       {{> afQuickField name="timeslot" }}
       <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
     </div>
     {{> afQuickField name="task" }}
+    {{> afQuickField name="notes" }}
   {{/autoForm}}
   <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
 </template>
@@ -20,12 +21,13 @@
     doc=this preserveForm=false resetOnSuccess=false}}
     {{> afQuickField name="userId" value=this.userId}}
     <div class="form-inline">
-      {{> afQuickField name="role" }}
-      {{> afQuickField name="area" }}
+      {{> afQuickField name="roleId" }}
+      {{> afQuickField name="areaId" }}
       {{> afQuickField name="timeslot" }}
       <button type="submit" class="btn btn-primary pull-right">{{_ "new"}}</button>
     </div>
     {{> afQuickField name="task" }}
+    {{> afQuickField name="notes" }}
   {{/autoForm}}
   <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
 </template>
@@ -37,6 +39,27 @@
         {{> reactiveTable settings=VolunteerTableSettings }}
       </div>
       <div class="col-md-8 content">
+        <div class="row">
+          {{_ "name"}} : {{getUserName currentResource.form.userId}}
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <strong>{{_ "roles"}}:</strong>
+            <ul>{{#each currentResource.form.role}}<li>{{getRoleName this}}</li>{{/each}}</ul>
+          </div>
+          <div class="col-md-3">
+            <strong>{{_ "skills"}}:</strong>
+            <ul>{{#each currentResource.form.skills}}<li>{{getSkillName this}}</li>{{/each}}</ul>
+          </div>
+          <div class="col-md-3">
+            <strong>{{_ "avalaibility"}}:</strong>
+            <ul>{{#each currentResource.form.avalaibility}}<li>{{_ this}}</li>{{/each}}</ul>
+          </div>
+          <div class="col-md-3">
+            <strong>{{_ "notes"}}:</strong>
+            <div>{{currentResource.form.notes}}</div>
+          </div>
+        </div>
         <div class="row well">
           {{> Template.dynamic template=currentResource.template data=currentResource.data }}
         </div>

@@ -1,1 +1,4 @@
-["morning", "afternoon", "build", "strike", "night"]
+[ "pre_event",
+  "during_event",
+  "after_event"
+]

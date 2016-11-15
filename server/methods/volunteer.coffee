@@ -19,6 +19,13 @@ Meteor.methods 'Volunteer.addForm': (doc) ->
   doc.userId = Meteor.userId()
   VolunteerForm.insert(doc)
 
+Meteor.methods 'VolunteerBackend.removeResourceForm': (formId) ->
+  console.log ["VolunteerBackend.removeResourceForm",formId]
+  check(formId,String)
+  userId = Meteor.userId()
+  if Roles.userIsInRole(userId, [ 'manager' ])
+    VolunteerResource.remove(formId)
+
 Meteor.methods 'VolunteerBackend.updateResourceForm': (doc,formId) ->
   console.log ["VolunteerBackend.updateResourceForm",doc, formId]
   check(doc,Schemas.VolunteerResource)
@@ -33,3 +40,4 @@ Meteor.methods 'VolunteerBackend.insertResourceForm': (doc) ->
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
     VolunteerResource.insert(doc)
+    # Areas.update(doc.areaId,{$set: {arearef: doc.userId}})

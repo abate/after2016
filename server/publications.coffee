@@ -22,5 +22,11 @@ Meteor.publish 'performanceResource', () ->
   else
     PerformanceResource.find({userId: this.userId})
 
-Meteor.publish 'settings', () ->
-  Settings.find()
+Meteor.publish "userData", () ->
+  if Roles.userIsInRole(this.userId, [ 'manager' ])
+    Meteor.users.find()
+
+Meteor.publish 'settings', () -> Settings.find()
+Meteor.publish 'areas', () -> Areas.find()
+Meteor.publish 'skills', () -> Skills.find()
+Meteor.publish 'approles', () -> AppRoles.find()

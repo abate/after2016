@@ -12,10 +12,19 @@ Template.volunteerList.helpers
     showRowCount: false
     showFilter: false
     fields: [
-      { key: 'role', label: (() -> TAPi18n.__("role"))},
-      { key: 'area', label: (() -> TAPi18n.__("area"))},
+      {
+        key: 'role',
+        label: (() -> TAPi18n.__("role")),
+        fn: (l,o,k) -> AppRoles.findOne(k).name},
+      {
+        key: 'area',
+        label: (() -> TAPi18n.__("area")),
+        fn: (l,o,k) -> Areas.findOne(k).name},
       { key: 'timeslot', label: (() -> TAPi18n.__("timeslot"))},
-      { key: 'arearef', label: (() -> TAPi18n.__("arearef")), fn: (a,b,c) -> ""},
+      {
+        key: 'arearef',
+        label: (() -> TAPi18n.__("arearef")),
+        fn: (l,o,k) -> Meteor.users.findOne(k).firstName },
     ]
 
 AutoForm.hooks

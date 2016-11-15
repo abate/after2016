@@ -2,6 +2,9 @@ Router.route '/',
   name: 'main'
   controller: 'AnonymousController'
   template: 'home'
+  onBeforeAction: () ->
+    if Meteor.user() then Router.go('userDashboard')
+    else this.next()
 
 anonymousRoutes = ['privacy','disclaimer', 'siteNotice', 'contacts' ]
 anonymousRoutes.forEach (r) ->
@@ -33,6 +36,21 @@ Router.route '/admin/translations',
   controller: 'AdminController'
   template: 'translations'
 
+Router.route '/admin/emails',
+  name: 'email_forms'
+  controller: 'AdminController'
+  template: 'emailForms'
+
+Router.route '/admin/settings/areas',
+  name: 'areasSettings'
+  controller: 'AdminController'
+  template: 'areasSettings'
+
+Router.route '/admin/settings/skills',
+  name: 'skillsSettings'
+  controller: 'AdminController'
+  template: 'skillsSettings'
+
 Router.route '/admin/performance',
   name: 'performanceBackend'
   controller: 'AdminController'
@@ -40,6 +58,7 @@ Router.route '/admin/performance',
   waitOn: () -> [
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('userData')
   ]
 
   Router.route '/admin/volunteer',
@@ -48,5 +67,6 @@ Router.route '/admin/performance',
   template: 'volunteerBackend'
   waitOn: () -> [
     Meteor.subscribe('volunteerResource'),
-    Meteor.subscribe('volunteerForm')
+    Meteor.subscribe('volunteerForm'),
+    Meteor.subscribe('userData')
   ]

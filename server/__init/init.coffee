@@ -2,18 +2,29 @@ Meteor.startup ->
 
   if Settings.find().count() == 0
     console.log "Init Settings"
+
     skills = JSON.parse(Assets.getText('skills.json'))
-    timeslotsV = JSON.parse(Assets.getText('timeslots-volunteer.json'))
-    timeslotsP = JSON.parse(Assets.getText('timeslots-performance.json'))
     areas = JSON.parse(Assets.getText('areas.json'))
     roles = JSON.parse(Assets.getText('roles.json'))
 
+    if Areas.find().count() == 0
+      for e in areas
+        Areas.insert {name: e}
+
+    if Skills.find().count() == 0
+      for e in skills
+        Skills.insert {name: e}
+
+    if AppRoles.find().count() == 0
+      for e in roles
+        AppRoles.insert {name: e}
+
+    timeslotsV = JSON.parse(Assets.getText('timeslots-volunteer.json'))
+    timeslotsP = JSON.parse(Assets.getText('timeslots-performance.json'))
+
     Settings.insert
-      skills: skills
       timeslotsV: timeslotsV
       timeslotsP: timeslotsP
-      areas: areas
-      roles: roles
 
   @allRoles = ['super-admin','admin','manager','user']
 # we create all the user roles if none exists already

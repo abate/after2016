@@ -1,38 +1,43 @@
 
 @VolunteerResource = new Mongo.Collection 'volunteerResource'
 
+# Timeslot = new SimpleSchema(
+#   start:
+#     type: String
+#     label: () -> TAPi18n.__("timeslot_start")
+#   duration:
+#     type: String
+#     label: () -> TAPi18n.__("timeslot_duration")
+#     allowedValues: ["1h", "2hs", "3hs", "4hs", "5hs", "day"]
+# )
+
 Schemas.VolunteerResource = new SimpleSchema(
   userId:
     type: String
     autoform:
       type: "hidden"
-  role:
+  roleId:
     type: String
     label: () -> TAPi18n.__("role")
     optional: true
     autoform:
+      type: "select"
       options: () ->
-        settings = Settings.findOne()
-        _.map(settings.roles,(e) -> {label: TAPi18n.__(e), value: e})
-  area:
+        AppRoles.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
+  areaId:
     type: String
     label: () -> TAPi18n.__("area")
     autoform:
+      type: "select"
       options: () ->
-        settings = Settings.findOne()
-        _.map(settings.areas,(e) -> {label: TAPi18n.__(e), value: e})
+        Areas.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   timeslot:
-    type: [String]
+    type: String
     label: () -> TAPi18n.__("timeslot")
     optional: true
-    # custom: () ->
-    #   isLead = this.field('role').value == 'lead'
-    #   isCoLead = this.field('role').value == 'colead'
-    #   if !(isLead or isCoLead) then "required"
     autoform:
-      options: () ->
-        settings = Settings.findOne()
-        _.map(settings.timeslotsV,(e) -> {label: TAPi18n.__(e), value: e})
+      afFieldInput:
+        type: "datetimepicker"
   modifiedBy:
     type: String
     optional: true
@@ -46,6 +51,13 @@ Schemas.VolunteerResource = new SimpleSchema(
     max: 1000
     autoform:
       rows:3
+  notes:
+    type: String
+    label: () -> TAPi18n.__("private_notes")
+    optional: true
+    max: 1000
+    autoform:
+      rows:4
 )
 
 VolunteerResource.attachSchema(Schemas.VolunteerResource)
@@ -59,15 +71,15 @@ Schemas.VolunteerForm = new SimpleSchema(
     autoValue: () -> Meteor.userId()
     autoform:
       omit: true
-  avalability:
+  avalaibility:
     type: [String]
-    label: () -> TAPi18n.__("avalability")
+    label: () -> TAPi18n.__("avalaibility")
     optional: true
     autoform:
       type: "select-checkbox-inline"
       options: () ->
         settings = Settings.findOne()
-        _.map(settings.timeslots,(e) -> {label: TAPi18n.__(e), value: e})
+        _.map(settings.timeslotsV,(e) -> {label: TAPi18n.__(e), value: e})
   skills:
     type: [String]
     label: () -> TAPi18n.__("skills")
@@ -75,8 +87,7 @@ Schemas.VolunteerForm = new SimpleSchema(
     autoform:
       type: "select-checkbox-inline"
       options: () ->
-        settings = Settings.findOne()
-        _.map(settings.skills,(e) -> {label: TAPi18n.__(e), value: e})
+        Skills.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   role:
     type: [String]
     label: () -> TAPi18n.__("role")
@@ -84,15 +95,15 @@ Schemas.VolunteerForm = new SimpleSchema(
     autoform:
       type: "select-checkbox-inline"
       options: () ->
-        settings = Settings.findOne()
-        _.map(settings.roles,(e) -> {label: TAPi18n.__(e), value: e})
+        AppRoles.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   notes:
     type: String
     label: () -> TAPi18n.__("notes")
     optional: true
     max: 1000
     autoform:
-      rows:6
+      rows:4
+
 )
 
 VolunteerForm.attachSchema(Schemas.VolunteerForm)

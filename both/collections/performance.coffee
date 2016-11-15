@@ -17,23 +17,22 @@ Schemas.PerformanceResource = new SimpleSchema(
       else this.unset()
     autoform:
       omit: true
-  area:
+  areaId:
     type: String
     label: () -> TAPi18n.__("area")
     optional: true
-    # custom: () -> if this.field('status').value == 'accepted' then "required"
     autoform:
       options: () ->
-        settings = Settings.findOne()
-        _.map(settings.areas,(e) -> {label: TAPi18n.__(e), value: e})
-  timeslot:
-    type: String
-    label: () -> TAPi18n.__("timeslot")
+        Area.find().map(e) -> {label: TAPi18n.__(e.name), value: e._id}
+  time:
+    type: "DateTime"
+    label: () -> TAPi18n.__("date")
     optional: true
-    autoform:
-      options: () ->
-        settings = Settings.findOne()
-        _.map(settings.timeslotsP,(e) -> {label: TAPi18n.__(e), value: e})
+  duration:
+    type: String
+    label: () -> TAPi18n.__("duration")
+    optional: true
+    custom: () -> if this.field('time').isSet then "required"
   notes:
     type: String
     label: () -> TAPi18n.__("notes")
@@ -100,7 +99,7 @@ Schemas.PerformanceForm = new SimpleSchema(
     optional: true
   links:
     type: [String]
-    label: () -> TAPi18n.__("links")
+    label: () -> TAPi18n.__("perf_links")
     optional: true
     autoform:
       template: "bootstrap3-inline"
@@ -108,7 +107,7 @@ Schemas.PerformanceForm = new SimpleSchema(
         template: "bootstrap3-inline"
   media:
     type: String
-    label: () -> TAPi18n.__("media")
+    label: () -> TAPi18n.__("perf_media")
     optional: true
     autoform:
       afFieldInput:
@@ -116,32 +115,92 @@ Schemas.PerformanceForm = new SimpleSchema(
         collection: 'PerformanceImages'
   description:
     type: String
-    label: () -> TAPi18n.__("description")
+    label: () -> TAPi18n.__("perf_description")
     optional: true
     max: 1000
     autoform:
       rows:6
+  dimension:
+    type: String
+    label: () -> TAPi18n.__("perf_dimension")
+    optional: true
   material:
     type: String
-    label: () -> TAPi18n.__("material")
+    label: () -> TAPi18n.__("perf_material")
     optional: true
-    max: 1000
     autoform:
-      rows:6
+      rows:2
+  textitles:
+    type: Boolean
+    label: () -> TAPi18n.__("perf_textiles")
+    optional: true
+  textitles_details:
+    type: String
+    label: () -> TAPi18n.__("perf_textiles_details")
+    optional: true
+    autoform:
+      rows: 2
+  fire:
+    type: Boolean
+    label: () -> TAPi18n.__("perf_fire")
+    optional: true
+  fire_details:
+    type: String
+    label: () -> TAPi18n.__("perf_fire_details")
+    optional: true
+    autoform:
+      rows: 2
+  sound:
+    type: Boolean
+    label: () -> TAPi18n.__("perf_sound")
+    optional: true
+  sound_details:
+    type: String
+    label: () -> TAPi18n.__("perf_sound_details")
+    optional: true
+    autoform:
+      rows: 2
+  light:
+    type: Boolean
+    label: () -> TAPi18n.__("perf_light")
+    optional: true
+  ligth_details:
+    type: String
+    label: () -> TAPi18n.__("perf_light_details")
+    optional: true
+    autoform:
+      rows: 2
+  power:
+    type: "select-radio-inline"
+    allowedValues: ["no", "1kw", "50kw", "deutereum reactor"]
+    label: () -> TAPi18n.__("perf_power")
+    optional: true
+  time:
+    type: String
+    label: () -> TAPi18n.__("perf_time")
+    optional: true
+  help:
+    type: "select-radio-inline"
+    allowedValues: ["no", "1", "2", "3+"]
+    label: () -> TAPi18n.__("perf_help")
+    optional: true
+  installation:
+    type: String
+    label: () -> TAPi18n.__("perf_installation")
+    optional: true
   safety:
     type: String
-    label: () -> TAPi18n.__("safety")
+    label: () -> TAPi18n.__("perf_safety")
     optional: true
-    max: 1000
     autoform:
-      rows:6
+      rows:2
   logistic:
     type: String
-    label: () -> TAPi18n.__("logistic")
+    label: () -> TAPi18n.__("perf_logistic")
     optional: true
     max: 1000
     autoform:
-      rows:6
+      rows:2
   status:
     type: String
     allowedValues: allowedStatus

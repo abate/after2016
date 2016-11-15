@@ -15,7 +15,7 @@ addUsersToRoles = (user) ->
   if Meteor.users.find().count() == 1
     Roles.addUsersToRoles userId, 'super-admin'
 
-setUserLanguage = (userId) ->
+@setUserLanguage = (userId) ->
   user = Meteor.users.findOne(userId)
   if user
     T9n.setLanguage user.profile.language

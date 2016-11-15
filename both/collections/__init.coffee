@@ -2,24 +2,48 @@
 
 @Settings = new Mongo.Collection 'settings'
 
+@Areas = new Mongo.Collection 'areas'
 
-@Area = new Mongo.Collection 'area'
-
-Schemas.Area = new SimpleSchema(
+Schemas.Areas = new SimpleSchema(
+  name:
+    type: String
+    label: () -> TAPi18n.__("name")
   arearef:
     type: String
+    label: () -> TAPi18n.__("arearef")
     optional: true
-  name:
-    type: String
   description:
     type: String
+    optional: true
+    label: () -> TAPi18n.__("description")
 )
 
-Schemas.Skill = new SimpleSchema(
+Areas.attachSchema(Schemas.Areas)
+
+@Skills = new Mongo.Collection 'skills'
+
+Schemas.Skills = new SimpleSchema(
   name:
     type: String
+    label: () -> TAPi18n.__("name")
   notes:
     type: String
+    optional: true
+    label: () -> TAPi18n.__("notes")
 )
 
-Area.attachSchema(Schemas.Area)
+Skills.attachSchema(Schemas.Skills)
+
+@AppRoles = new Mongo.Collection 'approles'
+
+Schemas.AppRoles = new SimpleSchema(
+  name:
+    type: String
+    label: () -> TAPi18n.__("name")
+  description:
+    type: String
+    optional: true
+    label: () -> TAPi18n.__("description")
+)
+
+AppRoles.attachSchema(Schemas.AppRoles)

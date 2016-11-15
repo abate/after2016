@@ -31,6 +31,12 @@
                 <li class="{{isActiveRoute 'usersBackend'}}">
                   <a href="{{pathFor 'usersBackend'}}">{{_ "all_users"}}</a>
                 </li>
+                <li class="{{isActiveRoute 'areasSettings'}}">
+                  <a href="{{pathFor 'areasSettings'}}">{{_ "areas_settings"}}</a>
+                </li>
+                <li class="{{isActiveRoute 'skillsSettings'}}">
+                  <a href="{{pathFor 'skillsSettings'}}">{{_ "skills_settings"}}</a>
+                </li>
                 <li class="{{isActiveRoute 'translations'}}">
                   <a href="{{pathFor 'translations'}}">{{_ "translations"}}</a>
                 </li>
@@ -55,7 +61,7 @@
               </ul>
             </li>
           {{/if}}
-    		  <!-- {{> atNavButton}} -->
+    		  {{> atNavButton}}
         </ul>
       </div>
     </div>

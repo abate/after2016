@@ -19,7 +19,13 @@ AuthenticatedController = AnonymousController.extend(
       @next()
     else
       @render 'notFound'
-  waitOn: -> [ Meteor.subscribe('settings') ]
+  waitOn: -> [
+    Meteor.subscribe('settings'),
+    Meteor.subscribe('areas'),
+    Meteor.subscribe('skills'),
+    Meteor.subscribe('approles')
+
+   ]
 )
 
 @UserController = AuthenticatedController.extend(
