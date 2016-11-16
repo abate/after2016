@@ -1,13 +1,21 @@
 
 Schemas.Profile = new SimpleSchema(
   firstName:
+    type: String
     label: () -> TAPi18n.__("firstName")
     optional: true
-    type: String
   lastName:
+    type: String
     label: () -> TAPi18n.__("lastName")
     optional: true
+  playaName:
     type: String
+    label: () -> TAPi18n.__("playaName")
+    optional: true
+  telephone:
+    type: "tel"
+    label: () -> TAPi18n.__("telephone")
+    optional: true
   picture:
     type: String
     optional: true

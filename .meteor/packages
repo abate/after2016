@@ -49,3 +49,4 @@ aslagle:reactive-table
 raix:handlebar-helpers
 markdown@1.0.11
 drewy:datetimepicker
+drewy:autoform-datetimepicker

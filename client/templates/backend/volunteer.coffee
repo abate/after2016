@@ -61,10 +61,7 @@ Template.volunteerBackend.helpers
         key: 'areaId',
         label: (() -> TAPi18n.__("area")),
         fn: (l,o,k) -> TAPi18n.__ (Areas.findOne(l).name)},
-      {
-        key: 'timeslot',
-        label: (() -> TAPi18n.__("timeslot"))
-        fn: (l,o,k) -> TAPi18n.__ l},
+      { key: 'timeslot', label: (() -> TAPi18n.__("timeslot")) },
       {
         key: 'arearef',
         label: (() -> TAPi18n.__("arearef")),
@@ -83,7 +80,6 @@ Template.volunteerBackend.helpers
 
 Template.volunteerBackend.events
   'click [data-action="removeVolunteerResource"]': (event, template) ->
-    console.log ["remove ss", $(event.target)]
     formId = $(event.target).data('id')
     Meteor.call 'VolunteerBackend.removeResourceForm', formId
 

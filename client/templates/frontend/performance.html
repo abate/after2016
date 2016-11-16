@@ -1,37 +1,13 @@
 
 <template name="insertPerformanceForm">
-  {{#autoForm id="insertPerformanceForm"
+  {{> quickForm id="insertPerformanceForm"
     collection="PerformanceForm" type="method" meteormethod="Performance.addForm" }}
-    <fieldset>
-      {{> afQuickField name="title" }}
-      {{> afQuickField name="ptype" }}
-      {{#if afFieldValueIs name="ptype" value="group"}}
-        {{> afQuickField name="people"}}
-      {{/if}}
-      {{#each afFieldNames omitFields="title,ptype,people"}}
-        {{> afQuickField name=this.name options=afOptionsFromSchema}}
-      {{/each}}
-    </fieldset>
-    <button type="submit" class="btn btn-primary">{{_ "insert"}}</button>
-  {{/autoForm}}
 </template>
 
 <template name="updatePerformanceForm">
-  {{#autoForm id="updatePerformanceForm"
+  {{>quickForm id="updatePerformanceForm"
     collection="PerformanceForm" doc=this
     type="method-update" meteormethod="Performance.updateForm" preserveForm=false resetOnSuccess=true }}
-    <fieldset>
-      {{> afQuickField name="title" }}
-      {{> afQuickField name="ptype" }}
-      {{#if afFieldValueIs name="ptype" value="group"}}
-        {{> afQuickField name="people"}}
-      {{/if}}
-      {{#each afFieldNames omitFields="title,ptype,people"}}
-        {{> afQuickField name=this.name options=afOptionsFromSchema}}
-      {{/each}}
-    </fieldset>
-    <button type="submit" class="btn btn-primary">{{_ "update"}}</button>
-  {{/autoForm}}
 </template>
 
 <template name="performanceList">

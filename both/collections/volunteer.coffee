@@ -32,12 +32,17 @@ Schemas.VolunteerResource = new SimpleSchema(
       options: () ->
         Areas.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   timeslot:
-    type: String
+    type: "datetime-local"
     label: () -> TAPi18n.__("timeslot")
     optional: true
     autoform:
-      afFieldInput:
-        type: "datetimepicker"
+      type: "datetimepicker"
+      opts:
+        startDate: '2017/12/16'
+        todayButton: false
+        formatDate:'d.m.Y'
+        # minDate:'-2016/12/16'
+        # maxDate:'+2017/12/18'
   modifiedBy:
     type: String
     optional: true
