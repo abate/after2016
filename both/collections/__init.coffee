@@ -8,6 +8,9 @@ Schemas.Areas = new SimpleSchema(
   name:
     type: String
     label: () -> TAPi18n.__("name")
+  performance:
+    type: Boolean
+    label: () -> TAPi18n.__("areas_performance")
   arearef:
     type: String
     label: () -> TAPi18n.__("arearef")

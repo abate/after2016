@@ -24,7 +24,6 @@ AuthenticatedController = AnonymousController.extend(
     Meteor.subscribe('areas'),
     Meteor.subscribe('skills'),
     Meteor.subscribe('approles')
-
    ]
 )
 

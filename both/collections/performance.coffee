@@ -18,22 +18,48 @@ Schemas.PerformanceResource = new SimpleSchema(
       else this.unset()
     autoform:
       omit: true
+  status:
+    type: String
+    label: () -> TAPi18n.__("status")
+    allowedValues: allowedStatus
+    autoform:
+      defaultValue: "pending"
+      type: "select"
+      options: () ->
+        _.map(allowedStatus,(e) -> {label: TAPi18n.__(e), value: e})
   areaId:
     type: String
     label: () -> TAPi18n.__("area")
     optional: true
+    # custom: () -> if this.field('status').value == "accepted" then "required"
     autoform:
+      type: () ->
+        if AutoForm.getFieldValue("status") == "accepted" then "" else "hidden"
       options: () ->
-        Area.find().map(e) -> {label: TAPi18n.__(e.name), value: e._id}
+        Areas.find({performance: true}).map(
+          (e) -> {label: TAPi18n.__(e.name), value: e._id}
+        )
   time:
-    type: "DateTime"
+    type: "datetime-local"
     label: () -> TAPi18n.__("date")
     optional: true
+    # custom: () -> if this.field('status').value == accepted then "required"
+    autoform:
+      type: "datetimepicker"
+      opts:
+        startDate: '2017/12/16'
+        todayButton: false
+        formatDate:'d.m.Y'
   duration:
     type: String
     label: () -> TAPi18n.__("duration")
     optional: true
-    custom: () -> if this.field('time').isSet then "required"
+    allowedValues: ["1h", "2hs", "3hs", "4hs", "5hs", "half_day", "all_day"]
+    # custom: () -> if this.field('time').isSet then "required"
+    autoform:
+      options: () ->
+        l=["1h", "2hs", "3hs", "4hs", "5hs", "half_day", "all_day"]
+        _.map(l,(e) -> {label: TAPi18n.__(e), value: e})
   notes:
     type: String
     label: () -> TAPi18n.__("notes")
@@ -47,25 +73,22 @@ Schemas.PerformanceResource = new SimpleSchema(
     autoValue: () -> Meteor.userId()
     autoform:
       omit: true
-  status:
-    type: String
-    label: () -> TAPi18n.__("status")
-    allowedValues: allowedStatus
-    autoform:
-      defaultValue: "pending"
-      type: "select"
-      omit: true
-      options: () ->
-        _.map(allowedStatus,(e) -> {label: TAPi18n.__(e), value: e})
 )
 
 PerformanceResource.attachSchema(Schemas.PerformanceResource)
 
 StagePerformanceForm = new SimpleSchema(
-  time:
+  duration:
     type: String
-    label: () -> TAPi18n.__("stageperf_time")
+    label: () -> TAPi18n.__("stageperf_duration")
     optional: true
+  logistic:
+    type: String
+    label: () -> TAPi18n.__("stageperf_logistic")
+    optional: true
+    max: 1000
+    autoform:
+      rows:2
   fire:
     type: Boolean
     label: () -> TAPi18n.__("stageperf_fire")
@@ -77,50 +100,23 @@ StagePerformanceForm = new SimpleSchema(
     custom: () -> if this.field('fire').value == true then "required"
     autoform:
       type: () ->
-        if (AutoForm.getFieldValue("performance.fire") == true) then ""
+        if AutoForm.getFieldValue("performance.fire") == true then ""
         else "hidden"
-      rows: 2
-  sound:
-    type: Boolean
-    label: () -> TAPi18n.__("stageperf_sound")
-    optional: true
-  sound_details:
-    type: String
-    label: () -> TAPi18n.__("stageperf_sound_details")
-    optional: true
-    custom: () -> if this.field('sound').value == true then "required"
-    autoform:
-      type: () ->
-        if (AutoForm.getFieldValue("performance.sound") == true) then ""
-        else "hidden"
-      rows: 2
-  light:
-    type: Boolean
-    label: () -> TAPi18n.__("stageperf_light")
-    optional: true
-  ligth_details:
-    type: String
-    label: () -> TAPi18n.__("stageperf_light_details")
-    optional: true
-    custom: () -> if this.field('light').value == true then "required"
-    autoform:
-      type: () ->
-        if (AutoForm.getFieldValue("performance.light") == true) then ""
-        else "hidden"
-      rows: 2
-  logistic:
-    type: String
-    label: () -> TAPi18n.__("stageperf_logistic")
-    optional: true
-    max: 1000
-    autoform:
-      rows:2
 )
 
 WorkshopForm = new SimpleSchema(
-  time:
+  type:
     type: String
-    label: () -> TAPi18n.__("workshop_time")
+    allowedValues: ["crafting","sensual/sexual","healing","roundtable"]
+    label: () -> TAPi18n.__("workshop_type")
+    autoform:
+      type: "select"
+      options: () ->
+        l=["crafting","sensual/sexual","healing","roundtable"]
+        _.map(l,(e) -> {label: TAPi18n.__(e), value: e})
+  duration:
+    type: String
+    label: () -> TAPi18n.__("workshop_duration")
     optional: true
   space:
     type: String
@@ -133,6 +129,11 @@ WorkshopForm = new SimpleSchema(
     max: 1000
     autoform:
       rows:2
+  kids:
+    type: Boolean
+    label: () -> TAPi18n.__("workshop_kids")
+    # autoform:
+    #   type: "select-radio-inline"
 )
 
 InstallationForm = new SimpleSchema(
@@ -203,21 +204,21 @@ InstallationForm = new SimpleSchema(
         else "hidden"
       rows: 2
   power:
-    type: "select-radio-inline"
-    allowedValues: ["no", "1kw", "50kw", "deutereum reactor"]
-    label: () -> TAPi18n.__("perf_power")
-    optional: true
-  time:
     type: String
-    label: () -> TAPi18n.__("perf_time")
+    label: () -> TAPi18n.__("perf_power")
     optional: true
     autoform:
       rows: 2
   help:
-    type: "select-radio-inline"
-    allowedValues: ["no", "1", "2", "3+"]
+    type: String
+    allowedValues: ["no", "1person", "2people", "3people_plus"]
     label: () -> TAPi18n.__("perf_help")
     optional: true
+    autoform:
+      type: "select"
+      options: () ->
+        l=["no", "1person", "2people", "3people_plus"]
+        _.map(l,(e) -> {label: TAPi18n.__(e), value: e})
   installation:
     type: String
     label: () -> TAPi18n.__("perf_installation")
@@ -285,10 +286,6 @@ Schemas.PerformanceForm = new SimpleSchema(
     type: ["url"]
     label: () -> TAPi18n.__("perf_links")
     optional: true
-    autoform:
-      template: "bootstrap3-inline"
-      afFieldInput:
-        template: "bootstrap3-inline"
   media:
     type: String
     label: () -> TAPi18n.__("perf_media")
@@ -300,7 +297,6 @@ Schemas.PerformanceForm = new SimpleSchema(
   description:
     type: String
     label: () -> TAPi18n.__("perf_description")
-    optional: true
     autoform:
       rows:6
   kind:
@@ -314,7 +310,6 @@ Schemas.PerformanceForm = new SimpleSchema(
   installation:
     type: InstallationForm
     optional: true
-    custom: () -> if this.field('kind').value == "installation" then "required"
     autoform:
       type: () ->
         if (AutoForm.getFieldValue("kind") == "installation") then ""
@@ -322,7 +317,6 @@ Schemas.PerformanceForm = new SimpleSchema(
   performance:
     type: StagePerformanceForm
     optional: true
-    custom: () -> if this.field('kind').value == "stage_perf" then "required"
     autoform:
       type: () ->
         if (AutoForm.getFieldValue("kind") == "stage_perf") then ""
@@ -330,7 +324,6 @@ Schemas.PerformanceForm = new SimpleSchema(
   workshop:
     type: WorkshopForm
     optional: true
-    custom: () -> if this.field('kind').value == "workshop" then "required"
     autoform:
       type: () ->
         if (AutoForm.getFieldValue("kind") == "workshop") then ""
@@ -341,7 +334,8 @@ Schemas.PerformanceForm = new SimpleSchema(
     optional: true
     defaultValue: "pending"
     autoform:
-      omit: true
+      type: "hidden"
+      # omit: true
 )
 
 PerformanceForm.attachSchema(Schemas.PerformanceForm)

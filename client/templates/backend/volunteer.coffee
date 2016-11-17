@@ -3,13 +3,6 @@ Template.volunteerBackend.onCreated () ->
   this.currentResource = new ReactiveVar({})
   # this.currentPage = new ReactiveVar(Session.get('current-page') || 0)
 
-getUserName = (userId) ->
-  user = Meteor.users.findOne(userId)
-  if user
-    if (user.profile?.firstName? or user.profile?.lastName?)
-      "#{user.profile.firstName} #{user.profile.lastName}"
-    else user.emails[0].address
-
 Template.updateVolunteerResourceForm.helpers
   'username': () -> getUserName(Meteor.user())
 
@@ -38,8 +31,7 @@ Template.volunteerBackend.helpers
         key: 'name',
         label: (() -> TAPi18n.__("name")),
         fn: (l,obj,k) -> if obj then getUserName(obj.userId)
-      },
-      # { key: 'status', label: (() -> TAPi18n.__("status"))}
+      }
     ]
   'VolunteerResourceTableSettings': () ->
     currentResource = Template.instance().currentResource.get()

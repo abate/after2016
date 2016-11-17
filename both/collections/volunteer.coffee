@@ -1,16 +1,6 @@
 
 @VolunteerResource = new Mongo.Collection 'volunteerResource'
 
-# Timeslot = new SimpleSchema(
-#   start:
-#     type: String
-#     label: () -> TAPi18n.__("timeslot_start")
-#   duration:
-#     type: String
-#     label: () -> TAPi18n.__("timeslot_duration")
-#     allowedValues: ["1h", "2hs", "3hs", "4hs", "5hs", "day"]
-# )
-
 Schemas.VolunteerResource = new SimpleSchema(
   userId:
     type: String
@@ -41,8 +31,6 @@ Schemas.VolunteerResource = new SimpleSchema(
         startDate: '2017/12/16'
         todayButton: false
         formatDate:'d.m.Y'
-        # minDate:'-2016/12/16'
-        # maxDate:'+2017/12/18'
   modifiedBy:
     type: String
     optional: true

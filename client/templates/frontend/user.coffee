@@ -43,4 +43,5 @@ Template.userDashboard.events
 AutoForm.hooks
   userProfileForm:
     onSuccess: () ->
+      setUserLanguage(Meteor.userId())
       Router.go('userDashboard')

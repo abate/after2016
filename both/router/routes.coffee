@@ -28,7 +28,8 @@ Router.route '/dashboard',
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),
     Meteor.subscribe('volunteerResource'),
-    Meteor.subscribe('volunteerForm')
+    Meteor.subscribe('volunteerForm'),
+    Meteor.subscribe('userData')
   ]
 
 Router.route '/admin/translations',

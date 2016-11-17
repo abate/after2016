@@ -1,61 +1,37 @@
 
 <template name="insertPerformanceForm">
   {{> quickForm id="insertPerformanceForm"
-    collection="PerformanceForm" type="method" meteormethod="Performance.addForm" }}
+    collection="PerformanceForm" type="method"
+    meteormethod="Performance.addForm" }}
 </template>
 
 <template name="updatePerformanceForm">
   {{>quickForm id="updatePerformanceForm"
     collection="PerformanceForm" doc=this
-    type="method-update" meteormethod="Performance.updateForm" preserveForm=false resetOnSuccess=true }}
+    type="method-update" meteormethod="Performance.updateForm" }}
 </template>
 
 <template name="performanceList">
   <div class="panel panel-default">
     <div class="panel-body">
-      {{#markdown}}{{_ "performance_wait_for_answer"}}{{/markdown}}
-      {{_ "accepted"}}
-      <table class="table table-hover">
-        <thead>
-          <tr><th>{{_ "title"}}</th><th>{{_ "timeslot"}}</th><th>{{_ "area"}}</th><th>{{_ "contact"}}</th><th>{{_ "action"}}</th></tr>
-        </thead>
-        <tbody>
-          {{#each accepted}}
-            <tr>
-              <td>{{performanceTitle performanceId}}</td>
-              <td>{{timeslot}}</td>
-              <td>{{area}}</td>
-              <td>areaRef</td>
-              <td>
-                <i data-id={{performanceId}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
-                <i data-id={{_id}} data-action="bailout" class="fa fa-trash" aria-hidden="true"></i>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
+      {{#if $and ($not accepted) ($not proposed)}}
+        {{#markdown}}{{_ "performance_wait_for_proposal"}}{{/markdown}}
+      {{/if}}
+      {{#if accepted}}
+        {{#markdown}}{{_ "performance_accepted_instructions"}}{{/markdown}}
+        <h3>{{_ "accepted"}}</h3>
+        {{> reactiveTable settings=AcceptedPerformanceTableSettings }}
+      {{/if}}
 
-      {{_ "proposed"}}
-      <table class="table table-hover">
-        <thead>
-          <tr><th>{{_ "title"}}</th><th>{{_ "submitted"}}</th><th>{{_ "status"}}</th><th>{{_ "action"}}</th></tr>
-        </thead>
-        <tbody>
-          {{#each proposed}}
-            <tr>
-              <td>{{title}}</td>
-              <td>{{createdAt}}</td>
-              <td>{{status}}</td>
-              <td>
-                {{#if $neq status "bailedout"}}
-                  <i data-id={{_id}} data-action="update" class="fa fa-pencil" aria-hidden="true"></i>
-                  <i data-id={{_id}} data-action="remove" class="fa fa-trash" aria-hidden="true"></i>
-                {{/if}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
+      {{#if proposed}}
+        {{#if accepted}}
+          {{#markdown}}{{_ "performance_wait_for_proposed"}}{{/markdown}}
+        {{else}}
+          {{#markdown}}{{_ "performance_wait_for_answer"}}{{/markdown}}
+        {{/if}}
+        <h3>{{_ "proposed"}}</h3>
+        {{> reactiveTable settings=ProposedPerformanceTableSettings }}
+      {{/if}}
     </div>
   </div>
 

@@ -1,1 +1,9 @@
-["gate", "kitchen", "dancefloor", "organization"]
+[
+  {"name":"gate", "performance": false},
+  {"name":"kitchen", "performance": false},
+  {"name":"mainarea", "performance": true},
+  {"name":"workshoproom_one", "performance": true},
+  {"name":"workshoproom_two", "performance": true},
+  {"name":"outside", "performance": true},
+  {"name":"organization", "performance": false}
+]

@@ -5,15 +5,14 @@
     <div class="form-inline">
       {{> afQuickField name="status" }}
       {{#if afFieldValueIs name="status" value="accepted"}}
-        {{> afQuickField name="area" }}
-        {{> afQuickField name="timeslot" }}
+        {{> afQuickField name="areaId" }}
+        {{> afQuickField name="time" }}
+        {{> afQuickField name="duration" }}
       {{/if}}
       <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
     </div>
-    {{#if afFieldValueIs name="status" value="accepted"}}
-      {{> afQuickField name="notes" }}
-      <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
-    {{/if}}
+    {{> afQuickField name="notes" }}
+    <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
   {{/autoForm}}
 </template>
 

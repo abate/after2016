@@ -9,7 +9,8 @@ Meteor.startup ->
 
     if Areas.find().count() == 0
       for e in areas
-        Areas.insert {name: e}
+        console.log e
+        Areas.insert e
 
     if Skills.find().count() == 0
       for e in skills

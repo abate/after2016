@@ -19,6 +19,7 @@ Meteor.methods 'Performance.updateForm': (doc,formId) ->
   check(formId,String)
   userId = Meteor.userId()
   if (userId == doc.userId) || Roles.userIsInRole(userId, [ 'manager' ])
+    if doc['$set'].status == "bailedout" then doc['$set'].status = "pending"
     PerformanceForm.update(formId,doc)
 
 Meteor.methods 'Performance.addForm': (doc) ->

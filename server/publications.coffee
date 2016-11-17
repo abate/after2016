@@ -23,8 +23,12 @@ Meteor.publish 'performanceResource', () ->
     PerformanceResource.find({userId: this.userId})
 
 Meteor.publish "userData", () ->
-  if Roles.userIsInRole(this.userId, [ 'manager' ])
-    Meteor.users.find()
+  if this.userId
+    if Roles.userIsInRole(this.userId, [ 'manager' ])
+      Meteor.users.find()
+    else
+      refs = _.uniq(Areas.find(arearef: $ne: null).map (e) -> e.arearef)
+      Meteor.users.find({_id: {$in: refs}})
 
 Meteor.publish 'settings', () -> Settings.find()
 Meteor.publish 'areas', () -> Areas.find()

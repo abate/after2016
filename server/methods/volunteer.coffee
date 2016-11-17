@@ -32,12 +32,20 @@ Meteor.methods 'VolunteerBackend.updateResourceForm': (doc,formId) ->
   check(formId,String)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    VolunteerResource.update(formId,doc)
+    VolunteerResource.update formId, doc, () ->
+      d = doc['$set']
+      role = AppRoles.findOne(d.roleId).name
+      if role == "lead"
+        console.log "update Area ref"
+        Areas.update(d.areaId,{$set: {arearef: d.userId}})
 
 Meteor.methods 'VolunteerBackend.insertResourceForm': (doc) ->
   console.log ["VolunteerBackend.insertResourceForm",doc]
   check(doc,Schemas.VolunteerResource)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    VolunteerResource.insert(doc)
-    # Areas.update(doc.areaId,{$set: {arearef: doc.userId}})
+    VolunteerResource.insert doc, () ->
+      role = AppRoles.findOne(doc.roleId).name
+      if role == "lead"
+        console.log "update Area ref"
+        Areas.update(doc.areaId,{$set: {arearef: doc.userId}})

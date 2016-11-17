@@ -35,3 +35,10 @@ Accounts.onLogin (conn) ->
     Meteor.users.update conn.user._id, $set: lastLogin: new Date
   if Meteor.isClient
     setUserLanguage Meteor.userId()
+
+@getUserName = (userId) ->
+  user = Meteor.users.findOne(userId)
+  if user
+    if (user.profile?.firstName? or user.profile?.lastName?)
+      "#{user.profile.firstName} #{user.profile.lastName}"
+    else user.emails[0].address

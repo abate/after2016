@@ -16,10 +16,6 @@ rowApplicationStatus = (perf) ->
   else if perf.status == "refused" then "bg-danger"
   else "bg-success"
 
-getUserName = (label,perf) ->
-  user = Meteor.users.findOne(perf.userId)
-  "#{user.profile.firstName} #{user.profile.lastName}"
-
 Template.performanceBackend.helpers
   'currentPerformance': () ->
     Template.instance().currentPerformance.get()
@@ -35,8 +31,15 @@ Template.performanceBackend.helpers
     rowClass: rowApplicationStatus
     # filters: []
     fields: [
-      { key: 'name', label: (() -> TAPi18n.__("name")), fn: getUserName},
-      { key: 'title', label: () -> TAPi18n.__("title") },
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (val,row,label) -> getUserName(row.userId)
+      },
+      {
+        key: 'kind',
+        label: () -> TAPi18n.__("kind"),
+        fn: (val,row,label) -> TAPi18n.__ val },
       { key: 'status', label: (() -> TAPi18n.__("status"))}
     ]
 

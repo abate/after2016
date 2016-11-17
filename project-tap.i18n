@@ -1,5 +1,4 @@
 {
     "supported_languages": ["en","fr"],
-    "preloaded_langs": ["*"],
-    "helper_name": "__"
+    "preloaded_langs": ["*"]
 }
