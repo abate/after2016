@@ -1,14 +1,26 @@
 
 <template name="insertPerformanceForm">
-  {{> quickForm id="insertPerformanceForm"
-    collection="PerformanceForm" type="method"
-    meteormethod="Performance.addForm" }}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>{{_ "performance_form"}}</h2>
+      <p>{{_ "performance_form_explanation"}}</p>
+      {{> quickForm id="insertPerformanceForm"
+        collection="PerformanceForm" type="method"
+        meteormethod="Performance.addForm" }}
+  </div>
+</div>
 </template>
 
 <template name="updatePerformanceForm">
-  {{>quickForm id="updatePerformanceForm"
-    collection="PerformanceForm" doc=this
-    type="method-update" meteormethod="Performance.updateForm" }}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>{{_ "performance_form"}}</h2>
+      <p>{{_ "performance_form_explanation"}}</p>
+      {{>quickForm id="updatePerformanceForm"
+        collection="PerformanceForm" doc=this
+        type="method-update" meteormethod="Performance.updateForm" }}
+  </div>
+</div>
 </template>
 
 <template name="performanceList">
@@ -34,5 +46,4 @@
       {{/if}}
     </div>
   </div>
-
 </template>

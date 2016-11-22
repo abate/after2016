@@ -31,11 +31,19 @@ Meteor.methods 'Performance.addForm': (doc) ->
 Meteor.methods 'PerformanceBackend.updatePerformanceResourceForm': (doc,formId) ->
   console.log ["Performance.updateForm",doc, formId]
   check(doc,Schemas.PerformanceResource)
-  # check(formId,String)
+  check(formId,String)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    if formId then PerformanceResource.update(formId,doc)
-    else PerformanceResource.insert(doc["$set"])
+    PerformanceResource.update formId, doc
     performanceId = doc["$set"].performanceId
     status = doc["$set"].status
-    PerformanceForm.update(performanceId,{$set: {status: status}})
+    if status
+      PerformanceForm.update(performanceId,{$set: {status: status}})
+
+Meteor.methods 'PerformanceBackend.insertPerformanceResourceForm': (doc) ->
+  console.log ["Performance.insertForm",doc]
+  check(doc,Schemas.PerformanceResource)
+  userId = Meteor.userId()
+  if Roles.userIsInRole(userId, [ 'manager' ])
+    PerformanceResource.insert(doc)
+    PerformanceForm.update(doc.performanceId,{$set: {status: doc.status}})

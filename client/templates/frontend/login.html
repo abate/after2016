@@ -1,5 +1,18 @@
 <template name="home">
-  <div class="well">
-    {{> atForm}}
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">{{_ "signup"}}</a></li>
+        <li role="presentation"><a href="#signin" aria-controls="signin" role="tab" data-toggle="tab">{{_ "signin"}}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="signup">
+          {{> atForm state="signUp"}}
+        </div>
+        <div role="tabpanel" class="tab-pane" id="signin">
+          {{> atForm state="signIn"}}
+        </div>
+      </div>
+    </div>
   </div>
 </template>

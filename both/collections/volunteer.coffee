@@ -9,7 +9,6 @@ Schemas.VolunteerResource = new SimpleSchema(
   roleId:
     type: String
     label: () -> TAPi18n.__("role")
-    optional: true
     autoform:
       type: "select"
       options: () ->
@@ -21,6 +20,17 @@ Schemas.VolunteerResource = new SimpleSchema(
       type: "select"
       options: () ->
         Areas.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
+  teamId:
+    type: String
+    label: () -> TAPi18n.__("team")
+    optional: true
+    autoform:
+      type: () ->
+        areaId = AutoForm.getFieldValue("areaId")
+        area = Areas.findOne(areaId)
+        if area?.name == "organization" then "select" else "hidden"
+      options: () ->
+        Teams.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   timeslot:
     type: "datetime-local"
     label: () -> TAPi18n.__("timeslot")
@@ -43,14 +53,14 @@ Schemas.VolunteerResource = new SimpleSchema(
     optional: true
     max: 1000
     autoform:
-      rows:3
+      rows:2
   notes:
     type: String
     label: () -> TAPi18n.__("private_notes")
     optional: true
     max: 1000
     autoform:
-      rows:4
+      rows:2
 )
 
 VolunteerResource.attachSchema(Schemas.VolunteerResource)
@@ -66,7 +76,7 @@ Schemas.VolunteerForm = new SimpleSchema(
       omit: true
   avalaibility:
     type: [String]
-    label: () -> TAPi18n.__("avalaibility")
+    label: () -> TAPi18n.__("availabilities")
     optional: true
     autoform:
       type: "select-checkbox-inline"
@@ -83,12 +93,20 @@ Schemas.VolunteerForm = new SimpleSchema(
         Skills.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   role:
     type: [String]
-    label: () -> TAPi18n.__("role")
+    label: () -> TAPi18n.__("roles")
     optional: true
     autoform:
       type: "select-checkbox-inline"
       options: () ->
         AppRoles.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
+  teams:
+    type: [String]
+    label: () -> TAPi18n.__("teams")
+    optional: true
+    autoform:
+      type: "select-checkbox-inline"
+      options: () ->
+        Teams.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
   notes:
     type: String
     label: () -> TAPi18n.__("notes")
@@ -96,7 +114,6 @@ Schemas.VolunteerForm = new SimpleSchema(
     max: 1000
     autoform:
       rows:4
-
 )
 
 VolunteerForm.attachSchema(Schemas.VolunteerForm)

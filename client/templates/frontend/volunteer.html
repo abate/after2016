@@ -1,13 +1,25 @@
 <template name="insertVolunteerForm">
-  {{> quickForm collection="VolunteerForm"
-    id="insertVolunteerForm" type="method"
-    meteormethod="Volunteer.addForm"}}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>{{_ "volunteer_preferences"}}</h2>
+      <p>{{_ "volunteer_preferences_explanation"}}</p>
+      {{> quickForm collection="VolunteerForm"
+        id="insertVolunteerForm" type="method"
+        meteormethod="Volunteer.addForm"}}
+    </div>
+  </div>
 </template>
 
 <template name="updateVolunteerForm">
-  {{> quickForm id="updateVolunteerForm"
-    collection="VolunteerForm" type="method-update"
-    meteormethod="Volunteer.updateForm" doc=this}}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>{{_ "volunteer_preferences"}}</h2>
+      <p>{{_ "volunteer_preferences_explanation"}}</p>
+      {{> quickForm id="updateVolunteerForm"
+        collection="VolunteerForm" type="method-update"
+        meteormethod="Volunteer.updateForm" doc=this}}
+    </div>
+  </div>
 </template>
 
 <template name="volunteerList">

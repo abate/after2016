@@ -10,8 +10,14 @@ Template.areasSettings.helpers
     # rowClass: rowApplicationStatus
     # filters: []
     fields: [
-      { key: 'name', label: (() -> TAPi18n.__("name"))},
-      # { key: 'arearef', label: (() -> TAPi18n.__("arearef"))}
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (val,row,label) -> TAPi18n.__ val},
+      {
+        key: 'leads',
+        label: (() -> TAPi18n.__("leads")),
+        fn: (val,row,label) -> getUserName(val) },
       { key: 'description', label: (() -> TAPi18n.__("description"))}
     ]
 
@@ -27,7 +33,10 @@ Template.skillsSettings.helpers
     # rowClass: rowApplicationStatus
     # filters: []
     fields: [
-      { key: 'name', label: (() -> TAPi18n.__("name"))},
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (val,row,label) -> TAPi18n.__ val},
       { key: 'notes', label: (() -> TAPi18n.__("notes"))}
     ]
 
@@ -43,6 +52,9 @@ Template.rolesSettings.helpers
     # rowClass: rowApplicationStatus
     # filters: []
     fields: [
-      { key: 'name', label: (() -> TAPi18n.__("name"))},
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name"))
+        fn: (val,row,label) -> TAPi18n.__ val},
       { key: 'description', label: (() -> TAPi18n.__("description"))}
     ]

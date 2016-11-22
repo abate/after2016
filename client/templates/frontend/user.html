@@ -6,6 +6,9 @@
           <div class="list-group-item">
             {{fa "user" ""}}
             <a href="#" data-template="userProfile">{{_ "profile"}}</a>
+            {{#if isProfileComplete}}
+              <span style="color: red;">{{fa "exclamation-triangle" ""}}</span>
+            {{/if}}
           </div>
           <div class="list-group-item">
             {{fa "heart" ""}}
@@ -29,13 +32,13 @@
         </div>
       </div>
       <div class="col-md-9 content">
-          <div class="panel panel-default">
+          <!-- <div class="panel panel-default">
             <div class="panel-heading">{{title}}</div>
-            <div class="panel-body">
+            <div class="panel-body"> -->
               {{> Template.dynamic template=tab.template data=tab.data}}
               {{ content}}
-            </div>
-          </div>
+            <!-- </div>
+          </div> -->
       </div>
     </div>
   </div>

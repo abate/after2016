@@ -1,0 +1,64 @@
+<template name="areasDashboard">
+  <div class="row row-no-padding">
+    <div class="col-md-2">
+      <div class="list-group">
+        <div class="list-group-item">
+          <h3>{{_ name}}</h3>
+        </div>
+        <div class="list-group-item">
+          {{fa "cog" ""}}
+          <a href="#" data-template="areaSettings">{{_ "area_settings"}}</a>
+        </div>
+        <div class="list-group-item">
+          {{fa "calendar-o" ""}}
+          <a href="#" data-template="volunteerAreaCal">{{_ "volunteering_planner"}}</a>
+        </div>
+        <div class="list-group-item">
+          {{fa "list" ""}}
+          <a href="#" data-template="volunteerAreaList">{{_ "volunteering_table"}}</a>
+        </div>
+        <div class="list-group-item">
+          {{fa "star" ""}}
+          <a href="#" data-template="performanceAreaList">{{_ "performance"}}</a>
+        </div>
+        <div class="list-group-item">
+          {{fa "question" ""}}
+          <a href="#" data-template="areaHelp">{{_ "area_help"}}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+        <div class="panel panel-default">
+          <!-- <div class="panel-heading">{{title}}</div> -->
+          <div class="panel-body">
+            {{> Template.dynamic template=tab.template data=this }}
+            {{ content}}
+          </div>
+        </div>
+    </div>
+  </div>
+</template>
+
+<template name="volunteerAreaList">
+  {{> reactiveTable settings=volunteerAreaTableSettings }}
+</template>
+
+<template name="volunteerAreaCal">
+  <div class="row row-no-padding">
+    <div class="col-md-2">
+      <div id="external-events" class="panel panel-default">
+        <h4>{{_ "volunteers"}}</h4>
+        {{#each volunteers}}
+          <div class="fc-event ui-draggable ui-draggable-handle">{{name}}</div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="col-md-10">
+      {{> fullcalendar options }}
+    </div>
+  </div>
+</template>
+
+<template name="performanceAreaList">
+  {{> fullcalendar options }}
+</template>

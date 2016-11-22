@@ -27,12 +27,15 @@ Schemas.Profile = new SimpleSchema(
   language:
     type: String
     allowedValues: ["en","fr"]
-    defaultValue: "en"
+    defaultValue: "fr"
     optional: true
     autoform:
       afFieldInput:
-        type: "select"
-        options: "allowed"
+        type: "select-radio-inline"
+        options: [
+          {value: "fr", label: Spacebars.SafeString('<img src="icons/blank.gif" class="flag flag-fr" alt="France" />')},
+          {value: "en", label: Spacebars.SafeString('<img src="icons/blank.gif" class="flag flag-uk" alt="UK" />')}
+        ]
   facebook:
     type: String
     label: "Facebook"

@@ -37,7 +37,7 @@ Meteor.methods 'VolunteerBackend.updateResourceForm': (doc,formId) ->
       role = AppRoles.findOne(d.roleId).name
       if role == "lead"
         console.log "update Area ref"
-        Areas.update(d.areaId,{$set: {arearef: d.userId}})
+        Areas.update(d.areaId,{$set: {leads: d.userId}})
 
 Meteor.methods 'VolunteerBackend.insertResourceForm': (doc) ->
   console.log ["VolunteerBackend.insertResourceForm",doc]
@@ -48,4 +48,4 @@ Meteor.methods 'VolunteerBackend.insertResourceForm': (doc) ->
       role = AppRoles.findOne(doc.roleId).name
       if role == "lead"
         console.log "update Area ref"
-        Areas.update(doc.areaId,{$set: {arearef: doc.userId}})
+        Areas.update(doc.areaId,{$set: {leads: doc.userId}})

@@ -2,6 +2,8 @@ Template.userDashboard.onCreated () ->
   Session.set("currentTab",{template:"userHelp"})
 
 Template.userDashboard.helpers
+  "isProfileComplete": () ->
+    !Meteor.user().profile.firstName? or !Meteor.user().profile.lastName?
   "tab": () -> Session.get("currentTab")
   "isVolunteer": () ->
     VolunteerForm.find({userId: Meteor.userId()}).count() > 0
@@ -44,4 +46,5 @@ AutoForm.hooks
   userProfileForm:
     onSuccess: () ->
       setUserLanguage(Meteor.userId())
+      Session.set("currentTab",{template:"userHelp"})
       Router.go('userDashboard')

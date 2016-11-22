@@ -20,6 +20,7 @@ addUsersToRoles = (user) ->
   if user
     T9n.setLanguage user.profile.language
     TAPi18n.setLanguage user.profile.language
+    moment.locale(user.profile.language)
 
 postSignUpHook = (userId, info) ->
   if Meteor.isServer then addUsersToRoles userId
@@ -39,6 +40,12 @@ Accounts.onLogin (conn) ->
 @getUserName = (userId) ->
   user = Meteor.users.findOne(userId)
   if user
-    if (user.profile?.firstName? or user.profile?.lastName?)
+    if (user.profile?.firstName? and user.profile?.lastName?)
       "#{user.profile.firstName} #{user.profile.lastName}"
+    else if user.profile?.firstName?
+      "#{user.profile.firstName}"
+    else if user.profile?.lastName?
+      "#{user.profile.lastName}"
+    else if user.profile?.playaName?
+      "#{user.profile.playaName}"
     else user.emails[0].address

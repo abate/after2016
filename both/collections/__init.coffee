@@ -2,6 +2,7 @@
 
 @Settings = new Mongo.Collection 'settings'
 
+
 @Areas = new Mongo.Collection 'areas'
 
 Schemas.Areas = new SimpleSchema(
@@ -11,9 +12,9 @@ Schemas.Areas = new SimpleSchema(
   performance:
     type: Boolean
     label: () -> TAPi18n.__("areas_performance")
-  arearef:
+  leads:
     type: String
-    label: () -> TAPi18n.__("arearef")
+    label: () -> TAPi18n.__("leads")
     optional: true
   description:
     type: String
@@ -22,6 +23,32 @@ Schemas.Areas = new SimpleSchema(
 )
 
 Areas.attachSchema(Schemas.Areas)
+
+@Teams = new Mongo.Collection 'teams'
+
+Schemas.Teams = new SimpleSchema(
+  name:
+    type: String
+    label: () -> TAPi18n.__("name")
+  leads:
+    type: String
+    label: () -> TAPi18n.__("leads")
+    optional: true
+  areaId:
+    type: String
+    label: () -> TAPi18n.__("area")
+    optional: true
+    autoform:
+      type: "select"
+      options: () ->
+        Areas.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
+  description:
+    type: String
+    optional: true
+    label: () -> TAPi18n.__("description")
+)
+
+Teams.attachSchema(Schemas.Teams)
 
 @Skills = new Mongo.Collection 'skills'
 

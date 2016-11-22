@@ -6,38 +6,170 @@
       {{> afQuickField name="status" }}
       {{#if afFieldValueIs name="status" value="accepted"}}
         {{> afQuickField name="areaId" }}
-        {{> afQuickField name="time" }}
-        {{> afQuickField name="duration" }}
       {{/if}}
       <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
     </div>
     {{> afQuickField name="notes" }}
-    <div class="form-control-static pull-right">{{_ "sign_off_by"}} {{username}}</div>
   {{/autoForm}}
 </template>
 
-<template name="performanceBackend">
-  <div class="container-fluid main-container">
-    <div class="row">
-      <div class="col-md-3">
-        {{> reactiveTable settings=PerformanceTableSettings }}
+<template name="performanceDisplay">
+  <div class="card">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{_ "general"}}</a></li>
+      <li role="presentation"><a href="#media" aria-controls="media" role="tab" data-toggle="tab">{{_ "media"}}</a></li>
+      <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{_ "details"}}</a></li>
+      <li role="presentation"><a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{_ "edit"}}</a></li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="general">
+        <h2>{{title}}</h2>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "description"}}</label>
+          <div class="col-xs-10">{{description}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kind"}}</label>
+          <div class="col-xs-10">{{_ kind}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
+          <div class="col-xs-10">{{_ type}}</div>
+        </div>
       </div>
-      <div class="col-md-8 content">
-        {{#if currentPerformance.title }}
-          <div class="row well">
-          <h1>{{currentPerformance.title}}</h1>
-            {{> Template.dynamic template="updatePerformanceResourceForm" data=currentResource }}
+      <div role="tabpanel" class="tab-pane" id="media">
+        <!-- XXX add image here !!! -->
+      </div>
+      <div role="tabpanel" class="tab-pane" id="details">
+        {{#if $eq kind "installation"}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "dimension"}}</label>
+            <div class="col-xs-10">{{installation.dimension}}</div>
           </div>
-          <div class="row">
-            <div class="panel panel-default">
-              <div class="panel-heading">{{_ "performance_details"}}</div>
-              <div class="panel-body">
-                {{> Template.dynamic template="updatePerformanceForm" data=currentPerformance }}
-              </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "material"}}</label>
+            <div class="col-xs-10">{{installation.meterial}}</div>
+          </div>
+          {{#if installation.textitles}}
+            <div class="form-group row">
+              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "textitles"}}</label>
+              <div class="col-xs-10">{{installation.textitles_details}}</div>
             </div>
+          {{/if}}
+          {{#if installation.fire}}
+            <div class="form-group row">
+              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
+              <div class="col-xs-10">{{installation.fire_details}}</div>
+            </div>
+          {{/if}}
+          {{#if sound}}
+            <div class="form-group row">
+              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "sound"}}</label>
+              <div class="col-xs-10">{{installation.sound_details}}</div>
+            </div>
+          {{/if}}
+          {{#if light}}
+            <div class="form-group row">
+              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "light"}}</label>
+              <div class="col-xs-10">{{installation.light_details}}</div>
+            </div>
+          {{/if}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "power"}}</label>
+            <div class="col-xs-10">{{installation.power}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "help"}}</label>
+            <div class="col-xs-10">{{installation.help}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "installation"}}</label>
+            <div class="col-xs-10">{{installation.installation}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "safety"}}</label>
+            <div class="col-xs-10">{{installation.safety}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+            <div class="col-xs-10">{{installation.logistic}}</div>
           </div>
         {{/if}}
+        {{#if $eq kind "stage_perf"}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
+            <div class="col-xs-10">{{performance.duration}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+            <div class="col-xs-10">{{performance.logistic}}</div>
+          </div>
+          {{#if performance.fire}}
+            <div class="form-group row">
+              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
+              <div class="col-xs-10">{{performance.fire_details}}</div>
+            </div>
+          {{/if}}
+        {{/if}}
+        {{#if $eq kind "workshop"}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
+            <div class="col-xs-10">{{_ workshop.type}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kids"}}</label>
+            <div class="col-xs-10">{{workshop.kids}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "space"}}</label>
+            <div class="col-xs-10">{{workshop.space}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
+            <div class="col-xs-10">{{workshop.duration}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+            <div class="col-xs-10">{{workshop.logistic}}</div>
+          </div>
+         {{/if}}
       </div>
+      <div role="tabpanel" class="tab-pane" id="edit">{{> updatePerformanceForm }} </div>
     </div>
   </div>
+</template>
+
+<template name="performanceBackendForm">
+  <div class="content">
+    <div class="col-md-9">
+      {{> performanceDisplay this}}
+    </div>
+    <div class="col-md-3">
+      <div class="row">
+        {{#if performanceResource}}
+          {{> quickForm meteormethod="PerformanceBackend.updatePerformanceResourceForm"
+              type="method-update" id="updatePerformanceResourceForm"
+              collection="PerformanceResource" template="bootstrap3-inline"
+              doc=performanceResource omitFields="time,duration"}}
+        {{else}}
+          {{> quickForm meteormethod="PerformanceBackend.insertPerformanceResourceForm"
+              type="method" id="insertPerformanceResourceForm"
+              collection="PerformanceResource" omitFields="time,duration"}}
+        {{/if}}
+      </div>
+      <!-- <div class="row">
+        {{> fullcalendar options }}
+      </div> -->
+    </div>
+  </div>
+</template>
+
+<template name="performanceBackend">
+  {{> reactiveTable settings=PerformanceTableSettings }}
+</template>
+
+<template name="performanceBackendActions">
+  {{#linkTo route="performanceBackendForm"}}
+    <i class="fa fa-pencil-square-o"></i>
+  {{/linkTo}}
 </template>

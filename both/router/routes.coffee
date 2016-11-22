@@ -26,10 +26,11 @@ Router.route '/dashboard',
   template: 'userDashboard'
   waitOn: () -> [
     Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('PerformanceImages'),
     Meteor.subscribe('performanceResource'),
     Meteor.subscribe('volunteerResource'),
     Meteor.subscribe('volunteerForm'),
-    Meteor.subscribe('userData')
+    Meteor.subscribe('userData'),
   ]
 
 Router.route '/admin/translations',
@@ -59,6 +60,23 @@ Router.route '/admin/performance',
   waitOn: () -> [
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('PerformanceImages'),
+    Meteor.subscribe('userData')
+  ]
+
+Router.route '/admin/performance/:_id',
+  name: 'performanceBackendForm'
+  controller: 'AdminController'
+  template: 'performanceBackendForm'
+  data: () ->
+    f = PerformanceForm.findOne(this.params._id)
+    if f
+      r = PerformanceResource.findOne({performanceId: this.params._id})
+      _.extend(f,{performanceResource: r})
+  waitOn: () -> [
+    Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('PerformanceImages'),
     Meteor.subscribe('userData')
   ]
 
@@ -67,6 +85,23 @@ Router.route '/admin/performance',
   controller: 'AdminController'
   template: 'volunteerBackend'
   waitOn: () -> [
+    Meteor.subscribe('volunteerResource'),
+    Meteor.subscribe('volunteerForm'),
+    Meteor.subscribe('userData')
+  ]
+
+  Router.route '/admin/areas/:name',
+  name: 'areasDashboard'
+  controller: 'AdminController'
+  template: 'areasDashboard'
+  data: () ->
+    if this.ready()
+      Areas.findOne({name:this.params.name})
+  waitOn: () -> [
+    #XXX this should be only for this area ...
+    Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('PerformanceImages'),
     Meteor.subscribe('volunteerResource'),
     Meteor.subscribe('volunteerForm'),
     Meteor.subscribe('userData')

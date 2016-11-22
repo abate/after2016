@@ -26,14 +26,16 @@ Template.volunteerList.helpers
         },
       { key: 'timeslot', label: (() -> TAPi18n.__("timeslot"))},
       {
-        key: 'arearef',
-        label: (() -> TAPi18n.__("arearef")),
+        key: 'leads',
+        label: (() -> TAPi18n.__("leads")),
         fn: (val,row,label) ->
-          getUserName(Areas.findOne(row.areaId).arearef)
+          getUserName(Areas.findOne(row.areaId).leads)
         },
       {
-        key: 'task',
-        label: (() -> TAPi18n.__("task")),
+        key: 'teamId',
+        label: (() -> TAPi18n.__("team")),
+        fn: (val,row,label) ->
+          if val then TAPi18n.__(Teams.findOne(val).name)
         cellClass: "volunteer-task-td"
       },
     ]

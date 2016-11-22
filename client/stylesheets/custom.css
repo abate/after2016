@@ -1,13 +1,18 @@
-/*h1.page-header {
-  margin-top: -5px;
+.volunteer-task-td {
+  word-wrap: break-word;
+  max-width: 160px;
 }
 
-.main-container {
-  background: #FFF;
-  padding-top: 15px;
-  margin-top: -20px;
-}*/
-.volunteer-task-td {
-    word-wrap: break-word;
-    max-width: 160px;
+.fc {
+  font-size: 14px;
+}
+
+.form-group label.control-label {
+  font-size: medium;
+  color: black;
+}
+
+.row-no-padding > [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }

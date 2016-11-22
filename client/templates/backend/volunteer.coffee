@@ -11,10 +11,13 @@ rowApplicationStatus = (vol) ->
   else if vol.status == "free" then "bg-success"
   else "bg-warning"
 
+AutoForm.debug()
+
 Template.volunteerBackend.helpers
-  'getUserName': (userId) -> getUserName(userId)
-  'getRoleName': (roleId) -> TAPi18n.__ (AppRoles.findOne(roleId).name)
-  'getSkillName': (skillId) -> TAPi18n.__ (Skills.findOne(skillId).name)
+  'getUserName': (id) -> getUserName(id)
+  'getRoleName': (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
+  'getSkillName': (id) -> TAPi18n.__ (Skills.findOne(id).name)
+  'getTeamName': (id) -> TAPi18n.__ (Teams.findOne(id).name)
   'currentResource': () -> Template.instance().currentResource.get()
   'VolunteerTableSettings': () ->
     collection: VolunteerForm.find()
@@ -48,23 +51,23 @@ Template.volunteerBackend.helpers
       {
         key: 'roleId',
         label: (() -> TAPi18n.__("role")),
-        fn: (l,o,k) -> TAPi18n.__ (AppRoles.findOne(l).name)},
+        fn: (val,row,key) -> TAPi18n.__ (AppRoles.findOne(val).name)},
       {
         key: 'areaId',
         label: (() -> TAPi18n.__("area")),
-        fn: (l,o,k) -> TAPi18n.__ (Areas.findOne(l).name)},
+        fn: (val,row,key) -> TAPi18n.__ (Areas.findOne(val).name)},
       { key: 'timeslot', label: (() -> TAPi18n.__("timeslot")) },
       {
-        key: 'arearef',
-        label: (() -> TAPi18n.__("arearef")),
-        fn: (l,o,k) -> getUserName(l) },
+        key: 'leads',
+        label: (() -> TAPi18n.__("leads")),
+        fn: (val,row,key) -> getUserName(val) },
       {
         key: 'actions',
         label: (() -> TAPi18n.__("actions")),
-        fn: (a,o,c) ->
+        fn: (val,row,key) ->
           Spacebars.SafeString (
             '<i data-action="removeVolunteerResource"
-                data-id="'+ o._id + '" class="fa fa-trash"
+                data-id="'+ row._id + '" class="fa fa-trash"
                 aria-hidden="true"></i>'
           )
       },

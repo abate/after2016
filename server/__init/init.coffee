@@ -1,31 +1,30 @@
 Meteor.startup ->
 
+  if Areas.find().count() == 0
+    console.log "Init Areas"
+    for e in JSON.parse(Assets.getText('areas.json'))
+      Areas.insert e
+
+  if Teams.find().count() == 0
+    console.log "Init Teams"
+    for e in JSON.parse(Assets.getText('teams.json'))
+      Teams.insert {name: e}
+
+  if Skills.find().count() == 0
+    console.log "Init Skills"
+    for e in JSON.parse(Assets.getText('skills.json'))
+      Skills.insert {name: e}
+
+  if AppRoles.find().count() == 0
+    console.log "Init Roles"
+    for e in JSON.parse(Assets.getText('roles.json'))
+      AppRoles.insert {name: e}
+
   if Settings.find().count() == 0
     console.log "Init Settings"
-
-    skills = JSON.parse(Assets.getText('skills.json'))
-    areas = JSON.parse(Assets.getText('areas.json'))
-    roles = JSON.parse(Assets.getText('roles.json'))
-
-    if Areas.find().count() == 0
-      for e in areas
-        console.log e
-        Areas.insert e
-
-    if Skills.find().count() == 0
-      for e in skills
-        Skills.insert {name: e}
-
-    if AppRoles.find().count() == 0
-      for e in roles
-        AppRoles.insert {name: e}
-
-    timeslotsV = JSON.parse(Assets.getText('timeslots-volunteer.json'))
-    timeslotsP = JSON.parse(Assets.getText('timeslots-performance.json'))
-
     Settings.insert
-      timeslotsV: timeslotsV
-      timeslotsP: timeslotsP
+      timeslotsV: JSON.parse(Assets.getText('timeslots-volunteer.json'))
+      dday: moment("2016-12-18")
 
   @allRoles = ['super-admin','admin','manager','user']
 # we create all the user roles if none exists already

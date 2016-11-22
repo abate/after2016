@@ -40,26 +40,23 @@ Schemas.PerformanceResource = new SimpleSchema(
           (e) -> {label: TAPi18n.__(e.name), value: e._id}
         )
   time:
-    type: "datetime-local"
-    label: () -> TAPi18n.__("date")
+    type: String
     optional: true
-    # custom: () -> if this.field('status').value == accepted then "required"
     autoform:
       type: "datetimepicker"
       opts:
-        startDate: '2017/12/16'
+        lang: 'fr' #Meteor.user().profile.language
+        format:'DD-MM-YYYY H:mm'
+        startDate: "18-12-2016"
+        formatDate: 'DD-MM-YYYY'
         todayButton: false
-        formatDate:'d.m.Y'
   duration:
     type: String
     label: () -> TAPi18n.__("duration")
     optional: true
-    allowedValues: ["1h", "2hs", "3hs", "4hs", "5hs", "half_day", "all_day"]
-    # custom: () -> if this.field('time').isSet then "required"
-    autoform:
-      options: () ->
-        l=["1h", "2hs", "3hs", "4hs", "5hs", "half_day", "all_day"]
-        _.map(l,(e) -> {label: TAPi18n.__(e), value: e})
+    # autoform:
+      # type: "oaf-duration"
+    # allowedValues: ("00:#{n * 5}" for n in [1..10]) + ("#{n}:00" for n in [1..10])
   notes:
     type: String
     label: () -> TAPi18n.__("notes")

@@ -20,9 +20,11 @@ AuthenticatedController = AnonymousController.extend(
     else
       @render 'notFound'
   waitOn: -> [
+    Meteor.subscribe('profilePictures'),
     Meteor.subscribe('settings'),
     Meteor.subscribe('areas'),
     Meteor.subscribe('skills'),
+    Meteor.subscribe('teams'),
     Meteor.subscribe('approles')
    ]
 )
