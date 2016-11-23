@@ -13,11 +13,14 @@ rowApplicationStatus = (vol) ->
 
 AutoForm.debug()
 
-Template.volunteerBackend.helpers
+Template.volunteerUserProfile.helpers
   'getUserName': (id) -> getUserName(id)
   'getRoleName': (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
   'getSkillName': (id) -> TAPi18n.__ (Skills.findOne(id).name)
   'getTeamName': (id) -> TAPi18n.__ (Teams.findOne(id).name)
+  'imageFileLink': (id) -> if id then ProfilePictures.findOne(id).link()
+
+Template.volunteerBackend.helpers
   'currentResource': () -> Template.instance().currentResource.get()
   'VolunteerTableSettings': () ->
     collection: VolunteerForm.find()
@@ -81,6 +84,7 @@ Template.volunteerBackend.events
   'click #VolunteerTableID.reactive-table tbody tr': (event, template) ->
     template.currentResource.set {
       form: VolunteerForm.findOne({userId: this.userId})
+      user: Meteor.users.findOne(this.userId)
       template: "insertVolunteerResourceForm",
       data: {userId : this.userId}}
 
@@ -88,5 +92,6 @@ Template.volunteerBackend.events
     data = VolunteerResource.findOne({userId: this.userId})
     template.currentResource.set {
       form: VolunteerForm.findOne({userId: this.userId})
+      user: Meteor.users.findOne(this.userId)
       template: "updateVolunteerResourceForm",
       data: data}

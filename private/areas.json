@@ -4,6 +4,8 @@
   {"name":"mainarea", "performance": true},
   {"name":"workshoproom_one", "performance": true},
   {"name":"workshoproom_two", "performance": true},
+  {"name":"chil", "performance": true},
+  {"name":"bar", "performance": false},
   {"name":"outside", "performance": true},
   {"name":"organization", "performance": false}
 ]
