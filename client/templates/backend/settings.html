@@ -13,3 +13,78 @@
 <template name="timeslotsSettings">
   {{> reactiveTable settings=timeslotsTableSettings }}
 </template>
+
+<template name="allUsersList">
+  <div class="row">
+    <div class="col-md-3">
+      {{> reactiveTable settings=allUsersTableSettings }}
+    </div>
+    <div class="col-md-9">
+      {{> allUsersProfile currentResource}}
+    </div>
+  </div>
+</template>
+
+<template name="allUsersActions1">
+  {{#linkTo route="allUsersProfile"}}
+    <i class="fa fa-pencil-square-o"></i>
+  {{/linkTo}}
+</template>
+
+<template name="allUsersActions">
+  <div class="btn-group">
+    <a class="btn btn-primary" href="#"><i class="fa fa-user fa-fw"></i>{{_ "actions"}}</a>
+    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+      <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <!-- <li><a data-action="sudo-user">{{_ "impersonate"}}</a></li> -->
+      <li><a data-action="remove-user"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> {{_ "remove"}}</a></li>
+      <li class="divider"></li>
+      <!-- <li><a data-action="email-user"><i class="fa fa-envelope-o fa-fw" aria-hidden="true"></i> {{_ "send_email"}}</a> </li> -->
+      {{#if isInRole 'admin'}}
+        <li class="divider"></li>
+      {{/if}}
+      {{#if isInRole 'super-admin'}}
+        <li><a data-action="admin-user"><i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_admin"}}</a></li>
+      {{/if}}
+      {{#if isInRole 'admin'}}
+        <li><a data-action="manager-user"><i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_manager"}}</a></li>
+      {{/if}}
+      {{#if isInRole 'manager'}}
+        <li><a data-action="normal-user"><i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_user"}}</a></li>
+      {{/if}}
+    </ul>
+  </div>
+</template>
+
+<template name="allUsersProfile">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{getUserName _id}}</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3 col-lg-3 " align="center">
+          <img alt="User Pic" src="{{imageFileLink profile.picture}}" class="img-circle img-responsive">
+          {{> allUsersActions }}
+        </div>
+        <div class=" col-md-9 col-lg-9 ">
+          <table class="table table-user-information">
+            <tbody>
+              <tr><td>{{_ "playaName"}}:</td><td>{{profile.playaName}}</td></tr>
+              <tr><td>{{_ "telephone"}}</td><td>{{profile.telephone}}</td></tr>
+              <tr><td>{{_ "email"}}</td>
+                <td>{{emails.[0].address}}{{#if emails.[0].verified}}{{fa 'check'}}{{/if}}</td>
+              </tr>
+              <tr><td>{{_ "facebook"}}</td><td>{{profile.facebook}}</td></tr>
+              <tr><td>{{_ "createdAt"}}</td><td>{{createdAt}}</td></tr>
+        		  <tr><td>{{_ "last_login"}}</td><td>{{lastLogin}}</td></tr>
+              <tr><td>{{_ "site_roles"}}</td><td>{{displayRoles _id}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

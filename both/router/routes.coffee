@@ -43,6 +43,24 @@ Router.route '/admin/emails',
   controller: 'AdminController'
   template: 'emailForms'
 
+Router.route '/admin/users/:_id',
+  name: 'allUsersProfile'
+  controller: 'AdminController'
+  template: 'allUsersProfile'
+  data: () ->
+    Meteor.users.findOne(this.params._id)
+  waitOn: () -> [
+    Meteor.subscribe('userData')
+  ]
+
+Router.route '/admin/users',
+  name: 'allUsersList'
+  controller: 'AdminController'
+  template: 'allUsersList'
+  waitOn: () -> [
+    Meteor.subscribe('userData')
+  ]
+
 Router.route '/admin/settings/areas',
   name: 'areasSettings'
   controller: 'AdminController'

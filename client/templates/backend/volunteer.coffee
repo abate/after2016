@@ -1,4 +1,3 @@
-
 Template.volunteerBackend.onCreated () ->
   this.currentResource = new ReactiveVar({})
   # this.currentPage = new ReactiveVar(Session.get('current-page') || 0)
@@ -11,14 +10,10 @@ rowApplicationStatus = (vol) ->
   else if vol.status == "free" then "bg-success"
   else "bg-warning"
 
-AutoForm.debug()
-
 Template.volunteerUserProfile.helpers
-  'getUserName': (id) -> getUserName(id)
   'getRoleName': (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
   'getSkillName': (id) -> TAPi18n.__ (Skills.findOne(id).name)
   'getTeamName': (id) -> TAPi18n.__ (Teams.findOne(id).name)
-  'imageFileLink': (id) -> if id then ProfilePictures.findOne(id).link()
 
 Template.volunteerBackend.helpers
   'currentResource': () -> Template.instance().currentResource.get()

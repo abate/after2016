@@ -13,3 +13,8 @@ Template.registerHelper "debug", (optionalValue) ->
     console.log("Value")
     console.log("====================")
     console.log(optionalValue)
+
+Template.registerHelper 'imageFileLink', (id) ->
+  if id then ProfilePictures.findOne(id).link()
+
+Template.registerHelper 'getUserName', (id) -> getUserName(id)

@@ -1,3 +1,53 @@
+
+Template.allUsersProfile.helpers
+  'displayRoles': (userId) ->
+    if Roles.userIsInRole(userId, [ 'super-admin' ])
+      TAPi18n.__ "super-admin"
+    else if Roles.userIsInRole(userId, [ 'admin' ])
+      TAPi18n.__ "admin"
+    else if Roles.userIsInRole(userId, [ 'manager' ])
+      TAPi18n.__ "manager"
+    else if Roles.userIsInRole(userId, [ 'user' ])
+      TAPi18n.__ "user"
+Template.allUsersList.onCreated () ->
+  this.currentResource = new ReactiveVar({})
+
+Template.allUsersList.events
+  'click [data-action="remove-user"]': (event, template) ->
+    Meteor.call 'Accounts.removeUser', this._id
+
+  'click [data-action="admin-user"]': (event, template) ->
+    Meteor.call "Accounts.changeUserRole", this._id, "admin"
+
+  'click [data-action="manager-user"]': (event, template) ->
+    Meteor.call "Accounts.changeUserRole", this._id, "manager"
+
+  'click [data-action="normal-user"]': (event, template) ->
+    Meteor.call "Accounts.changeUserRole", this._id, "user"
+
+  'click #AllUsersTableID.reactive-table tbody tr': (event, template) ->
+    template.currentResource.set Meteor.users.findOne(this._id)
+
+Template.allUsersList.helpers
+  'currentResource': () -> Template.instance().currentResource.get()
+  'allUsersTableSettings': () ->
+    collection: Meteor.users
+    # currentPage: Template.instance().currentPage
+    id: "AllUsersTableID"
+    class: "table table-bordered table-hover"
+    showNavigation: 'auto'
+    rowsPerPage: 20
+    showRowCount: true
+    # rowClass: rowApplicationStatus
+    # filters: []
+    fields: [
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (val,row,label) -> getUserName(row._id)
+      }
+    ]
+
 Template.areasSettings.helpers
   'areasTableSettings': () ->
     collection: Areas.find()

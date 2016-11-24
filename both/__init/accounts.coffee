@@ -1,7 +1,11 @@
 AccountsTemplates.configure
   defaultLayout: 'userLayout'
-  showForgotPasswordLink: true
+  # showForgotPasswordLink: true
   enablePasswordChange: true
+  showForgotPasswordLink: true
+  sendVerificationEmail: true
+  continuousValidation: true
+  enforceEmailVerification: false
   # postSignUpHook: postSignUpHook
   # onLogoutHook: onSignOut
   # privacyUrl: 'privacy'
@@ -9,6 +13,19 @@ AccountsTemplates.configure
 
 AccountsTemplates.configureRoute 'signIn', { redirect: '/dashboard' }
 AccountsTemplates.configureRoute 'signUp', { redirect: '/profile' }
+AccountsTemplates.configureRoute 'changePwd', { redirect: '/dashboard' }
+AccountsTemplates.configureRoute 'resetPwd'
+AccountsTemplates.configureRoute 'forgotPwd'
+AccountsTemplates.configureRoute 'enrollAccount'
+
+AccountsTemplates.addField
+  _id: 'language'
+  type: 'select'
+  displayName: "Language"
+  select: [
+    { text: 'fr', value: 'fr' },
+    { text: 'en', value: 'en' }
+  ]
 
 addUsersToRoles = (user) ->
   if userId then Roles.addUsersToRoles userId, 'user'
@@ -28,7 +45,8 @@ postSignUpHook = (userId, info) ->
 
 if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
-    console.log "profile to be filled"
+    # console.log ["profile to be filled", options]
+    user.profile = options.profile
     return user
 
 Accounts.onLogin (conn) ->

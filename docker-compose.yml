@@ -12,10 +12,10 @@ after:
         - MONGO_URL=mongodb://mongodb/after
         - ROOT_URL=http://bnafter2016.mooo.com
         - DELAY=30
+        - METEOR_SETTINGS="{default_users:true, init:true, revision:0.1}"
 mongodb:
     image: mongo
     ports:
         - "27017:27017"
     volumes:
         - /home/after/app/datadir:/data/db
-

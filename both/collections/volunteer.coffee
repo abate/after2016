@@ -107,6 +107,13 @@ Schemas.VolunteerForm = new SimpleSchema(
       type: "select-checkbox-inline"
       options: () ->
         Teams.find().map((e) -> {label: TAPi18n.__(e.name), value: e._id})
+  car:
+    type: Boolean
+    label: () -> TAPi18n.__("car")
+    defaultValue: false
+    autoform:
+      afFieldInput:
+        template: "toggle"
   notes:
     type: String
     label: () -> TAPi18n.__("notes")

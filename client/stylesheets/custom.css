@@ -16,3 +16,26 @@
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+/*.checkbox-settings {
+  .panel-heading {
+    .name {
+      display: inline-block;
+      font-weight: bold;
+    }
+    .switch {
+      display: inline-block;
+      float: right;
+    }
+  }
+  .panel-body {
+    .tag {
+      padding-right: 5px;
+      margin-top: 0;
+      font-size: 17px;
+    }
+    .input-container {
+      padding-left: 10px;
+    }
+  }
+}*/

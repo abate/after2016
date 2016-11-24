@@ -27,7 +27,6 @@
 </template>
 
 <template name="volunteerUserProfile">
-  {{debug}}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">{{getUserName user._id}}</h3>
@@ -40,10 +39,18 @@
         <div class=" col-md-9 col-lg-9 ">
           <table class="table table-user-information">
             <tbody>
-              <tr><td>{{_ "playaname"}}:</td><td>{{user.profile.playaName}}</td></tr>
+              <tr><td>{{_ "playaName"}}:</td><td>{{user.profile.playaName}}</td></tr>
               <tr><td>{{_ "telephone"}}</td><td>{{user.profile.telephone}}</td></tr>
-              <tr><td>{{_ "email"}}</td><td>{{user.emails.[0].address}}</td></tr>
+              <tr><td>{{_ "email"}}</td>
+                <td>
+                  {{user.emails.[0].address}}
+                  {{#if user.emails.[0].verified}}
+                    {{fa 'check'}}
+                  {{/if}}
+                </td>
+              </tr>
               <tr><td>{{_ "facebook"}}</td><td>{{user.profile.facebook}}</td></tr>
+              <tr><td>{{_ "hasCar"}}</td><td>{{form.car}}</td></tr>
               <tr><td>{{_ "roles"}}</td><td>
                 <ul class="list-group">
                   {{#each form.role}}

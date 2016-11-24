@@ -11,3 +11,23 @@ Meteor.methods 'Accounts.UpdateUser': (doc,id) ->
   if (userId == id) || Roles.userIsInRole(userId, [ 'manager' ])
     console.log ["Update user profile",doc]
     Meteor.users.update(id,doc)
+
+Meteor.methods 'Accounts.changeUserRole': (id, role) ->
+  console.log "Accounts.managerUserToggle"
+  check(id,String)
+  check(role,Match.Where (role) -> role in allRoles)
+  user = Meteor.users.findOne(id)
+  currentUser = Meteor.userId()
+  # a user cannot change his role
+  if user and !(user._id == currentUser)
+    if Roles.userIsInRole(currentUser, 'super-admin')
+      if role in ['admin';'manager';'user']
+        Roles.setUserRoles(user._id, role)
+
+    if Roles.userIsInRole(currentUser, 'admin')
+      if role in ['manager';'user']
+        Roles.setUserRoles(user._id, role)
+
+    if Roles.userIsInRole(currentUser, 'manager')
+      if role in ['user']
+        Roles.setUserRoles(user._id, role)

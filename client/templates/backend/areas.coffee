@@ -1,5 +1,5 @@
 Template.areasDashboard.onCreated () ->
-  Session.set("currentTab",{template:"userHelp"})
+  Session.set("currentTab",{template:"areaHelp"})
 
 Template.areasDashboard.helpers
   "tab": () -> Session.get("currentTab")
@@ -62,7 +62,10 @@ Template.volunteerAreaList.helpers
 
 Template.volunteerAreaCal.helpers
   'volunteers': () ->
-    VolunteerForm.find().map((res) -> name: getUserName(res.userId))
+    areaId = this._id
+    VolunteerResource.find({areaId:areaId}).map(
+      (res) -> name: getUserName(res.userId)
+    )
   'options': () ->
     areaId = this._id
     id: "volunteerAreaCal"
@@ -80,6 +83,7 @@ Template.volunteerAreaCal.helpers
         click: () ->
           title = prompt(TAPi18n.__ "team_name")
           if title
+            Meteor.call ""
             $('#volunteerAreaCal').fullCalendar(
               'addResource',{ title: title }, true
             )
