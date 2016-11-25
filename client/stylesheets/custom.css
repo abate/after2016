@@ -7,7 +7,7 @@
   font-size: 14px;
 }
 
-.form-group label.control-label {
+.form-group label, .form-group label.control-label {
   font-size: medium;
   color: black;
 }

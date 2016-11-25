@@ -18,6 +18,38 @@
   </div>
 </template>
 
+<template name="afArrayField_simpleArray">
+  <label class="control-label">{{afFieldLabelText name=this.atts.name}} {{#if this.atts.help}}<span>- {{this.atts.help}}</span>{{/if}}</label>
+  {{#if afFieldIsInvalid name=this.atts.name}}
+    <span class="help-block">{{{afFieldMessage name=this.atts.name}}}</span>
+  {{/if}}
+  <table class="table table-condensed table-condensed-form">
+    <tbody>
+      {{#afEachArrayItem name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+      <tr>
+        <td class="table-condensed-form-btn bg-gray">
+          {{#if afArrayFieldHasMoreThanMinimum name=../atts.name minCount=../atts.minCount maxCount=../atts.maxCount}}
+            <div class="autoform-remove-item"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+          {{/if}}
+        </td>
+        <td>
+          {{> afFieldInput name=this.name}}
+        </td>
+      </tr>
+      {{/afEachArrayItem}}
+      {{#if afArrayFieldHasLessThanMaximum name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+        <tr class="autoform-add-item cursor-pointer" data-autoform-field="{{this.atts.name}}" data-autoform-minCount="{{this.atts.minCount}}" data-autoform-maxCount="{{this.atts.maxCount}}">
+          <td class="table-condensed-form-btn bg-gray">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </td>
+          <td>
+          </td>
+        </tr>
+      {{/if}}
+    </tbody>
+  </table>
+</template>
+
 <template name="checkboxSettings">
   <div class="checkbox-settings">
     <div class="panel panel-default">
