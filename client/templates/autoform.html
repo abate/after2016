@@ -6,6 +6,18 @@
     </label>
 </template>
 
+<template name="afCheckboxGroupInline_groupGrid">
+  <div class="af-checkbox-group" {{dsk}}>
+    <ul class="list-group row">
+      {{#each this.items}}
+        <li class="list-group-item col-xs-4">
+          <label><input type="checkbox" value="{{this.value}}" {{atts}} /> {{this.label}}</label>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>
+
 <template name="checkboxSettings">
   <div class="checkbox-settings">
     <div class="panel panel-default">
