@@ -13,6 +13,7 @@
 <template name="updateVolunteerForm">
   <div class="panel panel-default">
     <div class="panel-body">
+      {{debug this}}
       <h2>{{_ "volunteer_preferences"}}</h2>
       <p>{{_ "volunteer_preferences_explanation"}}</p>
       {{> quickForm id="updateVolunteerForm"
@@ -26,9 +27,13 @@
   <div class="panel panel-default">
     <div class="panel-body">
       {{#if isVolunteer}}
-          {{#if hasResource}}
+          {{#if hasLead}}
+            {{#markdown}}{{_ "volunteer_has_lead"}}{{/markdown}}
+            {{> reactiveTable settings=VolunteerCrewUserTableSettings }}
+          {{/if}}
+          {{#if hasShift}}
             {{#markdown}}{{_ "volunteer_has_task"}}{{/markdown}}
-            {{> reactiveTable settings=VolunteerResourceUserTableSettings }}
+            {{> reactiveTable settings=VolunteerShiftUserTableSettings }}
           {{else}}
             {{#markdown}}{{_ "volunteer_wait_for_task"}}{{/markdown}}
           {{/if}}

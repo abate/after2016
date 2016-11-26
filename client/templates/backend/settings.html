@@ -10,8 +10,13 @@
   {{> reactiveTable settings=rolesTableSettings }}
 </template>
 
-<template name="timeslotsSettings">
-  {{> reactiveTable settings=timeslotsTableSettings }}
+<template name="availabilitysSettings">
+  {{> reactiveTable settings=availabilityTableSettings }}
+</template>
+
+<template name="teamsSettings">
+  SAVE : {{fa "floppy-o" "saveTeams"}}
+  {{> reactiveTable settings=teamsTableSettings }}
 </template>
 
 <template name="allUsersList">

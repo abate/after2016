@@ -5,10 +5,11 @@ AccountsTemplates.configure
   showForgotPasswordLink: true
   sendVerificationEmail: true
   continuousValidation: true
-  enforceEmailVerification: false
+  enforceEmailVerification: true
+  # showResendVerificationEmailLink: true
   # postSignUpHook: postSignUpHook
   # onLogoutHook: onSignOut
-  # privacyUrl: 'privacy'
+  privacyUrl: '/s/privacy'
   # termsUrl: 'terms-of-use'
 
 AccountsTemplates.configureRoute 'signIn', { redirect: '/dashboard' }
@@ -26,6 +27,14 @@ AccountsTemplates.addField
     { text: 'fr', value: 'fr' },
     { text: 'en', value: 'en' }
   ]
+
+AccountsTemplates.addField
+  _id: 'terms'
+  type: 'checkbox'
+  template: "termsCheckbox"
+  errStr: "You must agree to the Terms and Conditions"
+  func: (value) -> !value
+  negativeValidation: false
 
 addUsersToRoles = (user) ->
   if userId then Roles.addUsersToRoles userId, 'user'

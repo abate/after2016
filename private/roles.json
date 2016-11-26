@@ -1,1 +1,5 @@
-["lead", "co-lead", "helper"]
+[
+  {"name":"lead", "color": "red", "withShifts": false},
+  {"name":"co-lead", "color": "yellow", "withShifts": false},
+  {"name":"helper", "color": "green", "withShifts": true}
+]

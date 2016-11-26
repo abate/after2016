@@ -15,7 +15,6 @@ Accounts.emailTemplates.from = 'Volunteer Bot (no-replay@bys2016.frenchburners.o
 Meteor.startup ->
 
   if Meteor.settings.init
-    # Settings.remove({})
     Areas.remove({})
     Teams.remove({})
     Skills.remove({})
@@ -24,8 +23,10 @@ Meteor.startup ->
   if Settings.find().count() == 0
     console.log "Init Settings"
     Settings.insert
-      timeslotsV: JSON.parse(Assets.getText('timeslots-volunteer.json'))
+      availability: JSON.parse(Assets.getText('availability-volunteer.json'))
       dday: moment("2016-12-18")
+      emailFrom: 'Volunteer Coordinator (volunteers@bys2016.frenchburners.org)'
+      emailFromNoReplay: 'Volunteer Bot (no-replay@bys2016.frenchburners.org)'
       revision: Meteor.settings.revision
       init: Meteor.settings.init
 
@@ -37,7 +38,9 @@ Meteor.startup ->
   if Teams.find().count() == 0
     console.log "Init Teams"
     for e in JSON.parse(Assets.getText('teams.json'))
-      Teams.insert {name: e}
+      areaId = if e.area? then Areas.findOne({name:e.area})._id else null
+      ex = if areaId then _.extend(e, {areaId: areaId}) else e
+      Teams.insert ex
 
   if Skills.find().count() == 0
     console.log "Init Skills"
@@ -47,7 +50,17 @@ Meteor.startup ->
   if AppRoles.find().count() == 0
     console.log "Init Roles"
     for e in JSON.parse(Assets.getText('roles.json'))
-      AppRoles.insert {name: e}
+      AppRoles.insert e
+
+  if PerformanceType.find().count() == 0
+    console.log "Init Performances Types"
+    for e in JSON.parse(Assets.getText('performances.json'))
+      PerformanceType.insert e
+
+  if StaticContent.find().count() == 0
+    console.log "Init Static Content"
+    for e in JSON.parse(Assets.getText('static-content.json'))
+      StaticContent.insert e
 
   @allRoles = ['super-admin','admin','manager','user']
   if Meteor.roles.find().count() < 1
@@ -98,6 +111,7 @@ Meteor.startup ->
         console.log "Create default user " + options.email
         role = options.profile.role
         userId = Accounts.createUser(options)
+        Meteor.users.update(userId, {$set: {"emails.0.verified" :true}})
         Roles.addUsersToRoles(userId, role)
     else if Meteor.settings.default_users == false
       console.log "Remove default user" + options.email

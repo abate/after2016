@@ -1,7 +1,6 @@
 @PerformanceResource = new Mongo.Collection 'performanceResource'
 
-allowedStatus = ['pending','refused','accepted','bailedout']
-allowedPerfKinds = ["dj_set", "installation", "stage_perf", "workshop", "mobile_perf"]
+allowedStatus = ['pending','refused','accepted','bailedout','scheduled']
 
 Schemas.PerformanceResource = new SimpleSchema(
   performanceId:
@@ -39,24 +38,14 @@ Schemas.PerformanceResource = new SimpleSchema(
         Areas.find({performance: true}).map(
           (e) -> {label: TAPi18n.__(e.name), value: e._id}
         )
-  time:
-    type: String
+  start:
+    type: "datetime-local"
+    label: () -> TAPi18n.__("start")
     optional: true
-    autoform:
-      type: "datetimepicker"
-      opts:
-        lang: 'fr' #Meteor.user().profile.language
-        format:'DD-MM-YYYY H:mm'
-        startDate: "18-12-2016"
-        formatDate: 'DD-MM-YYYY'
-        todayButton: false
-  duration:
-    type: String
-    label: () -> TAPi18n.__("duration")
+  end:
+    type: "datetime-local"
+    label: () -> TAPi18n.__("end")
     optional: true
-    # autoform:
-      # type: "oaf-duration"
-    # allowedValues: ("00:#{n * 5}" for n in [1..10]) + ("#{n}:00" for n in [1..10])
   notes:
     type: String
     label: () -> TAPi18n.__("notes")
@@ -129,8 +118,6 @@ WorkshopForm = new SimpleSchema(
   kids:
     type: Boolean
     label: () -> TAPi18n.__("workshop_kids")
-    # autoform:
-    #   type: "select-radio-inline"
 )
 
 InstallationForm = new SimpleSchema(
@@ -277,8 +264,7 @@ Schemas.PerformanceForm = new SimpleSchema(
     custom: () -> if this.field('type').value == "group" then "required"
     autoform:
       type: () ->
-        if (AutoForm.getFieldValue("type") == "group") then ""
-        else "hidden"
+        if (AutoForm.getFieldValue("type") == "group") then "" else "hidden"
   links:
     type: ["url"]
     label: () -> TAPi18n.__("perf_links")
@@ -296,34 +282,44 @@ Schemas.PerformanceForm = new SimpleSchema(
     label: () -> TAPi18n.__("perf_description")
     autoform:
       rows:6
-  kind:
+  kindId:
     type: String
     label: () -> TAPi18n.__("perf_kind")
-    allowedValues: allowedPerfKinds
+    allowedValues: () -> PerformanceType.find().map((e) -> e._id)
     autoform:
       type: "select-radio-inline"
       options: () ->
-        _.map(allowedPerfKinds,(e) -> {label: TAPi18n.__(e), value: e})
+        PerformanceType.find().map((e) ->
+          {label: TAPi18n.__(e.name), value: e._id})
   installation:
     type: InstallationForm
     optional: true
     autoform:
       type: () ->
-        if (AutoForm.getFieldValue("kind") == "installation") then ""
+        kindId = AutoForm.getFieldValue("kindId")
+        if kindId
+          kind = PerformanceType.findOne(kindId)
+          if (kind.name == "installation") then "" else "hidden"
         else "hidden"
   performance:
     type: StagePerformanceForm
     optional: true
     autoform:
       type: () ->
-        if (AutoForm.getFieldValue("kind") == "stage_perf") then ""
+        kindId = AutoForm.getFieldValue("kindId")
+        if kindId
+          kind = PerformanceType.findOne(kindId)
+          if (kind.name == "stage_perf") then "" else "hidden"
         else "hidden"
   workshop:
     type: WorkshopForm
     optional: true
     autoform:
       type: () ->
-        if (AutoForm.getFieldValue("kind") == "workshop") then ""
+        kindId = AutoForm.getFieldValue("kindId")
+        if kindId
+          kind = PerformanceType.findOne(AutoForm.getFieldValue("kindId"))
+          if (kind.name == "workshop") then "" else "hidden"
         else "hidden"
   status:
     type: String
@@ -332,7 +328,6 @@ Schemas.PerformanceForm = new SimpleSchema(
     defaultValue: "pending"
     autoform:
       type: "hidden"
-      # omit: true
 )
 
 PerformanceForm.attachSchema(Schemas.PerformanceForm)

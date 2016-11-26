@@ -10,10 +10,13 @@ BaseController = RouteController.extend(
 @AnonymousController = BaseController.extend(
   layoutTemplate: 'userLayout'
   # onAfterAction: ->
-  # waitOn: -> [ ]
+  waitOn: -> [
+    Meteor.subscribe('staticContent'),
+  ]
 )
 
 AuthenticatedController = AnonymousController.extend(
+  fastRender: true
   onBeforeAction: ->
     if Meteor.userId()
       @next()
@@ -25,7 +28,8 @@ AuthenticatedController = AnonymousController.extend(
     Meteor.subscribe('areas'),
     Meteor.subscribe('skills'),
     Meteor.subscribe('teams'),
-    Meteor.subscribe('approles')
+    Meteor.subscribe('approles'),
+    Meteor.subscribe('performanceType'),
    ]
 )
 

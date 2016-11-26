@@ -1,0 +1,7 @@
+[
+  {"name":"dj_set", "color": "red"},
+  {"name":"installation", "color": "yellow"},
+  {"name":"stage_perf", "color": "green"},
+  {"name":"workshop", "color": "blue"},
+  {"name":"mobile_perf", "color": "orange"}
+]

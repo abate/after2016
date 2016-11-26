@@ -6,11 +6,31 @@ Router.route '/',
     if Meteor.user() then Router.go('userDashboard')
     else this.next()
 
-anonymousRoutes = ['privacy','disclaimer', 'siteNotice', 'contacts' ]
-anonymousRoutes.forEach (r) ->
-  Router.route r,
-    name: r
-    controller: 'AnonymousController'
+Router.route '/s/:_name',
+  name: 'staticContentDisplay'
+  template: 'staticContentDisplay'
+  controller: 'AnonymousController'
+  onBeforeAction: ->
+    if StaticContent.findOne({name: this.params._name, type:"public"})
+      @next()
+    else
+      @render 'notFound'
+  data: () ->
+    if this.ready()
+      StaticContent.findOne({name: this.params._name, type:"public"})
+
+Router.route '/sm/:_name',
+  name: 'staticContentDisplayModal'
+  template: 'staticContentDisplayModal'
+  controller: 'AnonymousController'
+  onBeforeAction: ->
+    if StaticContent.findOne({name: this.params._name, type:"public"})
+      @next()
+    else
+      @render 'notFound'
+  data: () ->
+    if this.ready()
+      StaticContent.findOne({name: this.params._name, type:"public"})
 
 Router.route '/profile',
   name: 'profile'
@@ -28,7 +48,8 @@ Router.route '/dashboard',
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('PerformanceImages'),
     Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('volunteerResource'),
+    Meteor.subscribe('volunteerShift'),
+    Meteor.subscribe('volunteerCrew'),
     Meteor.subscribe('volunteerForm'),
     Meteor.subscribe('userData'),
   ]
@@ -38,10 +59,10 @@ Router.route '/admin/translations',
   controller: 'AdminController'
   template: 'translations'
 
-Router.route '/admin/emails',
-  name: 'email_forms'
+Router.route '/admin/content',
+  name: 'staticContentBackend'
   controller: 'AdminController'
-  template: 'emailForms'
+  template: 'staticContentBackend'
 
 Router.route '/admin/users/:_id',
   name: 'allUsersProfile'
@@ -60,6 +81,16 @@ Router.route '/admin/users',
   waitOn: () -> [
     Meteor.subscribe('userData')
   ]
+
+# Router.route '/admin/settings',
+#   name: 'backendSettings'
+#   controller: 'AdminController'
+#   template: 'backendSettings'
+
+Router.route '/admin/settings/teams',
+  name: 'teamsSettings'
+  controller: 'AdminController'
+  template: 'teamsSettings'
 
 Router.route '/admin/settings/areas',
   name: 'areasSettings'
@@ -103,7 +134,8 @@ Router.route '/admin/performance/:_id',
   controller: 'AdminController'
   template: 'volunteerBackend'
   waitOn: () -> [
-    Meteor.subscribe('volunteerResource'),
+    Meteor.subscribe('volunteerShift'),
+    Meteor.subscribe('volunteerCrew'),
     Meteor.subscribe('volunteerForm'),
     Meteor.subscribe('userData')
   ]
@@ -120,7 +152,8 @@ Router.route '/admin/performance/:_id',
     Meteor.subscribe('performanceForm'),
     Meteor.subscribe('performanceResource'),
     Meteor.subscribe('PerformanceImages'),
-    Meteor.subscribe('volunteerResource'),
+    Meteor.subscribe('volunteerShift'),
+    Meteor.subscribe('volunteerCrew'),
     Meteor.subscribe('volunteerForm'),
     Meteor.subscribe('userData')
   ]

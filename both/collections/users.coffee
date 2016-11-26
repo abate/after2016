@@ -41,6 +41,7 @@ Schemas.Profile = new SimpleSchema(
     label: "Facebook"
     defaultValue: "no"
     optional: true
+
 )
 
 Schemas.User = new SimpleSchema(
@@ -67,6 +68,11 @@ Schemas.User = new SimpleSchema(
   lastLogin:
     type: Date
     optional: true
+  terms:
+    type: Boolean
+    defaultValue: false
+    autoform:
+      omit: true
   profile:
     type: Schemas.Profile
     optional: true

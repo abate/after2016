@@ -4,11 +4,17 @@ Meteor.publish 'volunteerForm', () ->
   else
     VolunteerForm.find({userId: this.userId})
 
-Meteor.publish 'volunteerResource', () ->
+Meteor.publish 'volunteerShift', () ->
   if Roles.userIsInRole(this.userId, [ 'manager' ])
-    VolunteerResource.find()
+    VolunteerShift.find()
   else
-    VolunteerResource.find({userId: this.userId})
+    VolunteerShift.find({userId: this.userId})
+
+Meteor.publish 'volunteerCrew', () ->
+  if Roles.userIsInRole(this.userId, [ 'manager' ])
+    VolunteerCrew.find()
+  else
+    VolunteerCrew.find({userId: this.userId})
 
 Meteor.publish 'performanceForm', () ->
   if Roles.userIsInRole(this.userId, [ 'manager' ])
@@ -49,3 +55,10 @@ Meteor.publish 'areas', () -> Areas.find()
 Meteor.publish 'skills', () -> Skills.find()
 Meteor.publish 'approles', () -> AppRoles.find()
 Meteor.publish 'teams', () -> Teams.find()
+Meteor.publish 'performanceType', () -> PerformanceType.find()
+
+Meteor.publish 'staticContent', () ->
+  if Roles.userIsInRole(this.userId, [ 'manager' ])
+    StaticContent.find()
+  else
+    StaticContent.find({type: "public"})

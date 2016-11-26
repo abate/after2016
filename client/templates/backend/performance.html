@@ -1,18 +1,3 @@
-<template name="updatePerformanceResourceForm">
-  {{#autoForm meteormethod="PerformanceBackend.updatePerformanceResourceForm" type="method-update"
-    id="insertPerformanceResourceForm" collection="PerformanceResource" doc=this preserveForm=false resetOnSuccess=false}}
-    {{> afQuickField name="performanceId" value=this.performanceId }}
-    <div class="form-inline">
-      {{> afQuickField name="status" }}
-      {{#if afFieldValueIs name="status" value="accepted"}}
-        {{> afQuickField name="areaId" }}
-      {{/if}}
-      <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
-    </div>
-    {{> afQuickField name="notes" }}
-  {{/autoForm}}
-</template>
-
 <template name="performanceDisplay">
   <div class="card">
     <ul class="nav nav-tabs" role="tablist">
@@ -30,7 +15,7 @@
         </div>
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kind"}}</label>
-          <div class="col-xs-10">{{_ kind}}</div>
+          <div class="col-xs-10">{{getKindName kindId}}</div>
         </div>
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
@@ -38,7 +23,7 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane" id="media">
-        <!-- XXX add image here !!! -->
+        <img alt="Media Pic" src="{{mediaFileLink media}}" class="img-responsive">
       </div>
       <div role="tabpanel" class="tab-pane" id="details">
         {{#if $eq kind "installation"}}
@@ -139,37 +124,33 @@
   </div>
 </template>
 
-<template name="performanceBackendForm">
-  <div class="content">
-    <div class="col-md-9">
-      {{> performanceDisplay this}}
-    </div>
+<template name="performanceBackend">
+  <div class="row">
     <div class="col-md-3">
-      <div class="row">
-        {{#if performanceResource}}
-          {{> quickForm meteormethod="PerformanceBackend.updatePerformanceResourceForm"
-              type="method-update" id="updatePerformanceResourceForm"
-              collection="PerformanceResource" template="bootstrap3-inline"
-              doc=performanceResource omitFields="time,duration"}}
-        {{else}}
-          {{> quickForm meteormethod="PerformanceBackend.insertPerformanceResourceForm"
-              type="method" id="insertPerformanceResourceForm"
-              collection="PerformanceResource" omitFields="time,duration"}}
-        {{/if}}
-      </div>
-      <!-- <div class="row">
-        {{> fullcalendar options }}
-      </div> -->
+      {{> reactiveTable settings=PerformanceTableSettings }}
+    </div>
+    <div class="col-md-9">
+      {{#if currentResource.form}}
+        <div class='panel panel-default'>
+          <div class="row">
+            <div class="col-md-8">
+              {{> performanceDisplay currentResource.form}}
+            </div>
+            <div class="col-md-4">
+              {{#if currentResource.data._id}}
+                {{> quickForm meteormethod="Backend.updatePerformanceResource"
+                    type="method-update" id="updatePerformanceResourceForm"
+                    collection="PerformanceResource" doc=currentResource.data
+                    omitFields="start,end"}}
+              {{else}}
+                {{> quickForm meteormethod="Backend.insertPerformanceResource"
+                    type="method" id="insertPerformanceResourceForm" doc=currentResource.data
+                    collection="PerformanceResource" omitFields="start,end"}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
     </div>
   </div>
-</template>
-
-<template name="performanceBackend">
-  {{> reactiveTable settings=PerformanceTableSettings }}
-</template>
-
-<template name="performanceBackendActions">
-  {{#linkTo route="performanceBackendForm"}}
-    <i class="fa fa-pencil-square-o"></i>
-  {{/linkTo}}
 </template>

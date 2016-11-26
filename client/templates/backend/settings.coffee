@@ -48,6 +48,40 @@ Template.allUsersList.helpers
       }
     ]
 
+Template.teamsSettings.helpers
+  'teamsTableSettings': () ->
+    collection: Teams.find()
+    # currentPage: Template.instance().currentPage
+    id: "TeamsTableID"
+    class: "table table-bordered table-hover"
+    showNavigation: 'auto'
+    rowsPerPage: 20
+    showRowCount: true
+    # rowClass: rowApplicationStatus
+    # filters: []
+    fields: [
+      {
+        key: 'name',
+        label: (() -> TAPi18n.__("name")),
+        fn: (val,row,label) -> TAPi18n.__ val},
+      {
+        key: 'areaId',
+        label: (() -> TAPi18n.__("area")),
+        fn: (val,row,label) -> if val then TAPi18n.__(Areas.findOne(val).name)},
+      {
+        key: 'leads',
+        label: (() -> TAPi18n.__("leads")),
+        fn: (val,row,label) -> getUserName(val) },
+      { key: 'minMembers', label: (() -> TAPi18n.__ ("min_members")) },
+      { key: 'maxMembers', label: (() -> TAPi18n.__ ("max_members")) },
+      { key: 'description', label: (() -> TAPi18n.__("description"))}
+    ]
+
+Template.teamsSettings.events
+  'click [data-action="saveTeams"]': (event, template) ->
+    Meteor.call 'Backend.saveTeams', () ->
+      console.log "Save all teams to disk"
+
 Template.areasSettings.helpers
   'areasTableSettings': () ->
     collection: Areas.find()

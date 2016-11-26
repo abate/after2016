@@ -18,8 +18,8 @@
           <a href="#" data-template="volunteerAreaList">{{_ "volunteering_table"}}</a>
         </div>
         <div class="list-group-item">
-          {{fa "star" ""}}
-          <a href="#" data-template="performanceAreaList">{{_ "performance"}}</a>
+          {{fa "calendar-o" ""}}
+          <a href="#" data-template="performanceAreaCal">{{_ "performance_planner"}}</a>
         </div>
         <div class="list-group-item">
           {{fa "question" ""}}
@@ -46,10 +46,12 @@
 <template name="volunteerAreaCal">
   <div class="row row-no-padding">
     <div class="col-md-2">
-      <div id="external-events" class="panel panel-default">
+      <div id="external-events-vol" class="panel panel-default">
         <h4>{{_ "volunteers"}}</h4>
         {{#each volunteers}}
-          <div class="fc-event ui-draggable ui-draggable-handle">{{name}}</div>
+          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle"
+            data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
+            data-stick="true">{{name}} <span class="badge">{{shiftNumber}}</span></div>
         {{/each}}
       </div>
     </div>
@@ -57,8 +59,156 @@
       {{> fullcalendar options }}
     </div>
   </div>
+  {{> volunteerAreaCalInfoModal}}
+  {{> insertAreaCalTeamFormModal}}
 </template>
 
-<template name="performanceAreaList">
-  {{> fullcalendar options }}
+<template name="insertAreaCalTeamFormModal">
+  <div id="insertAreaCalTeamFormModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">{{fa "times" ""}}</span> <span class="sr-only">{{_ "close"}}</span>
+          </button>
+          <h4 class="modal-title">{{_ "add_team"}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>{{_ "add_team_explanation"}}</p>
+          {{> quickForm collection="Teams"
+            id="addTeamsForm" type="method"
+            meteormethod="Backend.insertTeam" doc=this}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="updateAreaCalTeamFormModal">
+  <div id="updateAreaCalTeamFormModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="pull-left">
+            <span aria-hidden="true">
+              <i data-action="removeTeam" class="fa fa-trash-o" data-id="{{_id}}" aria-hidden="true"></i>
+            </span> <span class="sr-only">{{_ "remove"}}</span>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">{{fa "times" ""}}</span> <span class="sr-only">{{_ "close"}}</span>
+          </button>
+          <h4 class="modal-title">{{_ "update_team"}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>{{_ "add_team_explanation"}}</p>
+          {{> quickForm collection="Teams"
+            id="updateTeamsForm" type="method-update"
+            meteormethod="Areas.updateTeam" doc=this}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="volunteerUserProfileModal">
+  <div id="volunteerUserProfileModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="pull-left">
+            <span aria-hidden="true">
+              <i class="fa fa-trash-o"
+                data-action="removeShift"
+                data-id="{{shift.eventId}}"
+                data-fceventid="{{fcEventId}}"
+                aria-hidden="true"></i>
+            </span> <span class="sr-only">{{_ "remove"}}</span>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">{{fa "times"}}</span> <span class="sr-only">{{_ "close"}}</span>
+          </button>
+          <h4 class="modal-title">{{title}}</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-user-information">
+            <tbody>
+              <tr><td>{{_ "time"}}:</td><td>{{shift.start}} - {{shift.end}}</td></tr>
+              <tr><td>{{_ "team"}}:</td><td>{{team.name}}</td></tr>
+              <tr><td>{{_ "role"}}:</td><td>{{_ role}}</td></tr>
+              <tr><td>{{_ "description"}}:</td><td>{{team.description}}</td></tr>
+              <tr><td>{{_ "team_leads"}}:</td><td>
+                <ul class="taglist list-inline">
+                  {{#each team.leads}}
+                    <li>{{getUserName this}}</li>
+                  {{/each}}
+                </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-body">{{> volunteerUserProfile this}}</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="volunteerAreaCalInfoModal">
+  <div id="volunteerAreaCalInfoModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">{{fa "times"}}</span> <span class="sr-only">{{_ "close"}}</span>
+          </button>
+          <h4 class="modal-title">{{title}}</h4>
+        </div>
+        <div class="modal-body">{{> volunteerUserProfile userId}}</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "close"}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="performanceAreaCal">
+  <div class="row row-no-padding">
+    <div class="col-md-2">
+      <div id="external-events-perf" class="panel panel-default">
+        <h4>{{_ "performances"}}</h4>
+        {{#each performances}}
+          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle"
+            data-event='{"title":"{{name}}","userId":"{{userId}}","eventId":"{{performanceId}}","color":"{{color}}"}'
+            data-stick="true">{{name}}</div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="col-md-10">
+      {{> fullcalendar options }}
+    </div>
+  </div>
+  {{> performanceAreaCalInfoModal}}
+</template>
+
+<template name="performanceAreaCalInfoModal">
+  <div id="performanceAreaCalInfoModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        {{> performanceDisplay form}}
+        <div class="modal-footer">
+          <div class="pull-left">
+            <span aria-hidden="true">
+              <i class="fa fa-trash-o"
+                data-action="removePerformanceEvent"
+                data-id="{{performance.eventId}}"
+                data-fceventid="{{fcEventId}}"
+                aria-hidden="true"></i>
+            </span> <span class="sr-only">{{_ "remove"}}</span>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{_ "close"}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

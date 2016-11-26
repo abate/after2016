@@ -17,6 +17,9 @@
     padding-right: 0 !important;
 }
 
+.taglist li + li:before {
+    content: ", ";
+}
 /*.checkbox-settings {
   .panel-heading {
     .name {

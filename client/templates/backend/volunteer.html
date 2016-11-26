@@ -1,31 +1,3 @@
-<template name="updateVolunteerResourceForm">
-  {{#autoForm meteormethod="VolunteerBackend.updateResourceForm" type="method-update"
-    id="updateVolunteerResourceForm" collection="VolunteerResource" doc=this}}
-    {{> afQuickField name="userId" value=this.userId}}
-    <div class="form-inline">
-      {{> afQuickField name="roleId" }}
-      {{> afQuickField name="areaId" }}
-      {{> afQuickField name="teamId" }}
-      <button type="submit" class="btn btn-primary pull-right">{{_ "update"}}</button>
-    </div>
-    {{> afQuickField name="notes" }}
-  {{/autoForm}}
-</template>
-
-<template name="insertVolunteerResourceForm">
-  {{#autoForm meteormethod="VolunteerBackend.insertResourceForm" type="method"
-    id="insertVolunteerResourceForm" collection="VolunteerResource" doc=this}}
-    {{> afQuickField name="userId" value=this.userId}}
-    <div class="form-inline">
-      {{> afQuickField name="roleId" }}
-      {{> afQuickField name="areaId" }}
-      {{> afQuickField name="teamId" }}
-      <button type="submit" class="btn btn-primary pull-right">{{_ "new"}}</button>
-    </div>
-    {{> afQuickField name="notes" }}
-  {{/autoForm}}
-</template>
-
 <template name="volunteerUserProfile">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -100,10 +72,16 @@
             {{> volunteerUserProfile currentResource}}
           </div>
           <div class="col-md-4">
-            {{> Template.dynamic template=currentResource.template data=currentResource.data }}
+            {{#if currentResource.data._id}}
+              {{> quickForm meteormethod="VolunteerBackend.updateCrewForm" type="method-update"
+              id="updateVolunteerCrewForm" collection="VolunteerCrew" doc=currentResource.data}}
+            {{else}}
+              {{> quickForm meteormethod="VolunteerBackend.insertCrewForm" type="method"
+                id="insertVolunteerCrewForm" collection="VolunteerCrew" doc=currentResource.data}}
+            {{/if}}
           </div>
         </div>
-        {{> reactiveTable settings=VolunteerResourceTableSettings }}
+        {{> reactiveTable settings=VolunteerCrewTableSettings }}
       </div>
       {{/if}}
     </div>

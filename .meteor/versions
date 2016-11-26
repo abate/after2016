@@ -6,10 +6,10 @@ alanning:roles@1.2.14
 aldeed:autoform@5.8.1
 aldeed:collection2@2.10.0
 aldeed:collection2-core@1.2.0
-aldeed:delete-button@2.0.0
 aldeed:schema-deny@1.1.0
 aldeed:schema-index@1.1.1
 aldeed:simple-schema@1.5.3
+aldeed:template-extension@4.0.0
 allow-deny@1.0.5
 anti:i18n@0.4.3
 aslagle:reactive-table@0.8.38
@@ -27,6 +27,7 @@ caching-html-compiler@1.0.7
 callback-hook@1.0.10
 cfs:http-methods@0.0.32
 check@1.2.4
+chuangbo:cookie@1.1.0
 coffeescript@1.11.1_4
 dbernhard:jquery-ui-draggable@0.1.2
 ddp@1.2.5
@@ -37,8 +38,6 @@ ddp-server@1.3.12
 deps@1.0.12
 diff-sequence@1.0.7
 drblue:fullcalendar@2.5.0
-drewy:autoform-datetimepicker@1.0.666666
-drewy:datetimepicker@1.0.3
 ecmascript@0.6.1
 ecmascript-runtime@0.3.15
 ejson@1.0.13
@@ -76,6 +75,10 @@ mdg:validated-method@1.1.0
 mdg:validation-error@0.5.1
 meteor@1.6.0
 meteor-base@1.0.4
+meteorhacks:fast-render@2.16.0
+meteorhacks:inject-data@2.0.0
+meteorhacks:meteorx@1.4.1
+meteorhacks:picker@1.0.3
 meteorspark:util@0.2.0
 minifier-css@1.2.15
 minifier-js@1.2.15
@@ -95,6 +98,7 @@ ordered-dict@1.0.9
 ostrio:autoform-files@1.0.8
 ostrio:cookies@2.0.5
 ostrio:files@1.7.5
+peppelg:bootstrap-3-modal@1.0.4
 percolate:migrations@0.9.8
 promise@0.8.8
 raix:eventemitter@0.1.3
@@ -111,7 +115,7 @@ service-configuration@1.0.11
 session@1.1.7
 sha@1.0.9
 shell-server@0.2.1
-softwarerero:accounts-t9n@1.3.5
+softwarerero:accounts-t9n@1.3.6
 spacebars@1.0.13
 spacebars-compiler@1.0.13
 srp@1.0.10

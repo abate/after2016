@@ -17,4 +17,7 @@ Template.registerHelper "debug", (optionalValue) ->
 Template.registerHelper 'imageFileLink', (id) ->
   if id then ProfilePictures.findOne(id).link()
 
+Template.registerHelper 'mediaFileLink', (id) ->
+  if id then PerformanceImages.findOne(id).link()
+
 Template.registerHelper 'getUserName', (id) -> getUserName(id)

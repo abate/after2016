@@ -2,40 +2,28 @@
   <div class="row">
     <div class="col-md-3">
       <div class="nav nav-pills nav-stacked">
-        <li role="presentation">
-          <p>
-            {{fa "user" ""}}
-            <a href="#" data-template="userProfile">{{_ "profile"}}</a>
+          <span class="list-group-item">
+            {{fa "user" ""}} <a href="#" data-template="userProfile">{{_ "profile"}}</a>
             {{#if isProfileComplete}}
-              <span style="color: red;">{{fa "exclamation-triangle" ""}}</span>
+              <span style="color: red;"> {{fa "exclamation-triangle" ""}}</span>
             {{/if}}
-          </p>
-        </li>
-        <li role="presentation">
-          <p>
-            {{fa "heart" ""}}
-            <a href="#" data-template="volunteerList">{{_ "volunteering"}}</a>
+          </span>
+          <span class="list-group-item">
+            {{fa "heart" ""}} <a href="#" data-template="volunteerList">{{_ "volunteering"}}</a>
             {{#if isVolunteer}}
-              <span class="badge">{{fa "pencil" "updateVolunteerForm"}}</span>
-              <span class="badge">{{fa "trash" "removeVolunteerForm"}}</span>
+              <span class="badge btn-small">{{fa "pencil" "updateVolunteerForm"}}</span>
+              <span class="badge btn-small">{{fa "trash" "removeVolunteerForm"}}</span>
             {{else}}
-              <span class="badge">{{fa "plus-square" "insertVolunteerForm"}}</span>
+              <span class="badge btn-small">{{fa "plus-square" "insertVolunteerForm"}}</span>
             {{/if}}
-          </p>
-        </li>
-        <li role="presentation">
-          <p>
-            {{fa "star" ""}}
-            <a href="#" data-template="performanceList">{{_ "performance"}}</a>
-            <span class="badge">{{fa "plus-square" "insertPerformanceForm"}}</span>
-          </p>
-        </li>
-        <li role="presentation">
-          <p>
-            {{fa "question" ""}}
-            <a href="#" data-template="userHelp">{{_ "help"}}</a>
-          </p>
-        </li>
+          </span>
+          <span class="list-group-item">
+            {{fa "star" ""}} <a href="#" data-template="performanceList">{{_ "performance"}}</a>
+            <span class="badge btn-small">{{fa "plus-square" "insertPerformanceForm"}}</span>
+          </span>
+          <span class="list-group-item">
+            {{fa "question" ""}} <a href="#" data-template="userHelp">{{_ "help"}}</a>
+          </span>
       </div>
     </div>
     <div class="col-md-9 content">

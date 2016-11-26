@@ -1,0 +1,15 @@
+<template name="afCheckboxGroupInline_groupGrid">
+  <div class="af-checkbox-group" {{dsk}}>
+    <ul class="list-group row">
+      {{#each this.items}}
+        <li class="list-group-item col-xs-4">
+          <label>
+            <input type="checkbox" value="{{this.value}}" {{atts}} />
+            <!-- <span class="checkbox-material"><span class="check"></span></span> -->
+            {{this.label}}
+          </label>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>

@@ -1,1 +1,14 @@
-["lnt","strike","greaters","logistic","bar","decoration","superheros","kitchen","builders","whatever"]
+[
+  {"name":"lnt","minMembers":3, "area": "organization"},
+  {"name":"strike","minMembers":3, "area": "organization"},
+  {"name":"greaters","minMembers":3, "area": "gate"},
+  {"name":"logistic","minMembers":3, "area": "organization"},
+  {"name":"bar","minMembers":3, "area": "organization"},
+  {"name":"decoration","minMembers":3, "area": "organization"},
+  {"name":"superheros","minMembers":3, "area": "organization"},
+  {"name":"builders","minMembers":3, "area": "organization"},
+  {"name":"whatever","minMembers":3},
+  {"name":"Cleaning","minMembers":3, "area": "kitchen"},
+  {"name":"Cooking","minMembers":3, "area": "kitchen"},
+  {"name":"Staff","minMembers":3, "area": "bar"}
+]

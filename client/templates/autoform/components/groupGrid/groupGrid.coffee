@@ -1,0 +1,3 @@
+Template.afCheckboxGroupInline_groupGrid.inheritsHelpersFrom("afCheckboxGroupInline")
+Template.afCheckboxGroupInline_groupGrid.inheritsEventsFrom("afCheckboxGroupInline")
+AutoForm.setDefaultTemplateForType('afCheckboxGroupInline', 'groupGrid')
