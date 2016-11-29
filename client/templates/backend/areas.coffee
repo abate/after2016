@@ -16,6 +16,10 @@ Template.areasDashboard.events
     Session.set "currentTab", {template: currentTab.data('template')}
 
 Template.volunteerAreaCal.rendered = () ->
+  this.autorun () ->
+    Template.currentData()
+    $('#volunteerAreaCal').fullCalendar('refetchEvents')
+    $('#volunteerAreaCal').fullCalendar('refetchResources')
   $('#external-events-vol .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
@@ -45,12 +49,6 @@ Template.volunteerAreaList.helpers
         fn: (val,row,key) -> VolunteerShift.find({crewId:row._id}).count()
       }
     ]
-
-Template.volunteerAreaCal.rendered = () ->
-  this.autorun () ->
-    Template.currentData()
-    $('#volunteerAreaCal').fullCalendar('refetchEvents')
-    $('#volunteerAreaCal').fullCalendar('refetchResources')
 
 Template.volunteerAreaCal.helpers
   'volunteers': () ->
@@ -177,9 +175,7 @@ Template.performanceAreaCal.rendered = () ->
     Template.currentData()
     $('#performanceAreaCal').fullCalendar('refetchEvents')
     $('#performanceAreaCal').fullCalendar('refetchResources')
-
-Template.performanceAreaCal.rendered = () ->
-  $('#external-events .ext-event').each(() ->
+  $('#external-events-perf .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
 

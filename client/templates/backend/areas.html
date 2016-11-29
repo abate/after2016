@@ -49,7 +49,7 @@
       <div id="external-events-vol" class="panel panel-default">
         <h4>{{_ "volunteers"}}</h4>
         {{#each volunteers}}
-          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle"
+          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
             data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
             data-stick="true">{{name}} <span class="badge">{{shiftNumber}}</span></div>
         {{/each}}
@@ -178,7 +178,7 @@
       <div id="external-events-perf" class="panel panel-default">
         <h4>{{_ "performances"}}</h4>
         {{#each performances}}
-          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle"
+          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
             data-event='{"title":"{{name}}","userId":"{{userId}}","eventId":"{{performanceId}}","color":"{{color}}"}'
             data-stick="true">{{name}}</div>
         {{/each}}

@@ -20,6 +20,19 @@
 .taglist li + li:before {
     content: ", ";
 }
+
+.grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
 /*.checkbox-settings {
   .panel-heading {
     .name {

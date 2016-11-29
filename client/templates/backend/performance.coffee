@@ -9,6 +9,8 @@ rowApplicationStatus = (perf) ->
   else "bg-success"
 
 Template.performanceBackend.helpers
+  'currentResourceVar': () ->
+    Template.instance().currentResource
   'currentResource': () ->
     Template.instance().currentResource.get()
   'PerformanceTableSettings': () ->
@@ -44,4 +46,21 @@ Template.performanceBackend.events
     }
 
 Template.performanceDisplay.helpers
-  'getKindName': (id) -> if id then TAPi18n.__ (PerformanceType.findOne(id).name)
+  'getKindName': (id) ->
+    if id then TAPi18n.__ (PerformanceType.findOne(id).name)
+
+AutoForm.hooks
+  updatePerformanceResourceForm:
+    onSuccess: (ft,result) ->
+      data = PerformanceResource.findOne(result)
+      this.formAttributes.currentResource.set {
+        form: PerformanceForm.findOne(data.performanceId)
+        data: data
+      }
+  insertPerformanceResourceForm:
+    onSuccess: (ft,result) ->
+      data = PerformanceResource.findOne(result)
+      this.formAttributes.currentResource.set {
+        form: PerformanceForm.findOne(data.performanceId)
+        data: data
+      }

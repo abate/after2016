@@ -62,6 +62,7 @@ Meteor.methods 'Backend.updatePerformanceResource': (doc,formId) ->
     status = doc["$set"].status
     if status
       PerformanceForm.update(performance._id,{$set: {status: status}})
+    return formId
 
 Meteor.methods 'Backend.insertPerformanceResource': (doc) ->
   console.log ["Backend.insertPerformanceResource",doc]
@@ -69,5 +70,6 @@ Meteor.methods 'Backend.insertPerformanceResource': (doc) ->
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
     PerformanceResource.insert(doc)
-    emailPerformerAccepted(performance)
+    emailPerformer(performance)
     PerformanceForm.update(doc.performanceId,{$set: {status: doc.status}})
+    return doc.performanceId

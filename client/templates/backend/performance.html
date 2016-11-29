@@ -1,126 +1,124 @@
 <template name="performanceDisplay">
-  <div class="card">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{_ "general"}}</a></li>
-      <li role="presentation"><a href="#media" aria-controls="media" role="tab" data-toggle="tab">{{_ "media"}}</a></li>
-      <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{_ "details"}}</a></li>
-      <li role="presentation"><a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{_ "edit"}}</a></li>
-    </ul>
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="general">
-        <h2>{{title}}</h2>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{_ "general"}}</a></li>
+    <li role="presentation"><a href="#media" aria-controls="media" role="tab" data-toggle="tab">{{_ "media"}}</a></li>
+    <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{_ "details"}}</a></li>
+    <li role="presentation"><a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{_ "edit"}}</a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="general">
+      <h2>{{title}}</h2>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "description"}}</label>
+        <div class="col-xs-10">{{description}}</div>
+      </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kind"}}</label>
+        <div class="col-xs-10">{{getKindName kindId}}</div>
+      </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
+        <div class="col-xs-10">{{_ type}}</div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="media">
+      <img alt="Media Pic" src="{{mediaFileLink media}}" class="img-responsive">
+    </div>
+    <div role="tabpanel" class="tab-pane" id="details">
+      {{#if $eq kind "installation"}}
         <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "description"}}</label>
-          <div class="col-xs-10">{{description}}</div>
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "dimension"}}</label>
+          <div class="col-xs-10">{{installation.dimension}}</div>
         </div>
         <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kind"}}</label>
-          <div class="col-xs-10">{{getKindName kindId}}</div>
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "material"}}</label>
+          <div class="col-xs-10">{{installation.meterial}}</div>
         </div>
+        {{#if installation.textitles}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "textitles"}}</label>
+            <div class="col-xs-10">{{installation.textitles_details}}</div>
+          </div>
+        {{/if}}
+        {{#if installation.fire}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
+            <div class="col-xs-10">{{installation.fire_details}}</div>
+          </div>
+        {{/if}}
+        {{#if sound}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "sound"}}</label>
+            <div class="col-xs-10">{{installation.sound_details}}</div>
+          </div>
+        {{/if}}
+        {{#if light}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "light"}}</label>
+            <div class="col-xs-10">{{installation.light_details}}</div>
+          </div>
+        {{/if}}
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "power"}}</label>
+          <div class="col-xs-10">{{installation.power}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "help"}}</label>
+          <div class="col-xs-10">{{installation.help}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "installation"}}</label>
+          <div class="col-xs-10">{{installation.installation}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "safety"}}</label>
+          <div class="col-xs-10">{{installation.safety}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+          <div class="col-xs-10">{{installation.logistic}}</div>
+        </div>
+      {{/if}}
+      {{#if $eq kind "stage_perf"}}
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
+          <div class="col-xs-10">{{performance.duration}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+          <div class="col-xs-10">{{performance.logistic}}</div>
+        </div>
+        {{#if performance.fire}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
+            <div class="col-xs-10">{{performance.fire_details}}</div>
+          </div>
+        {{/if}}
+      {{/if}}
+      {{#if $eq kind "workshop"}}
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
-          <div class="col-xs-10">{{_ type}}</div>
+          <div class="col-xs-10">{{_ workshop.type}}</div>
         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane" id="media">
-        <img alt="Media Pic" src="{{mediaFileLink media}}" class="img-responsive">
-      </div>
-      <div role="tabpanel" class="tab-pane" id="details">
-        {{#if $eq kind "installation"}}
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "dimension"}}</label>
-            <div class="col-xs-10">{{installation.dimension}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "material"}}</label>
-            <div class="col-xs-10">{{installation.meterial}}</div>
-          </div>
-          {{#if installation.textitles}}
-            <div class="form-group row">
-              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "textitles"}}</label>
-              <div class="col-xs-10">{{installation.textitles_details}}</div>
-            </div>
-          {{/if}}
-          {{#if installation.fire}}
-            <div class="form-group row">
-              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
-              <div class="col-xs-10">{{installation.fire_details}}</div>
-            </div>
-          {{/if}}
-          {{#if sound}}
-            <div class="form-group row">
-              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "sound"}}</label>
-              <div class="col-xs-10">{{installation.sound_details}}</div>
-            </div>
-          {{/if}}
-          {{#if light}}
-            <div class="form-group row">
-              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "light"}}</label>
-              <div class="col-xs-10">{{installation.light_details}}</div>
-            </div>
-          {{/if}}
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "power"}}</label>
-            <div class="col-xs-10">{{installation.power}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "help"}}</label>
-            <div class="col-xs-10">{{installation.help}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "installation"}}</label>
-            <div class="col-xs-10">{{installation.installation}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "safety"}}</label>
-            <div class="col-xs-10">{{installation.safety}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
-            <div class="col-xs-10">{{installation.logistic}}</div>
-          </div>
-        {{/if}}
-        {{#if $eq kind "stage_perf"}}
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
-            <div class="col-xs-10">{{performance.duration}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
-            <div class="col-xs-10">{{performance.logistic}}</div>
-          </div>
-          {{#if performance.fire}}
-            <div class="form-group row">
-              <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "fire"}}</label>
-              <div class="col-xs-10">{{performance.fire_details}}</div>
-            </div>
-          {{/if}}
-        {{/if}}
-        {{#if $eq kind "workshop"}}
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
-            <div class="col-xs-10">{{_ workshop.type}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kids"}}</label>
-            <div class="col-xs-10">{{workshop.kids}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "space"}}</label>
-            <div class="col-xs-10">{{workshop.space}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
-            <div class="col-xs-10">{{workshop.duration}}</div>
-          </div>
-          <div class="form-group row">
-            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
-            <div class="col-xs-10">{{workshop.logistic}}</div>
-          </div>
-         {{/if}}
-      </div>
-      <div role="tabpanel" class="tab-pane" id="edit">{{> updatePerformanceForm }} </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "kids"}}</label>
+          <div class="col-xs-10">{{workshop.kids}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "space"}}</label>
+          <div class="col-xs-10">{{workshop.space}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
+          <div class="col-xs-10">{{workshop.duration}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+          <div class="col-xs-10">{{workshop.logistic}}</div>
+        </div>
+       {{/if}}
     </div>
+    <div role="tabpanel" class="tab-pane" id="edit">{{> updatePerformanceForm }} </div>
   </div>
 </template>
 
@@ -137,15 +135,17 @@
               {{> performanceDisplay currentResource.form}}
             </div>
             <div class="col-md-4">
+              <h4>{{_ "performance_status"}}</h4>
               {{#if currentResource.data._id}}
                 {{> quickForm meteormethod="Backend.updatePerformanceResource"
                     type="method-update" id="updatePerformanceResourceForm"
                     collection="PerformanceResource" doc=currentResource.data
-                    omitFields="start,end"}}
+                    omitFields="start,end" currentResource=currentResourceVar }}
               {{else}}
                 {{> quickForm meteormethod="Backend.insertPerformanceResource"
                     type="method" id="insertPerformanceResourceForm" doc=currentResource.data
-                    collection="PerformanceResource" omitFields="start,end"}}
+                    collection="PerformanceResource" omitFields="start,end"
+                    currentResource=currentResourceVar }}
               {{/if}}
             </div>
           </div>
