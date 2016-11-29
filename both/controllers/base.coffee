@@ -1,5 +1,6 @@
 
 BaseController = RouteController.extend(
+  loadingTemplate: 'loadingTemplate'
 # onAfterAction: ->
   # routeName = Router.current().route.getName()
   # $('.nav-active').removeClass 'nav-active'
