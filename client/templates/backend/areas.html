@@ -29,7 +29,6 @@
     </div>
     <div class="col-md-10">
         <div class="panel panel-default">
-          <!-- <div class="panel-heading">{{title}}</div> -->
           <div class="panel-body">
             {{> Template.dynamic template=tab.template data=this }}
             {{ content}}
@@ -43,17 +42,21 @@
   {{> reactiveTable settings=volunteerAreaTableSettings }}
 </template>
 
+<template name="volunteersDraggable">
+  <div id="external-events-vol">
+    <h4>{{_ "volunteers"}}</h4>
+    {{#each volunteers}}
+      <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
+        data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
+        data-stick="true">{{name}} <span class="badge">{{shiftNumber}}</span></div>
+    {{/each}}
+  </div>
+</template>
+
 <template name="volunteerAreaCal">
   <div class="row row-no-padding">
     <div class="col-md-2">
-      <div id="external-events-vol" class="panel panel-default">
-        <h4>{{_ "volunteers"}}</h4>
-        {{#each volunteers}}
-          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
-            data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
-            data-stick="true">{{name}} <span class="badge">{{shiftNumber}}</span></div>
-        {{/each}}
-      </div>
+      {{> volunteersDraggable volunteers=volunteers}}
     </div>
     <div class="col-md-10">
       {{> fullcalendar options }}
@@ -103,7 +106,7 @@
           <p>{{_ "add_team_explanation"}}</p>
           {{> quickForm collection="Teams"
             id="updateTeamsForm" type="method-update"
-            meteormethod="Areas.updateTeam" doc=this}}
+            meteormethod="Backend.updateTeam" doc=this}}
         </div>
       </div>
     </div>
@@ -172,17 +175,21 @@
   </div>
 </template>
 
+<template name="performancesDraggable">
+  <div id="external-events-perf" class="panel panel-default">
+    <h4>{{_ "performances"}}</h4>
+    {{#each performances}}
+      <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
+        data-event='{"title":"{{name}}","userId":"{{userId}}","eventId":"{{performanceId}}","color":"{{color}}"}'
+        data-stick="true">{{name}}</div>
+    {{/each}}
+  </div>
+</template>
+
 <template name="performanceAreaCal">
   <div class="row row-no-padding">
     <div class="col-md-2">
-      <div id="external-events-perf" class="panel panel-default">
-        <h4>{{_ "performances"}}</h4>
-        {{#each performances}}
-          <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
-            data-event='{"title":"{{name}}","userId":"{{userId}}","eventId":"{{performanceId}}","color":"{{color}}"}'
-            data-stick="true">{{name}}</div>
-        {{/each}}
-      </div>
+      {{> performancesDraggable performances=performances}}
     </div>
     <div class="col-md-10">
       {{> fullcalendar options }}

@@ -15,15 +15,6 @@ Template.areasDashboard.events
     currentTab = $(event.target)
     Session.set "currentTab", {template: currentTab.data('template')}
 
-Template.volunteerAreaCal.rendered = () ->
-  this.autorun () ->
-    Template.currentData()
-    $('#volunteerAreaCal').fullCalendar('refetchEvents')
-    $('#volunteerAreaCal').fullCalendar('refetchResources')
-  $('#external-events-vol .ext-event').each(() ->
-    $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
-  )
-
 Template.volunteerAreaList.helpers
   'volunteerAreaTableSettings': () ->
     collection: VolunteerCrew.find({areaId: this._id})
@@ -49,6 +40,38 @@ Template.volunteerAreaList.helpers
         fn: (val,row,key) -> VolunteerShift.find({crewId:row._id}).count()
       }
     ]
+
+observeDOM = do ->
+  MutationObserver = window.MutationObserver or window.WebKitMutationObserver
+  eventListenerSupported = window.addEventListener
+  (obj, callback) ->
+    if MutationObserver
+      obs = new MutationObserver((mutations, observer) ->
+        if mutations[0].addedNodes.length or mutations[0].removedNodes.length
+          callback())
+      obs.observe obj,
+        childList: true
+        subtree: true
+    else if eventListenerSupported
+      obj.addEventListener 'DOMNodeInserted', callback, false
+      obj.addEventListener 'DOMNodeRemoved', callback, false
+
+Template.volunteersDraggable.onRendered () ->
+  # first time init
+  $('#external-events-vol .ext-event').each(() ->
+    $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
+  )
+  # we set an observer to make sure we add bind the function again and again
+  observeDOM(document.getElementById('external-events-vol'), () ->
+    $('#external-events-vol .ext-event').each(() ->
+      $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
+    )
+  )
+
+Template.volunteerAreaCal.onRendered () ->
+  this.autorun () ->
+    $('#volunteerAreaCal').fullCalendar('refetchEvents')
+    $('#volunteerAreaCal').fullCalendar('refetchResources')
 
 Template.volunteerAreaCal.helpers
   'volunteers': () ->
@@ -95,13 +118,11 @@ Template.volunteerAreaCal.helpers
       resources = Teams.find({areaId:areaId}).map((team) ->
         id: team._id
         resourceId: team._id
-        title: team.name
-      )
+        title: team.name)
       callback(resources)
     events: (start, end, tz, callback) ->
       areaId = Template.currentData()._id
       events = VolunteerShift.find({areaId:areaId}).map((res) ->
-        # console.log res
         title: getUserName(VolunteerCrew.findOne(res.crewId).userId)
         resourceId: res.teamId # this is the fullCalendar resourceId / Team
         crewId: res.crewId
@@ -121,6 +142,8 @@ Template.volunteerAreaCal.helpers
         teamId: event.resourceId
         areaId: areaId
       Meteor.call 'VolunteerBackend.insertShiftForm', doc, (e,eventId) ->
+        # HACK !!! I've to remove this event to avoid a duplication.
+        $('#volunteerAreaCal').fullCalendar('removeEvents',event._id)
         event.eventId = eventId
     eventDrop: (event, delta, revertFunc) ->
       # console.log "eventDrop",event
@@ -170,14 +193,19 @@ Template.volunteerUserProfileModal.events
       Modal.hide("volunteerUserProfileModal")
       $('#volunteerAreaCal').fullCalendar('removeEvents',[fcEventId])
 
-Template.performanceAreaCal.rendered = () ->
-  this.autorun () ->
-    Template.currentData()
-    $('#performanceAreaCal').fullCalendar('refetchEvents')
-    $('#performanceAreaCal').fullCalendar('refetchResources')
+Template.performancesDraggable.onRendered () ->
   $('#external-events-perf .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
+  observeDOM(document.getElementById('external-events-perf'), () ->
+    $('#external-events-perf .ext-event').each(() ->
+      $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
+    )
+  )
+
+Template.performanceAreaCal.onRendered () ->
+  this.autorun () ->
+    $('#performanceAreaCal').fullCalendar('refetchEvents')
 
 Template.performanceAreaCal.helpers
   'performances': () ->
@@ -193,6 +221,7 @@ Template.performanceAreaCal.helpers
     areaId = Template.currentData()._id
     id: "performanceAreaCal"
     defaultView: 'agendaFourDays'
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     views:
       agendaFourDays:
         type: 'agenda'
@@ -209,7 +238,8 @@ Template.performanceAreaCal.helpers
       ddaybutton:
         text: TAPi18n.__ ("dday")
         click: () ->
-          $('#performanceAreaCal').fullCalendar( 'gotoDate', Settings.findOne().dday )
+          dday = Settings.findOne().dday
+          $('#performanceAreaCal').fullCalendar( 'gotoDate', dday )
           $('#performanceAreaCal').fullCalendar( 'changeView', 'agendaDay' )
     header: {right:  'agendaFourDays, agendaDay, ddaybutton, prev,next'}
     events: (start, end, tz, callback) ->
@@ -230,23 +260,23 @@ Template.performanceAreaCal.helpers
         start: event.start.format('DD-MM-YYYY H:mm')
         end: event.end.format('DD-MM-YYYY H:mm')
         status: "scheduled"
-      Meteor.call 'Backend.updatePerformanceResource',
-        {$set: doc}, event.eventId
+      mod = {$set: doc}
+      Meteor.call 'Backend.updatePerformanceResource', mod ,event.eventId, () ->
+        # HACK !!! I've to remove this event to avoid a duplication.
+        $('#performanceAreaCal').fullCalendar('removeEvents',event._id)
     # drop: (date, jsEvent, ui, resourceId) ->
     #   $(this).remove()
     eventDrop: (event, delta, revertFunc) ->
       doc =
         start: event.start.format('DD-MM-YYYY H:mm')
         end: event.end.format('DD-MM-YYYY H:mm')
-      Meteor.call 'Backend.updatePerformanceResource',
-        {$set: doc}, event.eventId
+      Meteor.call 'Backend.updatePerformanceResource',{$set: doc},event.eventId
     eventResize: (event, delta, revertFunc) ->
       # console.log "eventResize"
       doc =
         start: event.start.format('DD-MM-YYYY H:mm')
         end: event.end.format('DD-MM-YYYY H:mm')
-      Meteor.call 'Backend.updatePerformanceResource',
-        {$set: doc}, event.eventId
+      Meteor.call 'Backend.updatePerformanceResource',{$set: doc},event.eventId
     eventClick: (event, jsEvent, view) ->
       res = PerformanceResource.findOne(event.eventId)
       form =  PerformanceForm.findOne(res.performanceId)

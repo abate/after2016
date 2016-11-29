@@ -1,4 +1,3 @@
-
 Template.allUsersProfile.helpers
   'displayRoles': (userId) ->
     if Roles.userIsInRole(userId, [ 'super-admin' ])
@@ -9,6 +8,7 @@ Template.allUsersProfile.helpers
       TAPi18n.__ "manager"
     else if Roles.userIsInRole(userId, [ 'user' ])
       TAPi18n.__ "user"
+
 Template.allUsersList.onCreated () ->
   this.currentResource = new ReactiveVar({})
 
