@@ -57,11 +57,6 @@ Schemas.Teams = new SimpleSchema(
     type: String
     optional: true
     label: () -> TAPi18n.__("description")
-  userPreference:
-    type: Boolean
-    defaultValue: false
-    autoform:
-      omit: true
 )
 
 Teams.attachSchema(Schemas.Teams)
