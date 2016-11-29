@@ -45,9 +45,9 @@ Schemas.Profile = new SimpleSchema(
 )
 
 Schemas.User = new SimpleSchema(
-  username:
-    type: String
-    optional: true
+  # username:
+  #   type: String
+  #   optional: true
   emails:
     type: Array
     optional: true

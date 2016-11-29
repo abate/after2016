@@ -13,6 +13,9 @@ Template.allUsersList.onCreated () ->
   this.currentResource = new ReactiveVar({})
 
 Template.allUsersList.events
+  'click [data-action="enroll-account"]': (event, template) ->
+    Modal.show('adminEnrollAccount')
+
   'click [data-action="remove-user"]': (event, template) ->
     Meteor.call 'Accounts.removeUser', this._id
 

@@ -59,17 +59,19 @@ Meteor.methods 'Backend.updatePerformanceResource': (doc,formId) ->
     PerformanceResource.update formId, doc
     performance = PerformanceResource.findOne(formId)
     emailPerformer(performance)
-    status = doc["$set"].status
-    if status
-      PerformanceForm.update(performance._id,{$set: {status: status}})
-    return formId
+    if doc["$set"].status
+      modifier = {$set: {status: performance.status}}
+      PerformanceForm.update(performance.performanceId,modifier)
+    return performance._id
 
 Meteor.methods 'Backend.insertPerformanceResource': (doc) ->
   console.log ["Backend.insertPerformanceResource",doc]
   check(doc,Schemas.PerformanceResource)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    PerformanceResource.insert(doc)
+    formId = PerformanceResource.insert(doc)
+    performance = PerformanceResource.findOne(formId)
     emailPerformer(performance)
-    PerformanceForm.update(doc.performanceId,{$set: {status: doc.status}})
-    return doc.performanceId
+    modifier = {$set: {status: performance.status}}
+    PerformanceForm.update(performance.performanceId,modifier)
+    return performance._id

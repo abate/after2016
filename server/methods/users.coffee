@@ -31,3 +31,11 @@ Meteor.methods 'Accounts.changeUserRole': (id, role) ->
     if Roles.userIsInRole(currentUser, 'manager')
       if role in ['user']
         Roles.setUserRoles(user._id, role)
+
+Meteor.methods 'Accounts.adminEnrollAccount': (options) ->
+  console.log ["Accounts.adminEnrollAccount",options]
+  if Roles.userIsInRole(Meteor.userId(), 'super-admin')
+    userId = Accounts.createUser(options)
+    role = options.profile.role
+    Roles.addUsersToRoles(userId, role)
+    Accounts.sendEnrollmentEmail(userId)
