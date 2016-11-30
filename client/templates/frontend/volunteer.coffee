@@ -73,9 +73,9 @@ Template.volunteerList.helpers
 AutoForm.hooks
   insertVolunteerForm:
     onSuccess: () ->
-      # sAlert.success('We sent email invitation on your behalf.')
+      sAlert.success(TAPi18n.__('alert_success_update_volunteer_form'))
       Session.set("currentTab",{template: 'volunteerList'})
   updateVolunteerForm:
     onSuccess: () ->
-      # sAlert.success('We sent email invitation on your behalf.')
+      sAlert.success(TAPi18n.__('alert_success_update_volunteer_form'))
       Session.set("currentTab",{ template: 'volunteerList'})

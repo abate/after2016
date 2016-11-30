@@ -58,7 +58,7 @@ Meteor.methods 'Backend.updatePerformanceResource': (doc,formId) ->
   if Roles.userIsInRole(userId, [ 'manager' ])
     PerformanceResource.update formId, doc
     performance = PerformanceResource.findOne(formId)
-    emailPerformer(performance)
+    Meteor.wrapAsync(emailPerformer(performance))
     if doc["$set"].status
       modifier = {$set: {status: performance.status}}
       PerformanceForm.update(performance.performanceId,modifier)
@@ -71,7 +71,7 @@ Meteor.methods 'Backend.insertPerformanceResource': (doc) ->
   if Roles.userIsInRole(userId, [ 'manager' ])
     formId = PerformanceResource.insert(doc)
     performance = PerformanceResource.findOne(formId)
-    emailPerformer(performance)
+    Meteor.wrapAsync(emailPerformer(performance))
     modifier = {$set: {status: performance.status}}
     PerformanceForm.update(performance.performanceId,modifier)
     return performance._id

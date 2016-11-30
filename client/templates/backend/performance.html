@@ -140,12 +140,12 @@
                 {{> quickForm meteormethod="Backend.updatePerformanceResource"
                     type="method-update" id="updatePerformanceResourceForm"
                     collection="PerformanceResource" doc=currentResource.data
-                    omitFields="start,end" currentResource=currentResourceVar }}
+                    omitFields="start,end" resetOnSuccess=false }}
               {{else}}
                 {{> quickForm meteormethod="Backend.insertPerformanceResource"
                     type="method" id="insertPerformanceResourceForm" doc=currentResource.data
                     collection="PerformanceResource" omitFields="start,end"
-                    currentResource=currentResourceVar }}
+                    resetOnSuccess=false }}
               {{/if}}
             </div>
           </div>

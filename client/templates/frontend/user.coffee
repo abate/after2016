@@ -45,6 +45,7 @@ Template.userDashboard.events
 AutoForm.hooks
   userProfileForm:
     onSuccess: () ->
+      sAlert.success(TAPi18n.__('alert_success_update_profile_form'))
       setUserLanguage(Meteor.userId())
       Session.set("currentTab",{template:"userHelp"})
       Router.go('userDashboard')

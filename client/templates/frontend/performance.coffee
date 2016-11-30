@@ -126,9 +126,9 @@ Template.performanceList.events
 AutoForm.hooks
   insertPerformanceForm:
     onSuccess: () ->
-      # sAlert.success('We sent email invitation on your behalf.')
+      sAlert.success(TAPi18n.__('alert_success_update_performance_form'))
       Session.set("currentTab",{template: 'performanceList'})
   updatePerformanceForm:
     onSuccess: () ->
-      # sAlert.success('We sent email invitation on your behalf.')
+      sAlert.success(TAPi18n.__('alert_success_update_performance_form'))
       Session.set("currentTab",{ template: 'performanceList'})
