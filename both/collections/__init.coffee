@@ -25,6 +25,15 @@ Areas.attachSchema(Schemas.Areas)
 
 @Teams = new Mongo.Collection 'teams'
 
+Shifts = new SimpleSchema(
+  start:
+    type: "datetime-local"
+    optional: true
+  duration:
+    type: Number
+    optional: true
+)
+
 Schemas.Teams = new SimpleSchema(
   name:
     type: String
@@ -44,6 +53,9 @@ Schemas.Teams = new SimpleSchema(
     optional: true
   maxMembers:
     type: Number
+    optional: true
+  shifts:
+    type: [Shifts]
     optional: true
   areaId:
     type: String

@@ -4,6 +4,8 @@ Template.areasDashboard.onCreated () ->
 Template.areasDashboard.helpers
   "tab": () -> Session.get("currentTab")
 
+AutoForm.debug()
+
 Template.areasDashboard.events
   'click [data-template="areaSettings"]': (event, template) ->
     # updateActive(event)

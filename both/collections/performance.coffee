@@ -274,10 +274,10 @@ Schemas.PerformanceForm = new SimpleSchema(
         {label: TAPi18n.__("group"), value: "group"}
         ]
   people:
-    type: ["email"]
+    type: [String]
     label: () -> TAPi18n.__("other_performers")
     optional: true
-    custom: () -> if this.field('type').value == "group" then "required"
+    # custom: () -> if this.field('type').value == "group" then "required"
     autoform:
       type: () ->
         if (AutoForm.getFieldValue("type") == "group") then "" else "hidden"
@@ -301,6 +301,7 @@ Schemas.PerformanceForm = new SimpleSchema(
   budget:
     type: String
     label: () -> TAPi18n.__("perf_budget")
+    optional: true
     autoform:
       rows:2
   kindId:

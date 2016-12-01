@@ -72,3 +72,7 @@ Meteor.publish 'staticContent', () ->
     StaticContent.find()
   else
     StaticContent.find({type: "public"})
+
+Meteor.publish 'emailQueue', () ->
+  if Roles.userIsInRole(this.userId, [ 'manager' ])
+    EmailQueue.find()

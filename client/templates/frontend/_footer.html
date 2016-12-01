@@ -5,12 +5,13 @@
       </p>
     </div>
     <div class="footer-copyright">
+      <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
       <div class="container">
         <span>
-          <a class="white-text" href="{{ pathFor 'staticContentDisplay' _name='privacy' }}">{{_ "privacy"}}</a>
-          <a class="white-text" href="{{ pathFor 'staticContentDisplay' _name='volunteersAgreement' }}">{{_ "volunteer_agreement"}}</a>
+          <a class="white-text pull-left" href="{{ pathFor 'staticContentDisplay' _name='privacy' }}">{{fa "user-secret" ""}}{{_ "privacy"}}</a> |
+          <a class="white-text" href="{{ pathFor 'staticContentDisplay' _name='volunteersAgreement' }}">{{fa "thumbs-up" ""}}{{_ "volunteer_agreement"}}</a>
         </span>
-        <!-- <span class="right"> &copy; Copyright 2016 Pietro </span> -->
+        <span class="pull-right"> {{fa "copyright" ""}} Copyright 2016 Pietro </span>
       </div>
     </div>
   </footer>

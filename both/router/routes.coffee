@@ -62,6 +62,12 @@ Router.route '/admin/translations',
   controller: 'AdminController'
   template: 'translations'
 
+Router.route '/admin/emailQueue',
+  name: 'emailQueue'
+  controller: 'AdminController'
+  template: 'emailQueueTable'
+  waitOn: () -> [ Meteor.subscribe('emailQueue') ]
+
 Router.route '/admin/content',
   name: 'staticContentBackend'
   controller: 'AdminController'
