@@ -90,6 +90,22 @@ StagePerformanceForm = new SimpleSchema(
         else "hidden"
 )
 
+DJPerformanceForm = new SimpleSchema(
+  time:
+    type: String
+    allowedValues: ["early_morning","mid_morning","early_afternoon","late_afternoon"]
+    label: () -> TAPi18n.__("djperf_time")
+    autoform:
+      type: "select"
+      options: () ->
+        l=["early_morning","mid_morning","early_afternoon","late_afternoon"]
+        _.map(l,(e) -> {label: TAPi18n.__(e), value: e})
+  duration:
+    type: String
+    label: () -> TAPi18n.__("djperf_duration")
+    optional: true
+)
+
 WorkshopForm = new SimpleSchema(
   type:
     type: String
@@ -282,6 +298,11 @@ Schemas.PerformanceForm = new SimpleSchema(
     label: () -> TAPi18n.__("perf_description")
     autoform:
       rows:6
+  budget:
+    type: String
+    label: () -> TAPi18n.__("perf_budget")
+    autoform:
+      rows:2
   kindId:
     type: String
     label: () -> TAPi18n.__("perf_kind")
@@ -320,6 +341,16 @@ Schemas.PerformanceForm = new SimpleSchema(
         if kindId
           kind = PerformanceType.findOne(AutoForm.getFieldValue("kindId"))
           if (kind.name == "workshop") then "" else "hidden"
+        else "hidden"
+  dj:
+    type: DJPerformanceForm
+    optional: true
+    autoform:
+      type: () ->
+        kindId = AutoForm.getFieldValue("kindId")
+        if kindId
+          kind = PerformanceType.findOne(AutoForm.getFieldValue("kindId"))
+          if (kind.name == "dj_set") then "" else "hidden"
         else "hidden"
   status:
     type: String

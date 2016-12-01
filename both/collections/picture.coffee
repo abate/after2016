@@ -1,5 +1,9 @@
 @ProfilePictures = new FilesCollection
-  storagePath: 'data'
+  storagePath:
+    if process.env.NODE_ENV == 'development'
+      'data/profilePictures'
+    else
+      '/data/profilePictures'
   collectionName: 'ProfilePictures'
   allowClientCode: false # Disallow remove files from Client
   onBeforeUpload: (file) ->
@@ -10,7 +14,11 @@
       return TAPi18n.__ "upload_error"
 
 @PerformanceImages = new FilesCollection
-  storagePath: 'data'
+  storagePath:
+    if process.env.NODE_ENV == 'development'
+      'data/performanceImages'
+    else
+      '/data/performanceImages'
   collectionName: 'PerformanceImages'
   allowClientCode: false # Disallow remove files from Client
   onBeforeUpload: (file) ->

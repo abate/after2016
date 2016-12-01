@@ -41,6 +41,7 @@ Template.allUsersList.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
+    # showFilter: false
     # rowClass: rowApplicationStatus
     # filters: []
     fields: [

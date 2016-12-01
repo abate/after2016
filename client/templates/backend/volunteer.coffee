@@ -1,7 +1,3 @@
-Template.volunteerBackend.onCreated () ->
-  this.currentResource = new ReactiveVar({})
-  # this.currentPage = new ReactiveVar(Session.get('current-page') || 0)
-
 rowApplicationStatus = (vol) ->
   if vol.status == "assigned" then "bg-warning"
   else if vol.status == "free" then "bg-success"
@@ -12,24 +8,62 @@ Template.volunteerUserProfile.helpers
   'getSkillName': (id) -> TAPi18n.__ (Skills.findOne(id).name)
   'getTeamName': (id) -> TAPi18n.__ (Teams.findOne(id).name)
 
+Template.volunteerBackendFilter.onCreated () ->
+  this.carFilter = new ReactiveTable.Filter('checkbox-filter-car', [ 'car' ])
+  this.cookingFilter = new ReactiveTable.Filter('checkbox-filter-cooking', [ 'cooking' ])
+  this.usernameFilter = new ReactiveTable.Filter('username-filter', [ 'name' ])
+
+Template.volunteerBackendFilter.helpers
+  'checkedCar': () ->
+    if Template.instance().carFilter.get() == 'true' then 'checked' else ''
+
+  'checkedCooking': () ->
+    if Template.instance().cookingFilter.get() == 'true' then 'checked' else ''
+
+Template.volunteerBackendFilter.events
+  'change #user-cooking-filter': (event, template) ->
+    if $(event.target).is(':checked')
+      template.cookingFilter.set 'true'
+    else
+      template.cookingFilter.set ''
+
+  'change #user-car-filter': (event, template) ->
+    if $(event.target).is(':checked')
+      template.carFilter.set 'true'
+    else
+      template.carFilter.set ''
+
+Template.volunteerBackend.onCreated () ->
+  this.currentResource = new ReactiveVar({})
+  this.showAreaSlider = new ReactiveVar(false)
+  # this.currentPage = new ReactiveVar(Session.get('current-page') || 0)
+
 Template.volunteerBackend.helpers
+  'showAreaSlider': () -> Template.instance().showAreaSlider.get()
   'currentResource': () -> Template.instance().currentResource.get()
   'VolunteerTableSettings': () ->
-    collection: VolunteerForm.find()
+    collection: VolunteerForm
     # currentPage: Template.instance().currentPage
     id: "VolunteerTableID"
     class: "table table-bordered table-hover"
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
+    showFilter: false
     # rowClass: rowApplicationStatus
-    # filters: []
+    filters: [
+      "checkbox-filter-car",
+      "checkbox-filter-cooking",
+      "username-filter"
+    ]
     fields: [
       {
         key: 'name',
         label: (() -> TAPi18n.__("name")),
         fn: (l,obj,k) -> if obj then getUserName(obj.userId)
-      }
+      },
+      { key: 'car', label: "", hidden: true},
+      { key: 'cooking', label: "", hidden: true}
     ]
   'VolunteerCrewTableSettings': () ->
     currentResource = Template.instance().currentResource.get()
@@ -64,6 +98,9 @@ Template.volunteerBackend.helpers
     ]
 
 Template.volunteerBackend.events
+  'click [data-action="showAreaSlider"]': (event, template) ->
+    template.showAreaSlider.set(!template.showAreaSlider.get())
+
   'click [data-action="removeVolunteerCrew"]': (event, template) ->
     formId = $(event.target).data('id')
     Meteor.call 'VolunteerBackend.removeCrewForm', formId
@@ -82,3 +119,12 @@ Template.volunteerBackend.events
       form: VolunteerForm.findOne({userId: this.userId})
       user: Meteor.users.findOne(this.userId)
       data: data}
+
+Template.volunteerBackendAreasSlider.helpers
+  'areas': () ->
+    Areas.find().map((area) ->
+      name: area.name
+      arearef: if area.leads then getUserName(area.leads)
+      crews: VolunteerCrew.find({areaId: area._id}).count()
+      shifts: VolunteerShift.find({areaId: area._id}).count()
+    )

@@ -70,7 +70,7 @@ Meteor.methods 'VolunteerBackend.updateCrewForm': (doc,formId) ->
         role = AppRoles.findOne(d.roleId).name
         if role == "lead"
           console.log "update Area ref"
-          emailLeads(VolunteerCrew.findOne(r))
+          Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(formId)))
           Areas.update(d.areaId,{$set: {leads: d.userId}})
 
 Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
@@ -82,7 +82,7 @@ Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
       role = AppRoles.findOne(doc.roleId).name
       if role == "lead"
         console.log "update Area ref"
-        emailLeads(VolunteerCrew.findOne(r))
+        Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(r)))
         Areas.update(doc.areaId,{$set: {leads: doc.userId}})
 
 Meteor.methods 'VolunteerBackend.removeShiftForm': (formId) ->
@@ -101,7 +101,7 @@ Meteor.methods 'VolunteerBackend.updateShiftForm': (doc,formId) ->
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
     VolunteerShift.update formId, doc, (e,r) ->
-      emailHelpers(VolunteerShift.findOne(formId))
+      Meteor.wrapAsync(emailHelpers(VolunteerShift.findOne(formId)))
 
 Meteor.methods 'VolunteerBackend.insertShiftForm': (doc) ->
   console.log ["VolunteerBackend.insertShiftForm",doc]
@@ -109,4 +109,4 @@ Meteor.methods 'VolunteerBackend.insertShiftForm': (doc) ->
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
     VolunteerShift.insert doc, (e,r) ->
-      emailHelpers(VolunteerShift.findOne(r))
+      Meteor.wrapAsync(emailHelpers(VolunteerShift.findOne(r)))

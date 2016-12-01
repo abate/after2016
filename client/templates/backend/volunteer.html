@@ -22,29 +22,30 @@
                 </td>
               </tr>
               <tr><td>{{_ "facebook"}}</td><td>{{user.profile.facebook}}</td></tr>
-              <tr><td>{{_ "hasCar"}}</td><td>{{form.car}}</td></tr>
+              <tr><td>{{_ "has_car"}}</td><td>{{form.car}}</td></tr>
+              <tr><td>{{_ "available_for_cooking"}}</td><td>{{form.car}}</td></tr>
               <tr><td>{{_ "roles"}}</td><td>
-                <ul class="list-group">
+                <div class="list-group">
                   {{#each form.role}}
-                    <li class="list-group-item">{{getRoleName this}}</li>
+                    <div class="list-group-item">{{getRoleName this}}</div>
                   {{/each}}
-                </ul>
+                </div>
                 </td>
               </tr>
               <tr><td>{{_ "skills"}}</td><td>
-                <ul class="list-group">
+                <div class="list-group">
                   {{#each form.skills}}
-                    <li class="list-group-item">{{getSkillName this}}</li>
+                    <div class="list-group-item">{{getSkillName this}}</div>
                   {{/each}}
-                </ul>
+                </div>
                 </td>
               </tr>
               <tr><td>{{_ "teams"}}</td><td>
-                <ul class="list-group">
+                <div class="list-group">
                   {{#each form.teams}}
-                    <li class="list-group-item">{{getTeamName this}}</li>
+                    <div class="list-group-item">{{getTeamName this}}</div>
                   {{/each}}
-                </ul>
+                </div>
                 </td>
               </tr>
             </tbody>
@@ -59,12 +60,44 @@
   </div>
 </template>
 
+<template name="volunteerBackendFilter">
+  <label>
+    <input id="user-car-filter" type="checkbox" {{checkedCar}} />
+    <span class="checkbox-material"><span class="check"></span></span>
+    {{_ "has_car"}}
+  </label>
+  <label>
+    <input id="user-cooking-filter" type="checkbox" {{checkedCooking}} />
+    <span class="checkbox-material"><span class="check"></span></span>
+    {{_ "available_for_cooking"}}
+  </label>
+</template>
+
+<template name="volunteerBackendFilters">
+  <div id="filter">
+    <div class="form-group clearfix pull-left">
+      {{> volunteerBackendFilter}}
+    </div>
+    <!-- <div class="form-group clearfix">
+        {{> quoteFilter }}
+        {{> reactiveTableFilter id="filter3" label="All" }}
+    </div> -->
+    <!-- <div class="form-group clearfix">
+        {{> clearFiltersButton }}
+    </div> -->
+  </div>
+</template>
+
 <template name="volunteerBackend">
   <div class="row">
     <div class="col-md-3">
+      <!-- {{> volunteerBackendFilters }} -->
       {{> reactiveTable settings=VolunteerTableSettings }}
     </div>
     <div class="col-md-9">
+      {{#if showAreaSlider}}
+        <div class="panel">{{> volunteerBackendAreasSlider }}</div>
+      {{/if}}
       {{#if currentResource.form}}
       <div class='panel panel-default'>
         <div class="row">
@@ -72,6 +105,7 @@
             {{> volunteerUserProfile currentResource}}
           </div>
           <div class="col-md-4">
+            <div class="pull-right">{{ fa "list" "showAreaSlider" }}</div>
             {{#if currentResource.data._id}}
               {{> quickForm meteormethod="VolunteerBackend.updateCrewForm" type="method-update"
               id="updateVolunteerCrewForm" collection="VolunteerCrew" doc=currentResource.data}}
@@ -85,5 +119,20 @@
       </div>
       {{/if}}
     </div>
+  </div>
+</template>
+
+<template name="volunteerBackendAreasSlider">
+  <div style="overflow-x:scroll;white-space: nowrap;" class="list-inline">
+    {{#each areas}}
+      <li class="list-group-item">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>{{_ name}}</strong></li>
+          <li class="list-group-item">{{#if arearef}}{{arearef}}{{else}}{{_ "vacant"}}{{/if}}</li>
+          <li class="list-group-item">{{_ "assigned"}}: {{shifts}}</li>
+          <li class="list-group-item">{{_ "free" }}: {{crews}}</li>
+        </ul>
+      </li>
+    {{/each}}
   </div>
 </template>
