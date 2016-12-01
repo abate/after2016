@@ -70,6 +70,56 @@ Template.volunteerList.helpers
       },
     ]
 
+Template.publicVolunteerCal.onCreated () ->
+  area = Areas.findOne()
+  Session.set('currentAreaTab',{areaId:area._id})
+
+Template.publicVolunteerCal.helpers
+  'currentAreaTab': () -> Session.get('currentAreaTab')
+  'areas': () -> Areas.find().fetch()
+  'options': () ->
+    id: "publicVolunteerAreaCal"
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
+    scrollTime: '00:00'
+    slotDuration: "00:15"
+    aspectRatio: 1.5
+    now: Settings.findOne().dday
+    locale: Meteor.user().profile.language
+    defaultView: 'timelineDay'
+    views:
+      timelineThreeDays:
+        type: 'timeline'
+        duration: { days: 2 }
+    header:
+      right: 'timelineTwoDays, timelineDay, prev,next'
+    resourceLabelText: TAPi18n.__ "teams"
+    resourceAreaWidth: "20%"
+    resources: (callback) ->
+      areaId = Session.get('currentAreaTab').areaId
+      resources = Teams.find({areaId:areaId}).map((team) ->
+        id: team._id
+        resourceId: team._id
+        title: team.name)
+      callback(resources)
+    events: (start, end, tz, callback) ->
+      areaId = Session.get('currentAreaTab').areaId
+      events = VolunteerShift.find({areaId:areaId}).map((res) ->
+        title: getUserName(VolunteerCrew.findOne(res.crewId).userId)
+        resourceId: res.teamId # this is the fullCalendar resourceId / Team
+        crewId: res.crewId
+        userId: res.userId
+        eventId: res._id
+        start: moment(res.start, "DD-MM-YYYY H:mm")
+        end: moment(res.end, "DD-MM-YYYY H:mm"))
+      callback(events)
+
+Template.publicVolunteerCal.events
+  'click [data-action="switchTab"]': (event,template) ->
+    areaId = $(event.target).data('id')
+    Session.set('currentAreaTab',{areaId:areaId})
+    $('#publicVolunteerAreaCal').fullCalendar('refetchEvents')
+    $('#publicVolunteerAreaCal').fullCalendar('refetchResources')
+
 AutoForm.hooks
   insertVolunteerForm:
     onSuccess: () ->

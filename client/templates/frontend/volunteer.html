@@ -42,3 +42,18 @@
     </div>
   </div>
 </template>
+
+<template name="publicVolunteerCal">
+  <ul class="nav nav-tabs" role="tablist">
+    {{#each areas}}
+      <li role="presentation">
+        <a href="#" data-action="switchTab" data-id="{{this._id}}">{{_ this.name}}</a>
+      </li>
+    {{/each}}
+  </ul>
+  <div class="panel">
+    {{#if currentAreaTab }}
+      {{> fullcalendar options }}
+    {{/if}}
+  </div>
+</template>

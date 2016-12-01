@@ -37,6 +37,10 @@ Template.userDashboard.events
     event.stopImmediatePropagation()
     Session.set "currentTab", {template: "userProfile", data: Meteor.user()}
 
+  'click [data-template="volunteerCal"]': (event, template) ->
+    # updateActive(event)
+    Session.set "currentTab", {template: "publicVolunteerCal"}
+
   'click [data-template]': (event, template) ->
     # updateActive(event)
     currentTab = $(event.target)
