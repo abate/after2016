@@ -1,7 +1,6 @@
 rowApplicationStatus = (vol) ->
-  if vol.status == "assigned" then "bg-warning"
-  else if vol.status == "free" then "bg-success"
-  else "bg-warning"
+  crew = VolunteerCrew.find({userId:vol.userId}).count()
+  if crew == 0 then "bg-warning" else "bg-success"
 
 Template.volunteerUserProfile.helpers
   'getRoleName': (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
@@ -50,7 +49,7 @@ Template.volunteerBackend.helpers
     rowsPerPage: 20
     showRowCount: true
     showFilter: false
-    # rowClass: rowApplicationStatus
+    rowClass: rowApplicationStatus
     filters: [
       "checkbox-filter-car",
       "checkbox-filter-cooking",
@@ -58,9 +57,15 @@ Template.volunteerBackend.helpers
     ]
     fields: [
       {
-        key: 'name',
+        key: 'userId',
         label: (() -> TAPi18n.__("name")),
-        fn: (l,obj,k) -> if obj then getUserName(obj.userId)
+        fn: (val,row,key)-> if val then getUserName(val)
+      },
+      {
+        key: 'roles',
+        label: (() -> TAPi18n.__("shifts")),
+        fn: (val,row,key) ->
+          VolunteerCrew.find({userId:row.userId}).count()
       },
       { key: 'car', label: "", hidden: true},
       { key: 'cooking', label: "", hidden: true}

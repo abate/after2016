@@ -123,9 +123,9 @@
 </template>
 
 <template name="volunteerBackendAreasSlider">
-  <div style="overflow-x:scroll;white-space: nowrap;" class="list-inline">
+  <ul style="overflow-x:scroll;white-space:nowrap;" class="list-inline">
     {{#each areas}}
-      <li class="list-group-item">
+      <li class="list-group-item {{#if arearef}}list-group-item-success{{else}}list-group-item-warning{{/if}}">
         <ul class="list-group">
           <li class="list-group-item"><strong>{{_ name}}</strong></li>
           <li class="list-group-item">{{#if arearef}}{{arearef}}{{else}}{{_ "vacant"}}{{/if}}</li>
@@ -134,5 +134,5 @@
         </ul>
       </li>
     {{/each}}
-  </div>
+  </ul>
 </template>

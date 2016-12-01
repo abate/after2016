@@ -3,29 +3,29 @@
     <div class="col-md-3">
       <div class="nav nav-pills nav-stacked">
         <span class="list-group-item">
-          {{fa "user" ""}} <a href="#" data-template="userProfile">{{_ "profile"}}</a>
+          {{fa "user" ""}} <a data-template="userProfile">{{_ "profile"}}</a>
           {{#if isProfileComplete}}
             <span style="color: red;"> {{fa "exclamation-triangle" ""}}</span>
           {{/if}}
         </span>
         <span class="list-group-item">
-          {{fa "heart" ""}} <a href="#" data-template="volunteerList">{{_ "volunteering"}}</a>
+          {{fa "heart" ""}} <a data-template="volunteerList">{{_ "volunteering"}}</a>
           {{#if isVolunteer}}
-            <span class="badge btn-small">{{fa "pencil" "updateVolunteerForm"}}</span>
-            <span class="badge btn-small">{{fa "trash" "removeVolunteerForm"}}</span>
+            <a class="badge btn-small">{{fa "pencil" "updateVolunteerForm"}}</a>
+            <a class="badge btn-small">{{fa "trash" "removeVolunteerForm"}}</a>
           {{else}}
-            <span class="badge btn-small">{{fa "plus-square" "insertVolunteerForm"}}</span>
+            <a class="badge btn-small">{{fa "plus-square" "insertVolunteerForm"}}</a>
           {{/if}}
         </span>
         <span class="list-group-item">
-          {{fa "list" ""}} <a href="#" data-template="publicVolunteerCal">{{_ "planning"}}</a>
+          {{fa "list" ""}} <a data-template="publicVolunteerCal">{{_ "planning"}}</a>
         </span>
         <span class="list-group-item">
-          {{fa "star" ""}} <a href="#" data-template="performanceList">{{_ "performance"}}</a>
-          <span class="badge btn-small">{{fa "plus-square" "insertPerformanceForm"}}</span>
+          {{fa "star" ""}} <a data-template="performanceList">{{_ "performance"}}</a>
+          <a class="badge btn-small">{{fa "plus-square" "insertPerformanceForm"}}</a>
         </span>
         <span class="list-group-item">
-          {{fa "question" ""}} <a href="#" data-template="userHelp">{{_ "help"}}</a>
+          {{fa "question" ""}} <a data-template="userHelp">{{_ "help"}}</a>
         </span>
       </div>
     </div>
