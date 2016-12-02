@@ -58,7 +58,6 @@ Shifts = new SimpleSchema(
   minMembers:
     type: Number
     label: () -> TAPi18n.__("min_members")
-    defaultValue: 3
     optional: true
     autoform:
       label: false

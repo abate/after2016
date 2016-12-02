@@ -4,8 +4,6 @@ Template.areasDashboard.onCreated () ->
 Template.areasDashboard.helpers
   "tab": () -> Session.get("currentTab")
 
-AutoForm.debug()
-
 Template.areasDashboard.events
   'click [data-template="areaSettings"]': (event, template) ->
     # updateActive(event)
@@ -70,6 +68,11 @@ Template.volunteersDraggable.onRendered () ->
     )
   )
 
+shiftCount = (team) ->
+  count=0
+  _.each(team.shifts, (shift) -> count = count + shift.minMembers)
+  return count
+
 Template.volunteerAreaCal.onRendered () ->
   this.autorun () ->
     $('#volunteerAreaCal').fullCalendar('refetchEvents')
@@ -118,9 +121,14 @@ Template.volunteerAreaCal.helpers
     resources: (callback) ->
       areaId = Template.currentData()._id
       resources = Teams.find({areaId:areaId}).map((team) ->
+        required = shiftCount(team)
+        covered = VolunteerShift.find({teamId:team._id}).count()
         id: team._id
         resourceId: team._id
-        title: team.name)
+        title: team.name
+        covered: covered
+        required: required
+        )
       callback(resources)
     events: (start, end, tz, callback) ->
       areaId = Template.currentData()._id
@@ -175,6 +183,13 @@ Template.volunteerAreaCal.helpers
           end: event.end.format('DD-MM-YYYY H:mm')
       Modal.show("volunteerUserProfileModal", context)
     resourceRender: (resourceObj, labelTds, bodyTds) ->
+      if resourceObj.required > 0
+        if (resourceObj.required - resourceObj.covered <= 0)
+          $(labelTds).find(".fc-cell-content").addClass("bg-success")
+        else
+          $(labelTds).find(".fc-cell-content").addClass("bg-warning")
+      txt = " (#{resourceObj.required} / #{resourceObj.covered})"
+      $(labelTds).find(".fc-cell-text").append(txt)
       labelTds.on('click', () ->
         team = Teams.findOne(resourceObj.resourceId)
         Modal.show("updateAreaCalTeamFormModal",team)
@@ -313,4 +328,4 @@ AutoForm.hooks
   updateTeamsForm:
     onSuccess: (ft,result) ->
       Modal.hide("insertAreaCalTeamFormModal")
-      $('#volunteerAreaCal').fullCalendar( 'refetchResources' )
+      # $('#volunteerAreaCal').fullCalendar( 'refetchResources' )
