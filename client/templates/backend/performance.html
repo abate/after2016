@@ -22,6 +22,18 @@
         <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
         <div class="col-xs-10">{{_ type}}</div>
       </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "budget"}}</label>
+        <div class="col-xs-10">{{budget}}</div>
+      </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "links"}}</label>
+        <div class="col-xs-10">
+          <ul>
+            {{#each links}} <li>this</li> {{/each}}
+          </ul>
+        </div>
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="media">
       <img alt="Media Pic" src="{{mediaFileLink media}}" class="img-responsive">
