@@ -76,8 +76,6 @@ Template.teamsSettings.helpers
         key: 'leads',
         label: (() -> TAPi18n.__("leads")),
         fn: (val,row,label) -> getUserName(val) },
-      { key: 'minMembers', label: (() -> TAPi18n.__ ("min_members")) },
-      { key: 'maxMembers', label: (() -> TAPi18n.__ ("max_members")) },
       { key: 'description', label: (() -> TAPi18n.__("description"))}
     ]
 
@@ -106,8 +104,34 @@ Template.areasSettings.helpers
         key: 'leads',
         label: (() -> TAPi18n.__("leads")),
         fn: (val,row,label) -> getUserName(val) },
-      { key: 'description', label: (() -> TAPi18n.__("description"))}
+      {
+        key: 'teams',
+        label: (() -> TAPi18n.__("teams")),
+        tmpl: Template.areasSettingsTeams
+      }
     ]
+
+Template.updateAreaModal.events
+  'click [data-action="removeArea"]': (event, template) ->
+    formId = $(event.target).data('id')
+    Meteor.call 'Backend.removeArea', formId
+    Modal.hide("updateAreaModal")
+
+Template.areasSettings.events
+  'click #AreasTableID.reactive-table tbody tr': (event, template) ->
+    Modal.show("updateAreaModal",{doc:this})
+
+  'click [data-action="insertArea"]': (event, template) ->
+    Modal.show("updateAreaModal",{})
+
+Template.areasSettingsTeams.helpers
+  'teams': (areaId) ->
+    Teams.find({areaId:areaId}).fetch()
+
+AutoForm.hooks
+  updateAreaForm:
+    onSuccess: (ft,result) ->
+      Modal.hide("updateAreaModal")
 
 Template.skillsSettings.helpers
   'skillsTableSettings': () ->

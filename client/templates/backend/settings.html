@@ -1,5 +1,48 @@
 <template name="areasSettings">
+  <div class="pull-left">
+    <span aria-hidden="true">
+      <i class="fa fa-file" data-action="insertArea" aria-hidden="true"></i>
+    </span> <span class="sr-only">{{_ "add"}}</span>
+  </div>
   {{> reactiveTable settings=areasTableSettings }}
+</template>
+
+<template name="areasSettingsTeams">
+  <ul>
+    {{#each (teams(_id))}}
+    <li>{{name}}</li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="updateAreaModal">
+  <div id="updateAreaModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="pull-left">
+            <span aria-hidden="true">
+              <i data-action="removeArea" class="fa fa-trash-o" data-id="{{doc._id}}" aria-hidden="true"></i>
+            </span> <span class="sr-only">{{_ "remove"}}</span>
+          </div>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">{{fa "times" ""}}</span> <span class="sr-only">{{_ "close"}}</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {{#if doc}}
+            {{> quickForm collection="Areas" id="updateAreaForm"
+              type="method-update" meteormethod="Backend.updateArea"
+              doc=doc omitFields="leads"}}
+          {{else}}
+            {{> quickForm collection="Areas" id="insertAreaForm"
+              type="method" meteormethod="Backend.insertArea"
+              omitFields="leads"}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="skillsSettings">

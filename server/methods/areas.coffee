@@ -1,3 +1,22 @@
+Meteor.methods 'Backend.removeArea': (areaId) ->
+  console.log "Backend.removeArea"
+  check(areaId,String)
+  if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    Areas.remove(areaId)
+
+Meteor.methods 'Backend.insertArea': (doc) ->
+  console.log ["Backend.insertArea",doc]
+  check(doc,Schemas.Areas)
+  if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    Areas.insert(doc)
+
+Meteor.methods 'Backend.updateArea': (doc,formId) ->
+  console.log ["Backend.updateArea",doc, formId]
+  check(doc,Schemas.Areas)
+  check(formId,String)
+  if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    Areas.update(formId,doc)
+
 Meteor.methods 'Backend.removeTeam': (teamId) ->
   console.log "Backend.removeTeam"
   check(teamId,String)
