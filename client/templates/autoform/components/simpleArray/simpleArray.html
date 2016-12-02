@@ -13,7 +13,7 @@
           {{/if}}
         </td>
         <td>
-          {{> afFieldInput name=this.name}}
+          {{> afQuickField name=this.name label=false options=afOptionsFromSchema}}
         </td>
       </tr>
       {{/afEachArrayItem}}
@@ -28,4 +28,25 @@
       {{/if}}
     </tbody>
   </table>
+</template>
+
+<template name="afFormGroup_inlineCustom">
+  <div class="{{#if afFieldIsInvalid name=this.name}}has-error{{/if}} {{afFormGroupClass}}" data-required={{required}} {{afFormGroupAtts}}>
+    {{#unless skipLabel}}
+    <label {{bsFieldLabelAtts}}>{{#if this.labelText}}{{this.labelText}}{{else}}{{afFieldLabelText name=this.name}}{{/if}}</label>
+    {{/unless}}
+    {{> afFieldInput this.afFieldInputAtts}}
+    <span class="help-block">{{{afFieldMessage name=this.name}}}</span>
+  </div>
+</template>
+
+<template name="afObjectField_inlineCustom">
+  <div class="{{#if afFieldIsInvalid name=this.name}}has-error{{/if}}">
+    {{#if this.label}}
+      <label {{afFieldLabelAtts}}>{{afFieldLabelText name=this.name}}</label>
+    {{/if}}
+    <div class="form-inline">
+      {{> afQuickFields quickFieldsAtts template="inlineCustom"}}
+    </div>
+  </div>
 </template>

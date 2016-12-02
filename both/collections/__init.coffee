@@ -27,11 +27,53 @@ Areas.attachSchema(Schemas.Areas)
 
 Shifts = new SimpleSchema(
   start:
-    type: "datetime-local"
+    type: String
+    label: () -> TAPi18n.__("start")
     optional: true
-  duration:
+    autoform:
+      label: false
+      afFieldInput:
+        type: "datetimepicker"
+        placeholder: () -> TAPi18n.__("start")
+        class: "col-lg-3"
+        opts: () ->
+          step: 15
+          datepicker:false
+          format:'H:mm'
+          defaultTime:'05:00'
+  end:
+    type: String
+    label: () -> TAPi18n.__("end")
+    optional: true
+    autoform:
+      label: false
+      afFieldInput:
+        type: "datetimepicker"
+        placeholder: () -> TAPi18n.__("end")
+        class: "col-lg-3"
+        opts: () ->
+          step: 15
+          datepicker:false
+          format:'H:mm'
+  minMembers:
     type: Number
+    label: () -> TAPi18n.__("min_members")
+    defaultValue: 3
     optional: true
+    autoform:
+      label: false
+      afFieldInput:
+        class: "col-lg-3"
+        placeholder: "min"
+  maxMembers:
+    type: Number
+    label: () -> TAPi18n.__("min_members")
+    optional: true
+    autoform:
+      label: false
+      afFieldInput:
+        class: "col-lg-3"
+        placeholder: "max"
 )
 
 Schemas.Teams = new SimpleSchema(
@@ -47,16 +89,11 @@ Schemas.Teams = new SimpleSchema(
         areaId = AutoForm.getFieldValue("areaId")
         _.uniq(VolunteerCrew.find({},{fields:{userId:1}}).map((e) ->
           {label: (getUserName e.userId), value: e.userId}),(e)->e.value)
-  minMembers:
-    type: Number
-    defaultValue: 3
-    optional: true
-  maxMembers:
-    type: Number
-    optional: true
   shifts:
     type: [Shifts]
     optional: true
+    autoform:
+      template:"inlineCustom"
   areaId:
     type: String
     label: () -> TAPi18n.__("area")
