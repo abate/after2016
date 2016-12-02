@@ -1,7 +1,9 @@
 <template name="performanceDisplay">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">{{_ "general"}}</a></li>
-    <li role="presentation"><a href="#media" aria-controls="media" role="tab" data-toggle="tab">{{_ "media"}}</a></li>
+    {{#if media}}
+      <li role="presentation"><a href="#media" aria-controls="media" role="tab" data-toggle="tab">{{_ "media"}}</a></li>
+    {{/if}}
     <li role="presentation"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">{{_ "details"}}</a></li>
     <li role="presentation"><a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{_ "edit"}}</a></li>
   </ul>
@@ -25,15 +27,20 @@
       <img alt="Media Pic" src="{{mediaFileLink media}}" class="img-responsive">
     </div>
     <div role="tabpanel" class="tab-pane" id="details">
-      {{#if $eq kind "installation"}}
-        <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "dimension"}}</label>
-          <div class="col-xs-10">{{installation.dimension}}</div>
-        </div>
-        <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "material"}}</label>
-          <div class="col-xs-10">{{installation.meterial}}</div>
-        </div>
+      {{debug}}
+      {{#if installation}}
+        {{#if installation.dimension}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "dimension"}}</label>
+            <div class="col-xs-10">{{installation.dimension}}</div>
+          </div>
+        {{/if}}
+        {{#if installation.meterial}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "material"}}</label>
+            <div class="col-xs-10">{{installation.meterial}}</div>
+          </div>
+        {{/if}}
         {{#if installation.textitles}}
           <div class="form-group row">
             <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "textitles"}}</label>
@@ -58,28 +65,48 @@
             <div class="col-xs-10">{{installation.light_details}}</div>
           </div>
         {{/if}}
-        <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "power"}}</label>
-          <div class="col-xs-10">{{installation.power}}</div>
-        </div>
-        <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "help"}}</label>
-          <div class="col-xs-10">{{installation.help}}</div>
-        </div>
-        <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "installation"}}</label>
-          <div class="col-xs-10">{{installation.installation}}</div>
-        </div>
+        {{#if installation.power}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "power"}}</label>
+            <div class="col-xs-10">{{installation.power}}</div>
+          </div>
+        {{/if}}
+        {{#if installation.help}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "help"}}</label>
+            <div class="col-xs-10">{{installation.help}}</div>
+          </div>
+        {{/if}}
+        {{#if installation.installation}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "installation"}}</label>
+            <div class="col-xs-10">{{installation.installation}}</div>
+          </div>
+        {{/if}}
+        {{#if installation.safety}}
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "safety"}}</label>
           <div class="col-xs-10">{{installation.safety}}</div>
         </div>
+        {{/if}}
+        {{#if installation.logistic}}
+          <div class="form-group row">
+            <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
+            <div class="col-xs-10">{{installation.logistic}}</div>
+          </div>
+        {{/if}}
+      {{/if}}
+      {{#if dj}}
         <div class="form-group row">
-          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "logistic"}}</label>
-          <div class="col-xs-10">{{installation.logistic}}</div>
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
+          <div class="col-xs-10">{{dj.duration}}</div>
+        </div>
+        <div class="form-group row">
+          <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "time"}}</label>
+          <div class="col-xs-10">{{_ dj.time}}</div>
         </div>
       {{/if}}
-      {{#if $eq kind "stage_perf"}}
+      {{#if performance}}
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "duration"}}</label>
           <div class="col-xs-10">{{performance.duration}}</div>
@@ -95,7 +122,7 @@
           </div>
         {{/if}}
       {{/if}}
-      {{#if $eq kind "workshop"}}
+      {{#if workshop}}
         <div class="form-group row">
           <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "type"}}</label>
           <div class="col-xs-10">{{_ workshop.type}}</div>
