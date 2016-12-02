@@ -4,9 +4,9 @@
       <div class="nav nav-pills nav-stacked">
         <span class="list-group-item">
           {{fa "user" ""}} <a data-template="userProfile">{{_ "profile"}}</a>
-          {{#if isProfileComplete}}
+          {{#unless isProfileComplete}}
             <span style="color: red;"> {{fa "exclamation-triangle" ""}}</span>
-          {{/if}}
+          {{/unless}}
         </span>
         <span class="list-group-item">
           {{fa "heart" ""}} <a data-template="volunteerList">{{_ "volunteering"}}</a>

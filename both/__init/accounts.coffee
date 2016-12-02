@@ -1,15 +1,14 @@
 AccountsTemplates.configure
   defaultLayout: 'userLayout'
-  # showForgotPasswordLink: true
   enablePasswordChange: true
   showForgotPasswordLink: true
   sendVerificationEmail: true
   continuousValidation: true
   enforceEmailVerification: true
+  privacyUrl: '/s/privacy'
   # showResendVerificationEmailLink: true
   # postSignUpHook: postSignUpHook
   # onLogoutHook: onSignOut
-  privacyUrl: '/s/privacy'
   # termsUrl: 'terms-of-use'
 
 AccountsTemplates.configureRoute 'signIn', { redirect: '/dashboard' }
@@ -54,7 +53,6 @@ postSignUpHook = (userId, info) ->
 
 if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
-    # console.log ["profile to be filled", options]
     user.profile = options.profile
     return user
 

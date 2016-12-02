@@ -1,9 +1,16 @@
 Template.userDashboard.onCreated () ->
   Session.set("currentTab",{template:"userHelp"})
 
+isProfileComplete = (user) ->
+  p = user.profile
+  (p.firstName? or p.lastName? or p.playaName?) and p.telephone?
+
+Template.userDashboard.onRendered () ->
+  if !isProfileComplete(Meteor.user())
+    sAlert.warning(TAPi18n.__ "empty_profile_warning")
+
 Template.userDashboard.helpers
-  "isProfileComplete": () ->
-    !Meteor.user().profile.firstName? or !Meteor.user().profile.lastName?
+  "isProfileComplete": () -> isProfileComplete(Meteor.user())
   "tab": () -> Session.get("currentTab")
   "isVolunteer": () ->
     VolunteerForm.find({userId: Meteor.userId()}).count() > 0

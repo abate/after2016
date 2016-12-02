@@ -16,6 +16,8 @@ Schemas.Profile = new SimpleSchema(
     type: "tel"
     label: () -> TAPi18n.__("telephone")
     optional: true
+    autoform:
+      placeholder: "0000000000"
   picture:
     type: String
     optional: true
@@ -39,9 +41,10 @@ Schemas.Profile = new SimpleSchema(
   facebook:
     type: String
     label: "Facebook"
-    defaultValue: "no"
     optional: true
-
+    autoform:
+      afFieldInput:
+        placeholder: "https://www.facebook.com/your.name"
 )
 
 Schemas.User = new SimpleSchema(
