@@ -65,12 +65,11 @@ Accounts.onLogin (conn) ->
 @getUserName = (userId) ->
   user = Meteor.users.findOne(userId)
   if user
+    playaName = if user.profile?.playaName? then " (#{user.profile.playaName})" else ""
     if (user.profile?.firstName? and user.profile?.lastName?)
-      "#{user.profile.firstName} #{user.profile.lastName}"
+      "#{user.profile.firstName} #{user.profile.lastName}#{playaName}"
     else if user.profile?.firstName?
-      "#{user.profile.firstName}"
+      "#{user.profile.firstName}#{playaName}"
     else if user.profile?.lastName?
-      "#{user.profile.lastName}"
-    else if user.profile?.playaName?
-      "#{user.profile.playaName}"
+      "#{user.profile.lastName}#{playaName}"
     else user.emails[0].address
