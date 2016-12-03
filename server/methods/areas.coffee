@@ -2,6 +2,12 @@ Meteor.methods 'Backend.removeArea': (areaId) ->
   console.log "Backend.removeArea"
   check(areaId,String)
   if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    console.log "Remove all teams associated to this area"
+    Teams.remove({areaId:areaId})
+    console.log "Remove all crews associated to this area"
+    VolunteerCrew({areaId:areaId})
+    console.log "Remove all shifts associated to this area"
+    VolunteerShift({areaId:areaId})
     Areas.remove(areaId)
 
 Meteor.methods 'Backend.insertArea': (doc) ->
@@ -41,7 +47,7 @@ Meteor.methods 'Backend.updateTeam': (doc,formId) ->
 
 Meteor.methods "Backend.saveTeams": () ->
   console.log "Backend.saveTeams"
-  if Roles.userIsInRole(Meteor.userId(), [ 'admin' ])
+  if Roles.userIsInRole(Meteor.userId(), [ 'super-admin' ])
     fs = Npm.require "fs"
     assetsPath = process.env.PWD + "/private"
     unless fs.existsSync assetsPath
