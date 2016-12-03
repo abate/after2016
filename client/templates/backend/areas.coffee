@@ -95,7 +95,7 @@ Template.volunteerAreaCal.helpers
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     editable: true
     droppable: true
-    scrollTime: '00:00'
+    scrollTime: '06:00'
     slotDuration: "00:15"
     defaultTimedEventDuration: "02:00"
     forceEventDuration: true
@@ -120,12 +120,19 @@ Template.volunteerAreaCal.helpers
     resourceAreaWidth: "20%"
     resources: (callback) ->
       areaId = Template.currentData()._id
+      businessHours = (team) ->
+        _.map(team.shifts, (shift) -> {
+          start: shift.start,
+          end: shift.end,
+          dow: [0, 1, 2, 3, 4, 5, 6]
+        })
       resources = Teams.find({areaId:areaId}).map((team) ->
         required = shiftCount(team)
         covered = VolunteerShift.find({teamId:team._id}).count()
         id: team._id
-        resourceId: team._id
         title: team.name
+        businessHours: businessHours(team)
+        resourceId: team._id
         covered: covered
         required: required
         )

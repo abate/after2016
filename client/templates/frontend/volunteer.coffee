@@ -80,7 +80,7 @@ Template.publicVolunteerCal.helpers
   'options': () ->
     id: "publicVolunteerAreaCal"
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
-    scrollTime: '00:00'
+    scrollTime: '06:00'
     slotDuration: "00:15"
     aspectRatio: 1.5
     now: Settings.findOne().dday
@@ -96,10 +96,17 @@ Template.publicVolunteerCal.helpers
     resourceAreaWidth: "20%"
     resources: (callback) ->
       areaId = Session.get('currentAreaTab').areaId
+      businessHours = (team) ->
+        _.map(team.shifts, (shift) -> {
+          start: shift.start,
+          end: shift.end,
+          dow: [0, 1, 2, 3, 4, 5, 6]
+        })
       resources = Teams.find({areaId:areaId}).map((team) ->
         id: team._id
         resourceId: team._id
-        title: team.name)
+        title: team.name
+        businessHours: businessHours(team))
       callback(resources)
     events: (start, end, tz, callback) ->
       areaId = Session.get('currentAreaTab').areaId
