@@ -196,7 +196,9 @@ Template.volunteerAreaCal.helpers
         else
           $(labelTds).find(".fc-cell-content").addClass("bg-warning")
       txt = " (#{resourceObj.required} / #{resourceObj.covered})"
+      icon = ' <i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
       $(labelTds).find(".fc-cell-text").append(txt)
+      $(labelTds).find(".fc-cell-text").append(icon)
       labelTds.on('click', () ->
         team = Teams.findOne(resourceObj.resourceId)
         Modal.show("updateAreaCalTeamFormModal",team)
