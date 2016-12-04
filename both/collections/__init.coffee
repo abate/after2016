@@ -164,18 +164,15 @@ Schemas.StaticContent = new SimpleSchema(
   name:
     type: String
     label: () -> TAPi18n.__("name")
+    autoform:
+      afFieldInput:
+        placeholder: TAPi18n.__ "unique_machine_id"
   language:
     type: String
     allowedValues: ["en","fr"]
     defaultValue: "fr"
-    optional: true
     autoform:
-      afFieldInput:
-        type: "select-radio-inline"
-        options: [
-          {value: "fr", label: Spacebars.SafeString('<img src="icons/blank.gif" class="flag flag-fr" alt="France" />')},
-          {value: "en", label: Spacebars.SafeString('<img src="icons/blank.gif" class="flag flag-uk" alt="UK" />')}
-        ]
+      type: "hidden"
   title:
     type: String
     label: () -> TAPi18n.__("title")
@@ -183,7 +180,7 @@ Schemas.StaticContent = new SimpleSchema(
     type: String
     label: () -> TAPi18n.__("text")
     autoform:
-      rows: 5
+      rows: 7
   type:
     type: String
     label: () -> TAPi18n.__("type")

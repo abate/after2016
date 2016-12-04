@@ -21,6 +21,42 @@
   </div>
 </template>
 
+<template name="staticContentForm">
+  <ul class="nav nav-tabs" role="tablist">
+    {{#each languages}}
+      <li role="presentation">
+        <a href="#" data-action="switchTab" data-lang="{{this}}">{{this}}</a>
+      </li>
+    {{/each}}
+  </ul>
+  {{#with (currentResource(name)) }}
+    <div class="panel">
+      <div class="panel-heading">
+        {{#if _id}}
+          <div class="pull-left">
+            <span aria-hidden="true">
+              <i data-action="removeContent" class="fa fa-trash-o"
+                data-id="{{_id}}" aria-hidden="true"></i>
+            </span> <span class="sr-only">{{_ "remove"}}</span>
+          </div>
+          {{_ "update"}}
+        {{else}}
+          {{_ "add"}}
+        {{/if}}
+      </div>
+      {{#if _id}}
+        {{> quickForm collection="StaticContent"
+          id="updateStaticContent" type="method-update"
+          meteormethod="Backend.updateContent" doc=this }}
+      {{else}}
+        {{> quickForm collection="StaticContent"
+          id="insertStaticContent" type="method"
+          meteormethod="Backend.addContent" doc=this }}
+      {{/if}}
+    </div>
+  {{/with}}
+</template>
+
 <template name="staticContentBackend">
   <div class="row">
     <div class="col-md-3">
@@ -33,25 +69,9 @@
       {{> reactiveTable settings=ContentTableSettings }}
     </div>
     <div class="col-md-9">
-      <div class='panel panel-default'>
-        {{#if currentResource._id}}
-          <div class="panel-heading">
-            <div class="pull-left">
-              <span aria-hidden="true">
-                <i data-action="removeContent" class="fa fa-trash-o"
-                  data-id="{{currentResource._id}}" aria-hidden="true"></i>
-              </span> <span class="sr-only">{{_ "remove"}}</span>
-            </div>
-          </div>
-          {{> quickForm collection="StaticContent"
-            id="updateStaticContent" type="method-update"
-            meteormethod="Backend.updateContent" doc=currentResource }}
-        {{else}}
-          {{> quickForm collection="StaticContent"
-            id="insertStaticContent" type="method"
-            meteormethod="Backend.addContent" }}
-        {{/if}}
-      </div>
+      <!-- {{#if currentResource }} -->
+        {{> Template.dynamic template="staticContentForm" data=currentResource }}
+      <!-- {{/if}} -->
     </div>
   </div>
 </template>
