@@ -133,10 +133,15 @@ Schemas.VolunteerForm = new SimpleSchema(
       options: () ->
         Teams.find().map((e) ->
           teamName = TAPi18n.__(e.name)
-          areaName = if e.areaId? then Areas.findOne(e.areaId).name else null
-          areaNameTr = if areaName then "(#{TAPi18n.__(areaName)})" else ""
-          label = "#{teamName} #{areaNameTr}"
-          {label: label, value: e._id})
+          # areaName =
+          #   if e.areaId
+          #     area = Areas.findOne(e.areaId)
+          #     if area then area.name
+          #     else null
+          #   else null
+          # areaNameTr = if areaName then "(#{TAPi18n.__(areaName)})" else ""
+          # label = "#{teamName} #{areaNameTr}"
+          {label: teamName, value: e._id})
   car:
     type: Boolean
     label: () -> TAPi18n.__("car")
