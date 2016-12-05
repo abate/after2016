@@ -1,31 +1,24 @@
 
 emailLeads = (doc) ->
   console.log ["Queue emailLeads",doc]
-  content = StaticContent.findOne({name: "emailLeads",type:"email"})
   user = Meteor.users.findOne(doc.userId)
-  sel = {ref: doc._id}
+  sel = {userId: doc._id, templateName:"emailLeads"}
   email =
-    from: Settings.findOne().emailFromNoReplay
-    to: [user.emails[0].address]
-    contentId: content._id
-    context: {user: getUserName(user._id)}
-    ref: doc._id
+    templateName: "emailLeads"
+    userId: user._id
     sent: false
-  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}})
+  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}},{validate:false})
 
 emailHelpers = (doc) ->
   console.log ["Queue emailHelpers",doc]
-  content = StaticContent.findOne({name: "emailHelpers",type:"email"})
   crew = VolunteerCrew.findOne(doc.crewId)
   user = Meteor.users.findOne(crew.userId)
-  sel = {ref: doc._id}
+  sel = {userId: doc._id, templateName:"emailHelpers"}
   email =
-    from: Settings.findOne().emailFromNoReplay
-    to: [user.emails[0].address]
-    contentId: content._id
-    context: {user: getUserName(user._id)}
+    templateName: "emailHelpers"
+    userId: user._id
     sent: false
-  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}})
+  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}},{validate:false})
 
 Meteor.methods 'Volunteer.removeForm': (doc) ->
   console.log "Volunteer.removeForm"

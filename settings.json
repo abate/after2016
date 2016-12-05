@@ -1,1 +1,1 @@
-{ "default_users":true, "init":true, "revision":"0.1", "public": {} }
+{ "default_users":true, "init":false, "revision":"0.1", "public": {} }

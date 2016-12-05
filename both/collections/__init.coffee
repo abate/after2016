@@ -166,7 +166,7 @@ Schemas.StaticContent = new SimpleSchema(
     label: () -> TAPi18n.__("name")
     autoform:
       afFieldInput:
-        placeholder: TAPi18n.__ "unique_machine_id"
+        placeholder: () -> TAPi18n.__("unique_machine_id")
   language:
     type: String
     allowedValues: ["en","fr"]
@@ -211,18 +211,19 @@ Schemas.EmailQueue = new SimpleSchema(
     type: ["email"]
     label: () -> TAPi18n.__("bcc")
     optional: true
-  contentId:
+  templateName:
     type: String
     label: () -> TAPi18n.__("template_content")
+  subject:
+    type: String
+    label: () -> TAPi18n.__("subject")
     optional: true
   content:
     type: String
     label: () -> TAPi18n.__("custom_content")
     optional: true
-  context:
-    type: Object
-    optional: true
-    blackbox: true
+    autoform:
+      rows: 7
   lastModified:
     type: Date
     label: () -> TAPi18n.__("last_modified")
@@ -239,7 +240,7 @@ Schemas.EmailQueue = new SimpleSchema(
     type: Boolean
     label: () -> TAPi18n.__("sent")
     defaultValue: false
-  ref:
+  userId:
     type: String
     autoform:
       omit: true

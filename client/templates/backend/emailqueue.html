@@ -1,0 +1,38 @@
+<template name="emailQueueTable">
+  <div class="row">
+    <div class="col-md-3">
+      {{> reactiveTable settings=emailQueueTableSettings }}
+    </div>
+    <div class="col-md-9">
+      {{#if currentResource}}
+        {{> emailQueueForm currentResource}}
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="emailQueueForm">
+  <div class="panel">
+    <!-- <div class="panel-heading"> </div> -->
+    <div class="panel-body">
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "from"}}</label>
+        <div class="col-xs-10">{{from}}</div>
+      </div>
+      <div class="form-group row">
+        <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "to"}}</label>
+        <div class="col-xs-10">{{to}}</div>
+      </div>
+      {{#autoForm collection="EmailQueue" id="updateEmailQueue" type="method-update"
+        meteormethod="Backend.updateAndSendEmailQueue" doc=this }}
+        <fieldset>
+          {{> afQuickField name='subject'}}
+          {{> afQuickField name='content'}}
+        </fieldset>
+        <button type="submit" class="btn btn-primary">{{_ "send"}}</button>
+        <button type="reset" class="btn btn-primary">{{_ "cancel"}}</button>
+        <div class="pull-rigth btn btn-primary" data-action="removeEmail" data-id="{{../_id}}">{{_ "remove"}}</div>
+      {{/autoForm}}
+    </div>
+  </div>
+</template>

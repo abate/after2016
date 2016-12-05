@@ -139,15 +139,16 @@ Template.volunteerAreaCal.helpers
       callback(resources)
     events: (start, end, tz, callback) ->
       areaId = Template.currentData()._id
-      events = VolunteerShift.find({areaId:areaId}).map((res) ->
-        title: getUserName(VolunteerCrew.findOne(res.crewId).userId)
-        resourceId: res.teamId # this is the fullCalendar resourceId / Team
-        crewId: res.crewId
-        userId: res.userId
-        eventId: res._id
-        start: moment(res.start, "DD-MM-YYYY H:mm")
-        end: moment(res.end, "DD-MM-YYYY H:mm"))
-      callback(events)
+      if areaId
+        events = VolunteerShift.find({areaId:areaId}).map((res) ->
+          title: getUserName(VolunteerCrew.findOne(res.crewId).userId)
+          resourceId: res.teamId # this is the fullCalendar resourceId / Team
+          crewId: res.crewId
+          userId: res.userId
+          eventId: res._id
+          start: moment(res.start, "DD-MM-YYYY H:mm")
+          end: moment(res.end, "DD-MM-YYYY H:mm"))
+        callback(events)
     # drop: (date, jsEvent, ui, resourceId) ->
       # $(this).remove()
     eventReceive: (event) ->
@@ -196,7 +197,7 @@ Template.volunteerAreaCal.helpers
         else
           $(labelTds).find(".fc-cell-content").addClass("bg-warning")
       txt = " (#{resourceObj.required} / #{resourceObj.covered})"
-      icon = ' <i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
+      icon = ' <i class="btn-xs fa fa-pencil-square-o" aria-hidden="true"></i>'
       $(labelTds).find(".fc-cell-text").append(txt)
       $(labelTds).find(".fc-cell-text").append(icon)
       labelTds.on('click', () ->

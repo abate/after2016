@@ -73,3 +73,7 @@ Accounts.onLogin (conn) ->
     else if user.profile?.lastName?
       "#{user.profile.lastName}#{playaName}"
     else user.emails[0].address
+
+@getUserEmail = (userId) ->
+  user = Meteor.users.findOne(userId)
+  user.emails[0].address

@@ -27,15 +27,24 @@ Template.staticContentBackend.events
   'click [data-action="insertContent"]': (event, template) ->
     template.currentResource.set({name:""})
 
+  'click [data-action="saveContent"]': (event, template) ->
+    Meteor.call 'Backend.saveContent', () ->
+      console.log "Save all content to disk"
+
 Template.staticContentForm.onCreated () ->
   this.currentLang = new ReactiveVar("fr")
 
 Template.staticContentForm.helpers
   'languages': () -> ["fr","en"]
+  'lang': () -> Template.instance().currentLang.get()
   'currentResource': (name) ->
     lang = Template.instance().currentLang.get()
     doc = StaticContent.findOne({name:name,language:lang})
-    if doc then doc else {language:lang,name:name}
+    if doc then doc
+    else
+      doc1 = StaticContent.findOne({name:name})
+      type = if doc1 then doc1.type else ""
+      {language:lang,name:name,type:type}
 
 Template.staticContentForm.events
   'click [data-action="removeContent"]': (event, template) ->
@@ -43,10 +52,6 @@ Template.staticContentForm.events
     Meteor.call 'Backend.removeContent', formId
     template.name = ""
     template.currentLang.set("fr")
-
-  'click [data-action="saveContent"]': (event, template) ->
-    Meteor.call 'Backend.saveContent', () ->
-      console.log "Save all content to disk"
 
   'click [data-action="switchTab"]': (event,template) ->
     lang = $(event.target).data('lang')

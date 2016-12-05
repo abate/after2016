@@ -1,5 +1,5 @@
 # Accounts.emailTemplates.siteName = 'AwesomeSite'
-Accounts.emailTemplates.from = 'Volunteer Bot (no-replay@bys2016.frenchburners.org)'
+Accounts.emailTemplates.from = 'Volunteer Bot <no-replay@bys2016.frenchburners.org>'
 
 # Accounts.emailTemplates.enrollAccount.subject = (user) ->
 #   TAPi18n.__ "welcome_email_subject", lang=user.profile.language
@@ -25,8 +25,10 @@ Meteor.startup ->
     Settings.insert
       availability: JSON.parse(Assets.getText('availability-volunteer.json'))
       dday: moment("2016-12-18")
-      emailFrom: 'Volunteer Coordinator (volunteers@bys2016.frenchburners.org)'
-      emailFromNoReplay: 'Volunteer Bot (no-replay@bys2016.frenchburners.org)'
+      emailVolunteers: 'Volunteer Coordinator <volunteers@bys2016.frenchburners.org>'
+      emailPerformers: 'Performance Coordinator <performances@bys2016.frenchburners.org>'
+      emailNoReplay: 'Volunteer Bot <no-replay@bys2016.frenchburners.org>'
+      emailTech: 'Tech Assistance <help@bys2016.frenchburners.org>'
       revision: Meteor.settings.revision
       init: Meteor.settings.init
 
@@ -59,6 +61,7 @@ Meteor.startup ->
 
   if StaticContent.find().count() == 0
     console.log "Init Static Content"
+    StaticContent.remove({})
     for e in JSON.parse(Assets.getText('static-content.json'))
       StaticContent.insert e
 

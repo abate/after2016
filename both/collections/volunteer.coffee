@@ -119,7 +119,7 @@ Schemas.VolunteerForm = new SimpleSchema(
   role:
     type: [String]
     label: () -> TAPi18n.__("roles")
-    optional: true
+    # optional: true
     autoform:
       type: "select-checkbox-inline"
       options: () ->
@@ -127,7 +127,7 @@ Schemas.VolunteerForm = new SimpleSchema(
   teams:
     type: [String]
     label: () -> TAPi18n.__("teams")
-    optional: true
+    # optional: true
     autoform:
       type: "select-checkbox-inline"
       options: () ->

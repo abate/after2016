@@ -53,18 +53,8 @@ AutoForm.hooks
   updatePerformanceResourceForm:
     onSuccess: (ft,result) ->
       sAlert.success(TAPi18n.__('alert_success_update_performance_resource'))
-      # data = PerformanceResource.findOne(result)
-      # this.formAttributes.currentResource.set {
-      #   form: PerformanceForm.findOne(data.performanceId)
-      #   data: data
-      # }
       return
   insertPerformanceResourceForm:
     onSuccess: (ft,result) ->
       sAlert.success(TAPi18n.__('alert_success_update_performance_resource'))
-      # data = PerformanceResource.findOne(result)
-      # this.formAttributes.currentResource.set {
-      #   form: PerformanceForm.findOne(data.performanceId)
-      #   data: data
-      # }
       return

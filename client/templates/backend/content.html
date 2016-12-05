@@ -22,9 +22,9 @@
 </template>
 
 <template name="staticContentForm">
-  <ul class="nav nav-tabs" role="tablist">
+  <ul class="nav nav-pills nav-justified">
     {{#each languages}}
-      <li role="presentation">
+      <li class="{{#if $eq lang this}}active{{/if}}">
         <a href="#" data-action="switchTab" data-lang="{{this}}">{{this}}</a>
       </li>
     {{/each}}
@@ -45,13 +45,28 @@
         {{/if}}
       </div>
       {{#if _id}}
-        {{> quickForm collection="StaticContent"
+        {{# autoForm collection="StaticContent"
           id="updateStaticContent" type="method-update"
           meteormethod="Backend.updateContent" doc=this }}
+          {{> afQuickField name="type" type="hidden" }}
+          {{> afQuickField name="name" type="hidden" }}
+          {{> afQuickFields omitFields="type,name" }}
+          <button type="submit" class="btn btn-primary">{{_ "submit"}}</button>
+        {{/autoForm}}
       {{else}}
-        {{> quickForm collection="StaticContent"
+        {{# autoForm collection="StaticContent"
           id="insertStaticContent" type="method"
           meteormethod="Backend.addContent" doc=this }}
+          {{#if $and name type}}
+            {{> afQuickField name="name" type="hidden" }}
+            {{> afQuickField name="type" type="hidden" }}
+            {{> afQuickFields omitFields="type,name" }}
+          {{else}}
+            {{> afQuickField name="language" type="hidden" }}
+            {{> afQuickFields omitFields="language" }}
+          {{/if}}
+          <button type="submit" class="btn btn-primary">{{_ "submit"}}</button>
+        {{/autoForm}}
       {{/if}}
     </div>
   {{/with}}
@@ -61,10 +76,10 @@
   <div class="row">
     <div class="col-md-3">
       <div class="pull-left">
-        <span aria-hidden="true"> {{fa "plus-square-o" "insertContent"}}
+        <span class="btn bnt-default" aria-hidden="true"> {{fa "plus-square-o" "insertContent"}}
         </span> <span class="sr-only">{{_ "new"}}</span>
-        <span aria-hidden="true"> {{fa "floppy-o" "saveContent"}}
-        </span> <span class="sr-only">{{_ "new"}}</span>
+        <span class="btn bnt-default" aria-hidden="true"> {{fa "floppy-o" "saveContent"}}
+        </span> <span class="sr-only">{{_ "save"}}</span>
       </div>
       {{> reactiveTable settings=ContentTableSettings }}
     </div>

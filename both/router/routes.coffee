@@ -66,7 +66,13 @@ Router.route '/admin/emailQueue',
   name: 'emailQueue'
   controller: 'AdminController'
   template: 'emailQueueTable'
-  waitOn: () -> [ Meteor.subscribe('emailQueue') ]
+  waitOn: () -> [
+    Meteor.subscribe('volunteerShift'),
+    Meteor.subscribe('volunteerCrew'),
+    Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('userData'),
+    Meteor.subscribe('emailQueue') ]
 
 Router.route '/admin/content',
   name: 'staticContentBackend'

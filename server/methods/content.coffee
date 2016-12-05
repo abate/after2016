@@ -47,3 +47,35 @@ Meteor.methods 'Backend.removeEmailQueue': (id) ->
   check(id,String)
   if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
     EmailQueue.remove(id)
+
+Meteor.methods 'Backend.updateAndSendEmailQueue': (doc,formId) ->
+  console.log ["Backend.updateAndSendEmailQueue",doc, formId]
+  check(doc,Schemas.EmailQueue)
+  check(formId,String)
+  if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    EmailQueue.update(formId,doc, (e,r) ->
+      email = EmailQueue.findOne(formId)
+      user = Meteor.users.findOne(email.userId)
+      Email.send
+        to: "#{getUserName(email._id)} <#{user.emails[0].address}>"
+        from: Settings.findOne().emailVolunteers
+        # cc: "" bcc: "" replayTo: ""
+        subject: email.subject
+        text: email.content
+      EmailQueue.update(formId,{$set: {sent: true}})
+    )
+
+Meteor.methods 'Backend.sendEmailQueue': (id, content) ->
+  console.log "Backend.sendEmailQueue",id
+  check(id,String)
+  check(content,String)
+  if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+    email = EmailQueue.findOne(id)
+    user = Meteor.users.findOne(email.userId)
+    Email.send
+      to: "#{getUserName(email._id)} <#{user.emails[0].address}>"
+      from: Settings.findOne().emailVolunteers
+      # cc: "" bcc: "" replayTo: ""
+      subject: email.subject
+      text: content
+    EmailQueue.update(id,{$set: {sent: true}})

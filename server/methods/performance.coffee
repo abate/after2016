@@ -1,22 +1,17 @@
 emailPerformer = (doc,status) ->
   console.log ["Queue emailPerformerAccepted",doc]
-  templatename =
+  templateName =
     switch
       when doc.status == "accepted" then "emailPerformerAccepted"
       when doc.status == "refused" then "emailPerformerRefused"
       when doc.status == "scheduled" then "emailPerformerScheduled"
-  content = StaticContent.findOne({name: templatename, type:"email"})
-  if content
-    user = Meteor.users.findOne(doc.userId)
-    sel = {ref: doc._id}
-    email =
-      from: Settings.findOne().emailFromNoReplay
-      to: [user.emails[0].address]
-      contentId: content._id
-      context: {user: getUserName(user._id)}
-      ref: doc._id
-      sent: false
-    EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}})
+  user = Meteor.users.findOne(doc.userId)
+  sel = {userId: user._id, templateName:templateName}
+  email =
+    templateName: templateName
+    userId: user._id
+    sent: false
+  EmailQueue.upsert(sel,{$set: email},{validate:false})
 
 Meteor.methods 'Performance.removeForm': (doc) ->
   console.log "Performance.removeForm"
