@@ -16,13 +16,8 @@ Migrations.add
 Migrations.add
   version: 3
   name: 'emailQueueTable contentId -> templateName'
-  # down: () ->
-    # mod = {"$set": {"contentId": "BixxSxemPT983e6TE"}}
-    # EmailQueue.update({},mod,{"multi": true,"validate":false})
   up: () ->
     for email in EmailQueue.find().fetch()
-      console.log email
-      console.log StaticContent.find().fetch()
       templateName = StaticContent.findOne(email.contentId).name
       user = Accounts.findUserByEmail(email.to[0])
       mod =
@@ -59,4 +54,4 @@ Migrations.add
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(5)
+  Migrations.migrateTo(6)
