@@ -38,6 +38,10 @@
   max-width: none;
 }
 
+[data-required] > label:after {
+  content: '*'
+}
+
 /*.checkbox-settings {
   .panel-heading {
     .name {
