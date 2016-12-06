@@ -43,24 +43,76 @@
 </template>
 
 <template name="volunteersDraggable">
-  {{ > tooltips }}
   <div id="external-events-vol">
     <h4>{{_ "volunteers"}}</h4>
     {{#each volunteers}}
       <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
         data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
-        data-stick="true" data-tooltip="{{userInfo(userId)}}" data-tooltip-direction="e">
-        {{name}} <span class="badge">{{shiftNumber}}</span></div>
+        data-stick="true">
+        <a tabindex="0" class="ext-popover" role="button" data-toggle="popover"
+          data-id="{{userId}}"><span class="badge">{{fa "info" ""}}</span></a>
+        {{> volunteerPopover (userInfo(userId)) }}
+        {{name}} <span class="badge">{{shiftNumber}}</span>
+      </div>
     {{/each}}
   </div>
 </template>
 
-<template name="volunteerTooltip">
-  <ul>
-    {{#each shifts}}
-      <li>{{area}}/{{team}} : {{start}} - {{end}}</li>
-    {{/each}}
-  </ul>
+<template name="volunteerPopover">
+  <div id="popover-content-{{user._id}}" class="hide">
+    <table class="table table-user-information">
+      <tbody>
+        <tr><td>{{_ "name"}}</td><td>{{getUserName(user._id)}}</td></tr>
+        <tr><td>{{_ "telephone"}}</td><td>{{user.profile.telephone}}</td></tr>
+        {{#if user.profile.facebook}}
+          <tr><td>{{_ "facebook"}}</td><td>{{user.profile.facebook}}</td></tr>
+        {{/if}}
+        {{#if form.car}}
+          <tr><td>{{_ "has_car"}}</td><td>{{form.car}}</td></tr>
+        {{/if}}
+        {{#if form.cooking}}
+          <tr><td>{{_ "available_for_cooking"}}</td><td>{{form.cooking}}</td></tr>
+        {{/if}}
+        {{#if form.skills}}
+          <tr><td>{{_ "roles"}}</td><td>
+            <div class="list-group">
+              {{#each form.role}}
+                <div class="list-group-item">{{getRoleName this}}</div>
+              {{/each}}
+            </div>
+            </td>
+          </tr>
+        {{/if}}
+        {{#if form.skills}}
+          <tr><td>{{_ "skills"}}</td><td>
+            <div class="list-group">
+              {{#each form.skills}}
+                <div class="list-group-item">{{getSkillName this}}</div>
+              {{/each}}
+            </div>
+            </td>
+          </tr>
+        {{/if}}
+        {{#if form.teams}}
+          <tr><td>{{_ "teams"}}</td><td>
+            <div class="list-group">
+              {{#each form.teams}}
+                <div class="list-group-item">{{getTeamName this}}</div>
+              {{/each}}
+            </div>
+            </td>
+          </tr>
+        {{/if}}
+      </tbody>
+    </table>
+    <table class="table">
+      <tbody>
+      {{#each shifts}}
+        <tr><td>{{area}}/{{team}}</td><td>{{start}} - {{end}}</td></tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <template name="volunteerAreaCal">

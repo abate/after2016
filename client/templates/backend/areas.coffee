@@ -61,23 +61,37 @@ Template.volunteersDraggable.onRendered () ->
   $('#external-events-vol .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
+  $('#external-events-vol .ext-popover').each( () ->
+    id = $(this).data('id')
+    $(this).popover(
+      html: true
+      trigger: 'hover'
+      content: () -> $("#popover-content-#{id}").html()
+    )
+  )
   # we set an observer to make sure we add bind the function again and again
   observeDOM(document.getElementById('external-events-vol'), () ->
     $('#external-events-vol .ext-event').each(() ->
       $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
     )
+    $('#external-events-vol .ext-popover').each( () ->
+      id = $(this).data('id')
+      $(this).popover(
+        html: true
+        trigger: 'hover'
+        content: () -> $("#popover-content-#{id}").html()
+      )
+    )
   )
-
 Template.volunteersDraggable.helpers
   'userInfo': (userId) ->
-    user = Meteor.users.findOne(userId)
-    roleId = AppRoles.findOne({name: "helper"})._id
-    crewSel = {userId: user._id,roleId: roleId}
-    crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
-    context =
-      username: getUserName(user._id)
-      site_url: Meteor.absoluteUrl()
-      profile: user.profile
+    if userId
+      user = Meteor.users.findOne(userId)
+      roleId = AppRoles.findOne({name: "helper"})._id
+      crewSel = {userId: user._id,roleId: roleId}
+      crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
+      user: user
+      form: VolunteerForm.findOne({userId: userId})
       shifts:
         VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
           team = Teams.findOne(s.teamId)
@@ -90,7 +104,6 @@ Template.volunteersDraggable.helpers
           areaLeads: getUserName(area.leads)
           teamLeads: _.map(team.leads,(l) -> getUserName(l))
         )
-    Blaze.toHTMLWithData(Template.volunteerTooltip,context)
 
 shiftCount = (team) ->
   count=0
@@ -109,7 +122,7 @@ Template.volunteerAreaCal.helpers
     areaId = Template.currentData()._id
     sel = {areaId:this._id,roleId:helper._id}
     teamIds = Session.get("teamFilter")
-    if teamIds.length > 0
+    if teamIds and teamIds.length > 0
       usersIds = VolunteerForm.find({teams: {$in: teamIds}}).map((u)-> u.userId)
       sel = _.extend(sel,{userId: {$in: usersIds}})
     VolunteerCrew.find(sel).map((res) ->

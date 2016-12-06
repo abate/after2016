@@ -2,11 +2,6 @@ rowApplicationStatus = (vol) ->
   crew = VolunteerCrew.find({userId:vol.userId}).count()
   if crew == 0 then "bg-warning" else "bg-success"
 
-Template.volunteerUserProfile.helpers
-  'getRoleName': (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
-  'getSkillName': (id) -> TAPi18n.__ (Skills.findOne(id).name)
-  'getTeamName': (id) -> TAPi18n.__ (Teams.findOne(id).name)
-
 Template.volunteerBackendFilter.onCreated () ->
   this.carFilter = new ReactiveTable.Filter('checkbox-filter-car', [ 'car' ])
   this.cookingFilter = new ReactiveTable.Filter('checkbox-filter-cooking', [ 'cooking' ])

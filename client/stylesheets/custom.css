@@ -34,6 +34,10 @@
     cursor: -webkit-grabbing;
 }
 
+.popover {
+  max-width: none;
+}
+
 /*.checkbox-settings {
   .panel-heading {
     .name {
