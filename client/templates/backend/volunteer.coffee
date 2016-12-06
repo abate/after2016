@@ -128,3 +128,9 @@ Template.volunteerBackendAreasSlider.helpers
       crews: VolunteerCrew.find({areaId: area._id}).count()
       shifts: VolunteerShift.find({areaId: area._id}).count()
     )
+
+# AutoForm.hooks
+#   insertVolunteerCrewForm:
+#     onSuccess: (ft,result) ->
+#       if result
+#         sAlert.warning(TAPi18n.__ "double_volunteer_crew_warning")

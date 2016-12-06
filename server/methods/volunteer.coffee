@@ -2,23 +2,25 @@
 emailLeads = (doc) ->
   console.log ["Queue emailLeads",doc]
   user = Meteor.users.findOne(doc.userId)
-  sel = {userId: doc._id, templateName:"emailLeads"}
+  sel = {userId: doc.userId, templateName:"emailLeads"}
   email =
     templateName: "emailLeads"
     userId: user._id
     sent: false
-  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}},{validate:false})
+  mod = {$set: email, $setOnInsert: {ref: email._id}}
+  EmailQueue.upsert(sel,mod,{validate:false})
 
 emailHelpers = (doc) ->
   console.log ["Queue emailHelpers",doc]
   crew = VolunteerCrew.findOne(doc.crewId)
   user = Meteor.users.findOne(crew.userId)
-  sel = {userId: doc._id, templateName:"emailHelpers"}
+  sel = {userId: doc.userId, templateName:"emailHelpers"}
   email =
     templateName: "emailHelpers"
     userId: user._id
     sent: false
-  EmailQueue.upsert(sel,{$set: email, $setOnInsert: {ref: email._id}},{validate:false})
+  mod = {$set: email, $setOnInsert: {ref: email._id}}
+  EmailQueue.upsert(sel,mod,{validate:false})
 
 Meteor.methods 'Volunteer.removeForm': (doc) ->
   console.log "Volunteer.removeForm"
@@ -74,8 +76,8 @@ Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
     VolunteerCrew.upsert doc, {$set: doc}, (e,r) ->
       role = AppRoles.findOne(doc.roleId).name
       if role == "lead"
-        console.log "update Area ref"
-        Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(r)))
+        crewId = if r.insertedId? then r.insertedId else doc
+        Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(crewId)))
         Areas.update(doc.areaId,{$set: {leads: doc.userId}})
 
 Meteor.methods 'VolunteerBackend.removeShiftForm': (formId) ->
