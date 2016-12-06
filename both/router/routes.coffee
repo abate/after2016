@@ -3,7 +3,9 @@ Router.route '/',
   controller: 'AnonymousController'
   template: 'home'
   onBeforeAction: () ->
-    if Meteor.user() then Router.go('userDashboard')
+    if Meteor.user()
+      if isProfileComplete(Meteor.userId()) then Router.go('userDashboard')
+      else Router.go('profile')
     else this.next()
 
 Router.route '/s/:_name',
@@ -96,11 +98,6 @@ Router.route '/admin/users',
   waitOn: () -> [
     Meteor.subscribe('userData')
   ]
-
-# Router.route '/admin/settings',
-#   name: 'backendSettings'
-#   controller: 'AdminController'
-#   template: 'backendSettings'
 
 Router.route '/admin/settings/teams',
   name: 'teamsSettings'

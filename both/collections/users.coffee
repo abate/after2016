@@ -3,7 +3,9 @@ Schemas.Profile = new SimpleSchema(
   firstName:
     type: String
     label: () -> TAPi18n.__("firstName")
-    optional: true
+    defaultValue: ''
+    autoform:
+      placeholder: 'sparckle_unicor@example.com is not enough'
   lastName:
     type: String
     label: () -> TAPi18n.__("lastName")
@@ -15,7 +17,7 @@ Schemas.Profile = new SimpleSchema(
   telephone:
     type: "tel"
     label: () -> TAPi18n.__("telephone")
-    optional: true
+    defaultValue: ''
     autoform:
       placeholder: "0000000000"
   picture:

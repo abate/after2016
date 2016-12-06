@@ -11,7 +11,7 @@ AccountsTemplates.configure
   # onLogoutHook: onSignOut
   # termsUrl: 'terms-of-use'
 
-AccountsTemplates.configureRoute 'signIn', { redirect: '/dashboard' }
+AccountsTemplates.configureRoute 'signIn', {redirect: '/dashboard'}
 AccountsTemplates.configureRoute 'signUp', { redirect: '/profile' }
 AccountsTemplates.configureRoute 'changePwd', { redirect: '/dashboard' }
 AccountsTemplates.configureRoute 'resetPwd'
@@ -77,3 +77,8 @@ Accounts.onLogin (conn) ->
 @getUserEmail = (userId) ->
   user = Meteor.users.findOne(userId)
   user.emails[0].address
+
+@isProfileComplete = (userId) ->
+  user = Meteor.users.findOne(userId)
+  p = user.profile
+  (p.firstName or p.lastName? or p.playaName?) and p.telephone
