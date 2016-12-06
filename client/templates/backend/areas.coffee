@@ -65,6 +65,7 @@ Template.volunteersDraggable.onRendered () ->
     id = $(this).data('id')
     $(this).popover(
       html: true
+      container: 'body'
       trigger: 'hover'
       content: () -> $("#popover-content-#{id}").html()
     )
@@ -78,32 +79,37 @@ Template.volunteersDraggable.onRendered () ->
       id = $(this).data('id')
       $(this).popover(
         html: true
+        container: 'body'
         trigger: 'hover'
         content: () -> $("#popover-content-#{id}").html()
       )
     )
   )
+
 Template.volunteersDraggable.helpers
   'userInfo': (userId) ->
-    if userId
-      user = Meteor.users.findOne(userId)
-      roleId = AppRoles.findOne({name: "helper"})._id
-      crewSel = {userId: user._id,roleId: roleId}
-      crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
-      user: user
-      form: VolunteerForm.findOne({userId: userId})
-      shifts:
-        VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
-          team = Teams.findOne(s.teamId)
-          area = Areas.findOne(s.areaId)
-          start: s.start
-          end: s.end
-          area: area.name
-          team: team.name
-          description: team.description
-          areaLeads: getUserName(area.leads)
-          teamLeads: _.map(team.leads,(l) -> getUserName(l))
-        )
+    user = Meteor.users.findOne(userId)
+    roleId = AppRoles.findOne({name: "helper"})._id
+    crewSel = {userId: user._id,roleId: roleId}
+    crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
+    user: user
+    form: VolunteerForm.findOne({userId: userId})
+    shifts:
+      VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
+        team = Teams.findOne(s.teamId)
+        area = Areas.findOne(s.areaId)
+        mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
+        mend = moment(s.end, "DD-MM-YYYY H:mm")
+        day: mstasrt.format("DD-MM-YYYY")
+        start: mstasrt.format("H:mm")
+        end: mend.format("H:mm")
+        area: if area then area.name
+        team: if team then team.name
+        lead: if team then _.contains(team.leads,userId)
+        description: if team then team.description
+        areaLeads: if area then getUserName(area.leads)
+        teamLeads: if team then _.map(team.leads,(l) -> getUserName(l))
+      )
 
 shiftCount = (team) ->
   count=0
@@ -184,11 +190,18 @@ Template.volunteerAreaCal.helpers
       areaId = Template.currentData()._id
       if areaId
         events = VolunteerShift.find({areaId:areaId}).map((res) ->
-          title: getUserName(VolunteerCrew.findOne(res.crewId).userId)
+          crew = VolunteerCrew.findOne(res.crewId)
+          team = Teams.findOne(res.teamId)
+          backgroundColor =
+            if team.leads?
+              if _.contains(team.leads,crew.userId) then '#FFB347'
+              else ''
+          title: getUserName(crew.userId)
           resourceId: res.teamId # this is the fullCalendar resourceId / Team
           crewId: res.crewId
-          userId: res.userId
+          userId: crew.userId
           eventId: res._id
+          backgroundColor: backgroundColor
           start: moment(res.start, "DD-MM-YYYY H:mm")
           end: moment(res.end, "DD-MM-YYYY H:mm"))
         callback(events)

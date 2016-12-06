@@ -49,10 +49,10 @@
       <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
         data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
         data-stick="true">
-        <a tabindex="0" class="ext-popover" role="button" data-toggle="popover"
-          data-id="{{userId}}"><span class="badge">{{fa "info" ""}}</span></a>
+        <span tabindex="0" class="ext-popover" role="button" data-toggle="popover"
+          data-id="{{userId}}">{{name}}</span>
+        <span class="badge">{{shiftNumber}}</span>
         {{> volunteerPopover (userInfo(userId)) }}
-        {{name}} <span class="badge">{{shiftNumber}}</span>
       </div>
     {{/each}}
   </div>
@@ -83,16 +83,6 @@
             </td>
           </tr>
         {{/if}}
-        {{#if form.skills}}
-          <tr><td>{{_ "skills"}}</td><td>
-            <div class="list-group">
-              {{#each form.skills}}
-                <div class="list-group-item">{{getSkillName this}}</div>
-              {{/each}}
-            </div>
-            </td>
-          </tr>
-        {{/if}}
         {{#if form.teams}}
           <tr><td>{{_ "teams"}}</td><td>
             <div class="list-group">
@@ -105,13 +95,15 @@
         {{/if}}
       </tbody>
     </table>
-    <table class="table">
-      <tbody>
+    <h4>{{_ "shifts"}}</h4>
+    <ul class="list-group">
       {{#each shifts}}
-        <tr><td>{{area}}/{{team}}</td><td>{{start}} - {{end}}</td></tr>
+        <li class="list-group-item">
+          {{area}}/{{team}} : {{day}} {{start}} - {{end}}
+          {{#if lead}}({{_ "lead"}}){{/if}}
+        </li>
       {{/each}}
-      </tbody>
-    </table>
+    </ul>
   </div>
 </template>
 
