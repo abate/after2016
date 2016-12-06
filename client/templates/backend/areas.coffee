@@ -98,6 +98,7 @@ shiftCount = (team) ->
   return count
 
 Template.volunteerAreaCal.onRendered () ->
+  Session.set("teamFilter",[])
   this.autorun () ->
     $('#volunteerAreaCal').fullCalendar('refetchEvents')
     $('#volunteerAreaCal').fullCalendar('refetchResources')
@@ -106,7 +107,12 @@ Template.volunteerAreaCal.helpers
   'volunteers': () ->
     helper = AppRoles.findOne({name: "helper"})
     areaId = Template.currentData()._id
-    VolunteerCrew.find({areaId:this._id,roleId:helper._id}).map((res) ->
+    sel = {areaId:this._id,roleId:helper._id}
+    teamIds = Session.get("teamFilter")
+    if teamIds.length > 0
+      usersIds = VolunteerForm.find({teams: {$in: teamIds}}).map((u)-> u.userId)
+      sel = _.extend(sel,{userId: {$in: usersIds}})
+    VolunteerCrew.find(sel).map((res) ->
       name: getUserName(res.userId)
       userId: res.userId
       crewId: res._id
@@ -220,14 +226,28 @@ Template.volunteerAreaCal.helpers
           $(labelTds).find(".fc-cell-content").addClass("bg-success")
         else
           $(labelTds).find(".fc-cell-content").addClass("bg-warning")
+      input = "<input id='#{resourceObj.id}-filter' data-id='#{resourceObj.id}' class='btn-xs' type='checkbox'>"
       txt = " (#{resourceObj.required} / #{resourceObj.covered})"
-      icon = ' <i class="btn-xs fa fa-pencil-square-o" aria-hidden="true"></i>'
+      icon = " <i id='#{resourceObj.id}' class='btn-xs fa fa-pencil-square-o' aria-hidden='true'></i>"
+      $(labelTds).find(".fc-cell-text").prepend(input)
       $(labelTds).find(".fc-cell-text").append(txt)
       $(labelTds).find(".fc-cell-text").append(icon)
-      labelTds.on('click', () ->
+      labelTds.find("##{resourceObj.id}").on("click", () ->
         team = Teams.findOne(resourceObj.resourceId)
         Modal.show("updateAreaCalTeamFormModal",team)
       )
+      labelTds.find("##{resourceObj.id}-filter").on("change", () ->
+        filter = Session.get("teamFilter").slice(0)
+        teamId = $(this).data("id")
+        if $(this).is(":checked")
+          filter.push(teamId)
+        else
+          index = filter.indexOf(teamId)
+          if index > -1
+            filter.splice(index,1)
+        Session.set("teamFilter",filter)
+      )
+
 
 Template.updateAreaCalTeamFormModal.events
   'click [data-action="removeTeam"]': (event, template) ->
