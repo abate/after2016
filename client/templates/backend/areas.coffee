@@ -179,7 +179,7 @@ Template.volunteerAreaCal.helpers
         required = shiftCount(team)
         covered = VolunteerShift.find({teamId:team._id}).count()
         id: team._id
-        title: team.name
+        title: if team then team.name else console.log team
         businessHours: businessHours(team)
         resourceId: team._id
         covered: covered

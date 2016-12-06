@@ -86,7 +86,7 @@ Schemas.Teams = new SimpleSchema(
     autoform:
       options: () ->
         areaId = AutoForm.getFieldValue("areaId")
-        _.uniq(VolunteerCrew.find({},{fields:{userId:1}}).map((e) ->
+        _.uniq(VolunteerCrew.find({areaId:areaId},{fields:{userId:1}}).map((e) ->
           {label: (getUserName e.userId), value: e.userId}),(e)->e.value)
   shifts:
     type: [Shifts]

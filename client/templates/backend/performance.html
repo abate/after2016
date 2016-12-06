@@ -30,7 +30,7 @@
         <label for="example-text-input" class="col-xs-2 col-form-label">{{_ "links"}}</label>
         <div class="col-xs-10">
           <ul>
-            {{#each links}} <li>this</li> {{/each}}
+            {{#each links}} <li><a href="{{this}}">{{this}}</a></li> {{/each}}
           </ul>
         </div>
       </div>

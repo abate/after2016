@@ -37,8 +37,11 @@ previewEmail = (email) ->
                 name: PerformanceForm.findOne(p.performanceId).name
                 area: area.name
                 leads: getUserName(area.leads)
-                start: p.start
-                end: p.end
+                mstasrt = moment(p.start, "DD-MM-YYYY H:mm")
+                mend = moment(p.end, "DD-MM-YYYY H:mm")
+                day: mstasrt.format("DD-MM-YYYY")
+                start: mstasrt.format("H:mm")
+                end: mend.format("H:mm")
                 notes: p.notes
             )
         when email.templateName == "emailLeads"
@@ -64,8 +67,11 @@ previewEmail = (email) ->
             VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
               team = Teams.findOne(s.teamId)
               area = Areas.findOne(s.areaId)
-              start: s.start
-              end: s.end
+              mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
+              mend = moment(s.end, "DD-MM-YYYY H:mm")
+              day: mstasrt.format("DD-MM-YYYY")
+              start: mstasrt.format("H:mm")
+              end: mend.format("H:mm")
               area: area.name
               team: team.name
               description: team.description

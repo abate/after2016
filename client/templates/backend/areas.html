@@ -95,15 +95,17 @@
         {{/if}}
       </tbody>
     </table>
-    <h4>{{_ "shifts"}}</h4>
-    <ul class="list-group">
-      {{#each shifts}}
-        <li class="list-group-item">
-          {{area}}/{{team}} : {{day}} {{start}} - {{end}}
-          {{#if lead}}({{_ "lead"}}){{/if}}
-        </li>
-      {{/each}}
-    </ul>
+    {{#if shifts}}
+      <h4>{{_ "shifts"}}</h4>
+      <ul class="list-group">
+        {{#each shifts}}
+          <li class="list-group-item">
+            {{area}}/{{team}} : {{day}} {{start}} - {{end}}
+            {{#if lead}}({{_ "lead"}}){{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
   </div>
 </template>
 
