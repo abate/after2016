@@ -10,5 +10,4 @@
   {"name":"whatever"},
   {"name":"Cleaning", "area": "kitchen"},
   {"name":"Cooking", "area": "kitchen"},
-  {"name":"Staff", "area": "bar"}
 ]

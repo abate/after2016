@@ -71,7 +71,7 @@ Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
   check(doc,Schemas.VolunteerCrew)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    VolunteerCrew.insert doc, (e,r) ->
+    VolunteerCrew.upsert doc, {$set: doc}, (e,r) ->
       role = AppRoles.findOne(doc.roleId).name
       if role == "lead"
         console.log "update Area ref"

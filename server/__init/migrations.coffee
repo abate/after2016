@@ -51,7 +51,12 @@ Migrations.add
     for e in JSON.parse(Assets.getText('static-content.json'))
       StaticContent.insert e
 
+Migrations.add
+  version: 7
+  up: () ->
+    Teams.remove({name:"Staff"})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(6)
+  Migrations.migrateTo(7)
