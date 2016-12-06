@@ -1,5 +1,5 @@
 Template.areasDashboard.onCreated () ->
-  Session.set("currentTab",{template:"areaHelp"})
+  Session.set("currentTab",{template:"volunteerAreaCal"})
 
 Template.areasDashboard.helpers
   "tab": () -> Session.get("currentTab")
@@ -67,6 +67,30 @@ Template.volunteersDraggable.onRendered () ->
       $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
     )
   )
+
+Template.volunteersDraggable.helpers
+  'userInfo': (userId) ->
+    user = Meteor.users.findOne(userId)
+    roleId = AppRoles.findOne({name: "helper"})._id
+    crewSel = {userId: user._id,roleId: roleId}
+    crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
+    context =
+      username: getUserName(user._id)
+      site_url: Meteor.absoluteUrl()
+      profile: user.profile
+      shifts:
+        VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
+          team = Teams.findOne(s.teamId)
+          area = Areas.findOne(s.areaId)
+          start: s.start
+          end: s.end
+          area: area.name
+          team: team.name
+          description: team.description
+          areaLeads: getUserName(area.leads)
+          teamLeads: _.map(team.leads,(l) -> getUserName(l))
+        )
+    Blaze.toHTMLWithData(Template.volunteerTooltip,context)
 
 shiftCount = (team) ->
   count=0

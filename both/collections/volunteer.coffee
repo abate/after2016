@@ -102,7 +102,7 @@ Schemas.VolunteerForm = new SimpleSchema(
   availability:
     type: [String]
     label: () -> TAPi18n.__("availability")
-    optional: true
+    # optional: true
     autoform:
       type: "select-checkbox-inline"
       options: () ->

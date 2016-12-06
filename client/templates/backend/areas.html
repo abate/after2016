@@ -43,14 +43,24 @@
 </template>
 
 <template name="volunteersDraggable">
+  {{ > tooltips }}
   <div id="external-events-vol">
     <h4>{{_ "volunteers"}}</h4>
     {{#each volunteers}}
       <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
         data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
-        data-stick="true">{{name}} <span class="badge">{{shiftNumber}}</span></div>
+        data-stick="true" data-tooltip="{{userInfo(userId)}}" data-tooltip-direction="e">
+        {{name}} <span class="badge">{{shiftNumber}}</span></div>
     {{/each}}
   </div>
+</template>
+
+<template name="volunteerTooltip">
+  <ul>
+    {{#each shifts}}
+      <li>{{area}}/{{team}} : {{start}} - {{end}}</li>
+    {{/each}}
+  </ul>
 </template>
 
 <template name="volunteerAreaCal">
