@@ -15,6 +15,30 @@ Template.areasDashboard.events
     currentTab = $(event.target)
     Session.set "currentTab", {template: currentTab.data('template')}
 
+userInfo = (userId) ->
+  user = Meteor.users.findOne(userId)
+  roleId = AppRoles.findOne({name: "helper"})._id
+  crewSel = {userId: user._id,roleId: roleId}
+  crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
+  user: user
+  form: VolunteerForm.findOne({userId: userId})
+  shifts:
+    VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
+      team = Teams.findOne(s.teamId)
+      area = Areas.findOne(s.areaId)
+      mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
+      mend = moment(s.end, "DD-MM-YYYY H:mm")
+      day: mstasrt.format("DD-MM-YYYY")
+      start: mstasrt.format("H:mm")
+      end: mend.format("H:mm")
+      area: if area then area.name
+      team: if team then team.name
+      lead: if team then _.contains(team.leads,userId)
+      description: if team then team.description
+      areaLeads: if area then getUserName(area.leads)
+      teamLeads: if team then _.map(team.leads,(l) -> getUserName(l))
+    )
+
 Template.volunteerAreaList.helpers
   'volunteerAreaTableSettings': () ->
     collection: VolunteerCrew.find({areaId: this._id})
@@ -29,17 +53,26 @@ Template.volunteerAreaList.helpers
       {
         key: 'userId',
         label: (() -> TAPi18n.__("name")),
-        fn: (val,object,key) -> getUserName(val)},
+        fn: (val,object,key) -> getUserName(val),
+        sortable: false
+      },
       {
         key: 'roleId',
         label: (() -> TAPi18n.__("role")),
-        fn: (val,row,key) -> TAPi18n.__ (AppRoles.findOne(val).name)},
+        fn: (val,row,key) -> TAPi18n.__ (AppRoles.findOne(val).name),
+        sortDirection: 'descending'
+      },
       {
         key: 'shifts',
         label: (() -> TAPi18n.__("shifts")),
-        fn: (val,row,key) -> VolunteerShift.find({crewId:row._id}).count()
+        tmpl: Template.volunteerShiftsRow,
+        sortable: false
       }
     ]
+
+Template.volunteerShiftsRow.helpers
+  'shifts': (userId) -> userInfo(userId).shifts
+  'role': (roleId) -> AppRoles.findOne(roleId).name
 
 observeDOM = do ->
   MutationObserver = window.MutationObserver or window.WebKitMutationObserver
@@ -87,29 +120,7 @@ Template.volunteersDraggable.onRendered () ->
   )
 
 Template.volunteersDraggable.helpers
-  'userInfo': (userId) ->
-    user = Meteor.users.findOne(userId)
-    roleId = AppRoles.findOne({name: "helper"})._id
-    crewSel = {userId: user._id,roleId: roleId}
-    crewsId = VolunteerCrew.find(crewSel).map((e) -> e._id)
-    user: user
-    form: VolunteerForm.findOne({userId: userId})
-    shifts:
-      VolunteerShift.find({crewId: {$in : crewsId}}).map((s) ->
-        team = Teams.findOne(s.teamId)
-        area = Areas.findOne(s.areaId)
-        mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
-        mend = moment(s.end, "DD-MM-YYYY H:mm")
-        day: mstasrt.format("DD-MM-YYYY")
-        start: mstasrt.format("H:mm")
-        end: mend.format("H:mm")
-        area: if area then area.name
-        team: if team then team.name
-        lead: if team then _.contains(team.leads,userId)
-        description: if team then team.description
-        areaLeads: if area then getUserName(area.leads)
-        teamLeads: if team then _.map(team.leads,(l) -> getUserName(l))
-      )
+  'userInfo': (userId) -> userInfo (userId)
 
 shiftCount = (team) ->
   count=0

@@ -42,6 +42,18 @@
   {{> reactiveTable settings=volunteerAreaTableSettings }}
 </template>
 
+<template name="volunteerShiftsRow">
+  {{#if $eq (role(roleId)) "helper"}}
+    <ul class="list-group">
+      {{#each (shifts(userId))}}
+        <li class="list-group-item">
+          {{team}} : {{day}} {{start}} - {{end}} {{#if lead}}({{_ "lead"}}){{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</template>
+
 <template name="volunteersDraggable">
   <div id="external-events-vol">
     <h4>{{_ "volunteers"}}</h4>
