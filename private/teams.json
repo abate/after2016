@@ -7,7 +7,7 @@
   {"name":"decoration", "area": "organization"},
   {"name":"superheros", "area": "organization"},
   {"name":"builders", "area": "organization"},
-  {"name":"whatever"},
   {"name":"Cleaning", "area": "kitchen"},
   {"name":"Cooking", "area": "kitchen"},
+  {"name":"whatever"}
 ]

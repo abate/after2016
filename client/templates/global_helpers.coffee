@@ -22,11 +22,14 @@ Template.registerHelper 'mediaFileLink', (id) ->
 
 Template.registerHelper 'getUserName', (id) -> getUserName(id)
 
-Template.registerHelper 'getRoleName',
-  (id) -> TAPi18n.__ (AppRoles.findOne(id).name)
+Template.registerHelper 'getRoleName', (id) ->
+  role = AppRoles.findOne(id)
+  if role then TAPi18n.__(role.name) else "XXXR"
 
-Template.registerHelper 'getSkillName',
-  (id) -> TAPi18n.__ (Skills.findOne(id).name)
+Template.registerHelper 'getSkillName', (id) ->
+  skill = Skills.findOne(id)
+  if skill then TAPi18n.__(skill.name) else "XXXS"
 
-Template.registerHelper 'getTeamName',
-  (id) -> TAPi18n.__ (Teams.findOne(id).name)
+Template.registerHelper 'getTeamName', (id) ->
+  team = Teams.findOne(id)
+  if team then TAPi18n.__(team.name) else "XXXT"

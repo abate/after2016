@@ -197,12 +197,25 @@ StaticContent.attachSchema(Schemas.StaticContent)
 @EmailQueue = new Mongo.Collection 'emailQueue'
 
 Schemas.EmailQueue = new SimpleSchema(
+  templateName:
+    type: String
+    label: () -> TAPi18n.__("template_content")
+  userId:
+    type: String
+    autoform:
+      omit: true
+  sent:
+    type: Boolean
+    label: () -> TAPi18n.__("sent")
+    defaultValue: false
   from:
     type: "email"
     label: () -> TAPi18n.__("from")
+    optional: true
   to:
     type: ["email"]
     label: () -> TAPi18n.__("to")
+    optional: true
   cc:
     type: ["email"]
     label: () -> TAPi18n.__("cc")
@@ -211,9 +224,6 @@ Schemas.EmailQueue = new SimpleSchema(
     type: ["email"]
     label: () -> TAPi18n.__("bcc")
     optional: true
-  templateName:
-    type: String
-    label: () -> TAPi18n.__("template_content")
   subject:
     type: String
     label: () -> TAPi18n.__("subject")
@@ -236,12 +246,6 @@ Schemas.EmailQueue = new SimpleSchema(
     autoValue: () ->
       if this.isInsert then return new Date
       else this.unset()
-  sent:
-    type: Boolean
-    label: () -> TAPi18n.__("sent")
-    defaultValue: false
-  userId:
-    type: String
     autoform:
       omit: true
 )

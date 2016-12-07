@@ -58,10 +58,10 @@ observeDOM = do ->
 
 Template.volunteersDraggable.onRendered () ->
   # first time init
-  $('#external-events-vol .ext-event').each(() ->
+  this.$('#external-events-vol .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
-  $('#external-events-vol .ext-popover').each( () ->
+  this.$('#external-events-vol .ext-popover').each( () ->
     id = $(this).data('id')
     $(this).popover(
       html: true
@@ -72,10 +72,10 @@ Template.volunteersDraggable.onRendered () ->
   )
   # we set an observer to make sure we add bind the function again and again
   observeDOM(document.getElementById('external-events-vol'), () ->
-    $('#external-events-vol .ext-event').each(() ->
+    this.$('#external-events-vol .ext-event').each(() ->
       $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
     )
-    $('#external-events-vol .ext-popover').each( () ->
+    this.$('#external-events-vol .ext-popover').each( () ->
       id = $(this).data('id')
       $(this).popover(
         html: true
@@ -179,7 +179,7 @@ Template.volunteerAreaCal.helpers
         required = shiftCount(team)
         covered = VolunteerShift.find({teamId:team._id}).count()
         id: team._id
-        title: if team then team.name else console.log team
+        title: if team then team.name
         businessHours: businessHours(team)
         resourceId: team._id
         covered: covered
@@ -274,7 +274,6 @@ Template.volunteerAreaCal.helpers
         Session.set("teamFilter",filter)
       )
 
-
 Template.updateAreaCalTeamFormModal.events
   'click [data-action="removeTeam"]': (event, template) ->
     formId = $(event.target).data('id')
@@ -291,11 +290,11 @@ Template.volunteerUserProfileModal.events
       $('#volunteerAreaCal').fullCalendar('removeEvents',[fcEventId])
 
 Template.performancesDraggable.onRendered () ->
-  $('#external-events-perf .ext-event').each(() ->
+  this.$('#external-events-perf .ext-event').each(() ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
   observeDOM(document.getElementById('external-events-perf'), () ->
-    $('#external-events-perf .ext-event').each(() ->
+    this.$('#external-events-perf .ext-event').each(() ->
       $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
     )
   )
@@ -317,7 +316,7 @@ Template.performanceAreaCal.helpers
   options: () ->
     areaId = Template.currentData()._id
     id: "performanceAreaCal"
-    defaultView: 'agendaFourDays'
+    defaultView: 'agendaDay'
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     views:
       agendaFourDays:
@@ -326,8 +325,8 @@ Template.performanceAreaCal.helpers
     editable: true
     slotDuration: "00:15"
     droppable: true
-    scrollTime: '00:00'
-    defaultTimedEventDuration: "02:00"
+    scrollTime: '06:00'
+    defaultTimedEventDuration: "01:30"
     forceEventDuration: true
     defaultDate: Settings.findOne().dday
     locale: Meteor.user().profile.language

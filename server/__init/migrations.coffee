@@ -1,3 +1,7 @@
+Migrations.config
+  log: true
+  logIfLatest: false
+
 Migrations.add
   version: 1
   name: 'move minMembers/maxMembers in teams.shifts'
@@ -55,6 +59,45 @@ Migrations.add
   version: 7
   up: () ->
     Teams.remove({name:"Staff"})
+
+# Migrations.add
+#   version: 8
+#   up: () ->
+#     console.log "shift begin", VolunteerShift.find().count()
+#     for shift in VolunteerShift.find().fetch()
+#       crew = VolunteerCrew.findOne(shift.crewId)
+#       unless crew
+#         console.log remove "crew not found", shift
+#         VolunteerShift.remove(shift._id)
+#       area = Areas.findOne(shift.areaId)
+#       unless area
+#         console.log remove "area not found", shift
+#         VolunteerShift.remove(shift._id)
+#       team = Teams.findOne(shift.teamId)
+#       unless team
+#         console.log remove "team not found", shift
+#         VolunteerShift.remove(shift._id)
+#     console.log "shift end", VolunteerShift.find().count()
+#     console.log "crew begin", VolunteerCrew.find().count()
+#     VolunteerCrew.find().forEach((crew) ->
+#       VolunteerCrew.remove({
+#         _id: {$ne: crew._id},
+#         areaId: crew.areaId,
+#         userId: crew.userId,
+#         roleId: crew.roleId
+#       })
+#     )
+#     console.log "crew end", VolunteerCrew.find().count()
+    # console.log "email begin", EmailQueue.find().count()
+    # EmailQueue.find().forEach((email) ->
+    #   console.log email
+    #   EmailQueue.remove({
+    #     _id: {$ne: email._id},
+    #     templateName: email.templateName,
+    #     userId: email.userId
+    #   })
+    # )
+    # console.log "email end", EmailQueue.find().count()
 
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
