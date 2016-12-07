@@ -41,20 +41,20 @@ userInfo = (userId) ->
 
 Template.volunteerAreaList.helpers
   'volunteerAreaTableSettings': () ->
-    collection: VolunteerCrew.find({areaId: this._id})
+    collection: VolunteerCrew.find({areaId: this._id}).map((e) ->
+      _.extend(e,{username:getUserName(e.userId)} )
+    )
     # currentPage: Template.instance().currentPage
     id: "VolunteerAreaCrewTableID"
     class: "table table-bordered table-hover"
     showNavigation: 'never'
     rowsPerPage: 20
     showRowCount: false
-    showFilter: false
+    # showFilter: false
     fields: [
       {
-        key: 'userId',
-        label: (() -> TAPi18n.__("name")),
-        fn: (val,object,key) -> getUserName(val),
-        sortable: false
+        key: 'username',
+        label: (() -> TAPi18n.__("name"))
       },
       {
         key: 'roleId',

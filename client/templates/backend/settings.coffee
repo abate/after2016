@@ -33,6 +33,8 @@ Template.allUsersList.events
 
 Template.allUsersList.helpers
   'currentResource': () -> Template.instance().currentResource.get()
+  'usernameFilterFields': () ->
+    ["profile.firstName",'profile.lastName','profile.playaName','emails']
   'allUsersTableSettings': () ->
     collection: Meteor.users
     # currentPage: Template.instance().currentPage
@@ -41,9 +43,8 @@ Template.allUsersList.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    # showFilter: false
-    # rowClass: rowApplicationStatus
-    # filters: []
+    showFilter: false
+    filters: ["username-filter"]
     fields: [
       {
         key: 'name',
@@ -51,6 +52,10 @@ Template.allUsersList.helpers
         fn: (val,row,label) -> getUserName(row._id),
         sortable: false
       },
+      { key: 'profile.firstName', hidden: true},
+      { key: 'profile.lastName', hidden: true},
+      { key: 'profile.playaName', hidden: true},
+      { key: 'emails', fn: ((val,row,label) -> val[0].address), hidden: true},
       {
         key: 'createdAt',
         hidden: true,
@@ -67,8 +72,7 @@ Template.teamsSettings.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    # rowClass: rowApplicationStatus
-    # filters: []
+    showFilter: false
     fields: [
       {
         key: 'name',
@@ -99,8 +103,7 @@ Template.areasSettings.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    # rowClass: rowApplicationStatus
-    # filters: []
+    showFilter: false
     fields: [
       {
         key: 'name',
@@ -148,8 +151,7 @@ Template.skillsSettings.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    # rowClass: rowApplicationStatus
-    # filters: []
+    showFilter: false
     fields: [
       {
         key: 'name',
@@ -167,8 +169,7 @@ Template.rolesSettings.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
-    # rowClass: rowApplicationStatus
-    # filters: []
+    showFilter: false
     fields: [
       {
         key: 'name',

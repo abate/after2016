@@ -3,19 +3,12 @@ rowApplicationStatus = (vol) ->
   if crew == 0 then "bg-warning" else "bg-success"
 
 Template.volunteerBackendFilter.onCreated () ->
-  this.carFilter = new ReactiveTable.Filter('checkbox-filter-car', [ 'car' ])
-  this.cookingFilter = new ReactiveTable.Filter('checkbox-filter-cooking', [ 'cooking' ])
-  this.usernameFilter = new ReactiveTable.Filter('username-filter', [ 'name' ])
-
-Template.volunteerBackendFilter.helpers
-  'checkedCar': () ->
-    if Template.instance().carFilter.get() == 'true' then 'checked' else ''
-
-  'checkedCooking': () ->
-    if Template.instance().cookingFilter.get() == 'true' then 'checked' else ''
+  this.carFilter = new ReactiveTable.Filter('checkbox-car-filter', [ 'car' ])
+  this.cookingFilter = new ReactiveTable.Filter('checkbox-cooking-filter', [ 'cooking' ])
 
 Template.volunteerBackendFilter.events
   'change #user-cooking-filter': (event, template) ->
+    console.log $(event.target)
     if $(event.target).is(':checked')
       template.cookingFilter.set 'true'
     else
@@ -35,8 +28,11 @@ Template.volunteerBackend.onCreated () ->
 Template.volunteerBackend.helpers
   'showAreaSlider': () -> Template.instance().showAreaSlider.get()
   'currentResource': () -> Template.instance().currentResource.get()
+  'usernameFilterFields': () -> ["username"]
   'VolunteerTableSettings': () ->
-    collection: VolunteerForm
+    collection: VolunteerForm.find().map((e) ->
+      _.extend(e,{username:getUserName(e.userId)} )
+    )
     # currentPage: Template.instance().currentPage
     id: "VolunteerTableID"
     class: "table table-bordered table-hover"
@@ -46,25 +42,21 @@ Template.volunteerBackend.helpers
     showFilter: false
     rowClass: rowApplicationStatus
     filters: [
-      "checkbox-filter-car",
-      "checkbox-filter-cooking",
+      "checkbox-car-filter",
+      "checkbox-cooking-filter",
       "username-filter"
     ]
     fields: [
-      {
-        key: 'userId',
-        label: (() -> TAPi18n.__("name")),
-        fn: (val,row,key)-> if val then getUserName(val)
-      },
+      { key: 'username', label: (() -> TAPi18n.__("name")) },
       {
         key: 'roles',
         label: (() -> TAPi18n.__("shifts")),
-        fn: (val,row,key) ->
-          VolunteerCrew.find({userId:row.userId}).count()
+        fn: (val,row,key) -> VolunteerCrew.find({userId:row.userId}).count()
       },
       { key: 'car', label: "", hidden: true},
       { key: 'cooking', label: "", hidden: true}
     ]
+
   'VolunteerCrewTableSettings': () ->
     currentResource = Template.instance().currentResource.get()
     userId = if currentResource.data then currentResource.data.userId else null
@@ -128,9 +120,3 @@ Template.volunteerBackendAreasSlider.helpers
       crews: VolunteerCrew.find({areaId: area._id}).count()
       shifts: VolunteerShift.find({areaId: area._id}).count()
     )
-
-# AutoForm.hooks
-#   insertVolunteerCrewForm:
-#     onSuccess: (ft,result) ->
-#       if result
-#         sAlert.warning(TAPi18n.__ "double_volunteer_crew_warning")

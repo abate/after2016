@@ -23,7 +23,7 @@
               </tr>
               <tr><td>{{_ "facebook"}}</td><td>{{user.profile.facebook}}</td></tr>
               <tr><td>{{_ "has_car"}}</td><td>{{form.car}}</td></tr>
-              <tr><td>{{_ "available_for_cooking"}}</td><td>{{form.car}}</td></tr>
+              <tr><td>{{_ "available_for_cooking"}}</td><td>{{form.cooking}}</td></tr>
               <tr><td>{{_ "roles"}}</td><td>
                 <div class="list-group">
                   {{#each form.role}}
@@ -61,37 +61,29 @@
 </template>
 
 <template name="volunteerBackendFilter">
-  <label>
-    <input id="user-car-filter" type="checkbox" {{checkedCar}} />
-    <span class="checkbox-material"><span class="check"></span></span>
-    {{_ "has_car"}}
-  </label>
-  <label>
-    <input id="user-cooking-filter" type="checkbox" {{checkedCooking}} />
-    <span class="checkbox-material"><span class="check"></span></span>
-    {{_ "available_for_cooking"}}
-  </label>
-</template>
-
-<template name="volunteerBackendFilters">
-  <div id="filter">
-    <div class="form-group clearfix pull-left">
-      {{> volunteerBackendFilter}}
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="input-group">
+        <input id="user-car-filter" type="checkbox" />
+        <label for="user-car-filter">{{_ "has_car"}}</label>
+      </div>
     </div>
-    <!-- <div class="form-group clearfix">
-        {{> quoteFilter }}
-        {{> reactiveTableFilter id="filter3" label="All" }}
-    </div> -->
-    <!-- <div class="form-group clearfix">
-        {{> clearFiltersButton }}
-    </div> -->
+    <div class="col-lg-4">
+      <div class="input-group">
+        <input id="user-cooking-filter" type="checkbox" />
+        <label for="user-cooking-filter">{{_ "available_for_cooking"}}</label>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      {{> reactiveTableFilter id="username-filter" label="User" fields=usernameFilterFields }}
+    </div>
   </div>
 </template>
 
 <template name="volunteerBackend">
   <div class="row">
     <div class="col-md-3">
-      <!-- {{> volunteerBackendFilters }} -->
+      {{> volunteerBackendFilter}}
       {{> reactiveTable settings=VolunteerTableSettings }}
     </div>
     <div class="col-md-9">
