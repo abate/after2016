@@ -48,7 +48,13 @@ Template.allUsersList.helpers
       {
         key: 'name',
         label: (() -> TAPi18n.__("name")),
-        fn: (val,row,label) -> getUserName(row._id)
+        fn: (val,row,label) -> getUserName(row._id),
+        sortable: false
+      },
+      {
+        key: 'createdAt',
+        hidden: true,
+        sortDirection: 'descending'
       }
     ]
 
