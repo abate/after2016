@@ -179,6 +179,15 @@ Schemas.StaticContent = new SimpleSchema(
   body:
     type: String
     label: () -> TAPi18n.__("text")
+    custom: () ->
+      res =
+        try (SpacebarsCompiler.parse(this.value); return)
+        catch e then e.message
+      if res
+        SimpleSchema.messages(
+          "compileError": "The template does not compile: #{res}"
+        )
+        return "compileError"
     autoform:
       rows: 7
   type:

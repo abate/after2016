@@ -67,7 +67,7 @@ Accounts.onLogin (conn) ->
   if user
     playaName =
       if user.profile?.playaName? then " (#{user.profile.playaName})" else ""
-    if (user.profile?.firstName?)
+    if (user.profile?.firstName)
       "#{user.profile.firstName} #{playaName}"
     else if user.profile?.lastName?
       "#{user.profile.lastName} #{playaName}"
