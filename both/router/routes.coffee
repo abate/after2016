@@ -99,11 +99,6 @@ Router.route '/admin/users',
     Meteor.subscribe('userData')
   ]
 
-Router.route '/admin/settings/teams',
-  name: 'teamsSettings'
-  controller: 'AdminController'
-  template: 'teamsSettings'
-
 Router.route '/admin/settings/areas',
   name: 'areasSettings'
   controller: 'AdminController'

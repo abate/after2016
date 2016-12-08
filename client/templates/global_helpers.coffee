@@ -14,6 +14,9 @@ Template.registerHelper "debug", (optionalValue) ->
     console.log("====================")
     console.log(optionalValue)
 
+Template.registerHelper 'isDev', () ->
+  process.env.NODE_ENV == 'development'
+
 Template.registerHelper 'imageFileLink', (id) ->
   if id then ProfilePictures.findOne(id).link()
 
