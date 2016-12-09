@@ -50,6 +50,7 @@ Migrations.add
 
 Migrations.add
   version: 6
+  name: "fix static content"
   up: () ->
     StaticContent.remove({})
     for e in JSON.parse(Assets.getText('static-content.json'))
@@ -57,8 +58,23 @@ Migrations.add
 
 Migrations.add
   version: 7
+  name: "remove staff team"
   up: () ->
     Teams.remove({name:"Staff"})
+
+Migrations.add
+  version: 8
+  name: "add tickets email"
+  up: () ->
+    emails =
+      emailTickets: 'Tickets Master <tickets@bys2016.frenchburners.org>'
+    s = Settings.findOne()
+    Settings.update(s._id,{$set: emails})
+
+Meteor.startup () ->
+  if process.env.UNLOCK_MIGRATE
+    Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
+  Migrations.migrateTo(8)
 
 # Migrations.add
 #   version: 8
@@ -98,8 +114,3 @@ Migrations.add
     #   })
     # )
     # console.log "email end", EmailQueue.find().count()
-
-Meteor.startup () ->
-  if process.env.UNLOCK_MIGRATE
-    Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(7)
