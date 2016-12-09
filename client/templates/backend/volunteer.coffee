@@ -116,7 +116,7 @@ Template.volunteerBackendAreasSlider.helpers
   'areas': () ->
     Areas.find().map((area) ->
       name: area.name
-      arearef: if area.leads then getUserName(area.leads)
+      arearef: _.map(getAreaLeads(s.areaId),(l) ->getUserName(l.userId))
       crews: VolunteerCrew.find({areaId: area._id}).count()
       shifts: VolunteerShift.find({areaId: area._id}).count()
     )

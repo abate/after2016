@@ -40,8 +40,12 @@ Meteor.publish "userData", () ->
   if Roles.userIsInRole(this.userId, [ 'manager' ])
     Meteor.users.find()
   else if this.userId
-    refs = _.uniq(Areas.find(leads: $ne: null).map (e) -> e.leads)
-    Meteor.users.find({_id: {$in: refs}})
+    rolesSel = {name: {$in: ["lead","co-lead"]}}
+    leadRoles = AppRoles.find(rolesSel).map((e) -> e._id)
+    crewSel = {roleId: {$in: leadRoles}}
+    VolunteerCrew.find(crewSel).map((e) -> Meteor.users.findOne(e.userId))
+    # refs = _.uniq(Areas.find(leads: $ne: null).map (e) -> e.leads)
+    # Meteor.users.find({_id: {$in: refs}})
 
 Meteor.publish "userDataPublic", () ->
   if this.userId

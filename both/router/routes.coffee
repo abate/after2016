@@ -103,6 +103,10 @@ Router.route '/admin/settings/areas',
   name: 'areasSettings'
   controller: 'AdminController'
   template: 'areasSettings'
+  waitOn: () -> [
+    Meteor.subscribe('volunteerCrew'),
+    Meteor.subscribe('userData')
+  ]
 
 Router.route '/admin/settings/skills',
   name: 'skillsSettings'

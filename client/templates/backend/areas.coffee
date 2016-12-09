@@ -35,8 +35,8 @@ userInfo = (userId) ->
       team: if team then team.name
       lead: if team then _.contains(team.leads,userId)
       description: if team then team.description
-      areaLeads: if area then getUserName(area.leads)
-      teamLeads: if team then _.map(team.leads,(l) -> getUserName(l))
+      areaLeads: _.map(getAreaLeads(s.areaId),(l) -> getUserName(l.userId))
+      teamLeads: _.map(team.leads,(l) -> getUserName(l))
     )
 
 Template.volunteerAreaList.helpers

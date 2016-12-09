@@ -65,8 +65,7 @@ Template.volunteerList.helpers
         label: (() -> TAPi18n.__("leads")),
         fn: (val,row,label) ->
           areaId = VolunteerCrew.findOne(row.crewId).areaId
-          leadId = Areas.findOne(areaId).leads
-          getUserName(leadId)
+          _.map(getAreaLeads(areaId),(l) ->getUserName(l.userId))
       },
     ]
 

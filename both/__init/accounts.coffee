@@ -79,6 +79,12 @@ Accounts.onLogin (conn) ->
   user = Meteor.users.findOne(userId)
   user.emails[0].address
 
+@getAreaLeads = (areaId) ->
+  rolesSel = {name: {$in: ["lead","co-lead"]}}
+  leadRoles = AppRoles.find(rolesSel).map((e) -> e._id)
+  crewSel = {areaId:areaId, roleId: {$in: leadRoles}}
+  VolunteerCrew.find(crewSel).map((e) -> {userId: e.userId, roleId: e.roleId})
+
 @isProfileComplete = (userId) ->
   user = Meteor.users.findOne(userId)
   p = user.profile

@@ -81,7 +81,8 @@ Template.areasSettings.helpers
       {
         key: 'leads',
         label: (() -> TAPi18n.__("leads")),
-        fn: (val,row,label) -> getUserName(val) },
+        tmpl: Template.areasSettingsLeads
+      },
       {
         key: 'teams',
         label: (() -> TAPi18n.__("teams")),
@@ -105,6 +106,11 @@ Template.areasSettings.events
 Template.areasSettingsTeams.helpers
   'teams': (areaId) ->
     Teams.find({areaId:areaId}).fetch()
+
+Template.areasSettingsLeads.helpers
+  'leads': (areaId) ->
+    _.map(getAreaLeads(areaId),(l) ->
+      {name: getUserName(l.userId), role: AppRoles.findOne(l.roleId).name })
 
 AutoForm.hooks
   updateAreaForm:

@@ -15,6 +15,14 @@
   </ul>
 </template>
 
+<template name="areasSettingsLeads">
+  <ul>
+    {{#each (leads(_id))}}
+    <li>{{name}} {{#if role}}({{role}}){{/if}}</li>
+    {{/each}}
+  </ul>
+</template>
+
 <template name="updateAreaModal">
   <div id="updateAreaModal" class="modal fade">
     <div class="modal-dialog">

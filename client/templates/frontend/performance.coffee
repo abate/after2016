@@ -81,7 +81,7 @@ Template.performanceList.helpers
         label: (() -> TAPi18n.__("leads")),
         fn: (val,row,label) ->
           if row.areaId
-            getUserName(Areas.findOne(row.areaId).leads)},
+            _.map(getAreaLeads(row.areaId),(l) ->getUserName(l.userId))},
       {
         key: 'status',
         label: (() -> TAPi18n.__("status")),

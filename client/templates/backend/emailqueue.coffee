@@ -24,7 +24,7 @@ previewEmail = (email) ->
                 area = Areas.findOne(p.areaId)
                 name: PerformanceForm.findOne(p.performanceId).name
                 area: area.name
-                leads: getUserName(area.leads)
+                leads: _.map(getAreaLeads(p.areaId),(l) ->getUserName(l.userId))
             )
         when email.templateName == "emailPerformerScheduled"
           username: getUserName(user._id)
@@ -36,7 +36,7 @@ previewEmail = (email) ->
                 area = Areas.findOne(p.areaId)
                 name: PerformanceForm.findOne(p.performanceId).name
                 area: area.name
-                leads: getUserName(area.leads)
+                leads: _.map(getAreaLeads(p.areaId),(l) ->getUserName(l.userId))
                 mstasrt = moment(p.start, "DD-MM-YYYY H:mm")
                 mend = moment(p.end, "DD-MM-YYYY H:mm")
                 day: mstasrt.format("DD-MM-YYYY")
@@ -75,7 +75,7 @@ previewEmail = (email) ->
               area: area.name
               team: team.name
               description: team.description
-              areaLeads: getUserName(area.leads)
+              areaLeads: _.map(getAreaLeads(s.areaId),(l) -> getUserName(l.userId))
               teamLeads: _.map(team.leads,(l) -> getUserName(l))
             )
     compiled = SpacebarsCompiler.compile(emailTemplate.body, isBody: true)

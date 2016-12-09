@@ -66,6 +66,7 @@ Meteor.methods 'VolunteerBackend.updateCrewForm': (doc,formId) ->
         if role == "lead"
           console.log "update Area ref"
           Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(formId)))
+          # XXX this one should be removed or fixed. this is wrong this way
           Areas.update(d.areaId,{$set: {leads: d.userId}})
 
 Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
@@ -78,6 +79,7 @@ Meteor.methods 'VolunteerBackend.insertCrewForm': (doc) ->
       if role == "lead"
         crewId = if r.insertedId? then r.insertedId else doc
         Meteor.wrapAsync(emailLeads(VolunteerCrew.findOne(crewId)))
+        # XXX this one should be removed or fixed. this is wrong this way
         Areas.update(doc.areaId,{$set: {leads: doc.userId}})
 
 Meteor.methods 'VolunteerBackend.removeShiftForm': (formId) ->
