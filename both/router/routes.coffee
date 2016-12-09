@@ -8,6 +8,19 @@ Router.route '/',
       else Router.go('profile')
     else this.next()
 
+Router.route '/program',
+  name: 'publicPerformanceCal'
+  controller: 'AnonymousController'
+  template: 'publicPerformanceCal'
+  waitOn: () -> [
+    Meteor.subscribe('areas'),
+    Meteor.subscribe('settings'),
+    Meteor.subscribe('performanceType'),
+    Meteor.subscribe('performanceForm'),
+    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('userDataPerformers'),
+  ]
+
 Router.route '/s/:_name',
   name: 'staticContentDisplay'
   template: 'staticContentDisplay'

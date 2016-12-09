@@ -123,6 +123,55 @@ Template.performanceList.events
     form = PerformanceForm.findOne(id)
     Session.set("currentTab",{template: 'updatePerformanceForm', data:form})
 
+Template.publicPerformanceCal.helpers
+  'areas': () -> Areas.find().fetch()
+  'options': () ->
+    id: "publicPerfomanceCalAreaCal"
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
+    scrollTime: '06:00'
+    slotDuration: "00:15"
+    aspectRatio: 1.5
+    now: Settings.findOne().dday
+    views: {
+      agendaDay:
+        groupByResource: true
+    }
+    defaultView: 'agendaDay'
+    resourceLabelText: TAPi18n.__ "areas"
+    resourceAreaWidth: "20%"
+    resources: (callback) ->
+      resources = Areas.find({performance: true}).map((area) ->
+        id: area._id
+        resourceId: area._id
+        title: area.name
+      )
+      callback(resources)
+    events: (start, end, tz, callback) ->
+      events = PerformanceResource.find({status: "scheduled"}).map((res) ->
+        form = PerformanceForm.findOne(res.performanceId)
+        title: form.title
+        resourceId: res.areaId # this is the fullCalendar resourceId / Team
+        eventId: res._id
+        description: form.description
+        kind: form.kind
+        userId: res.userId
+        start: moment(res.start, "DD-MM-YYYY H:mm")
+        end: moment(res.end, "DD-MM-YYYY H:mm"))
+      callback(events)
+    eventRender: (event, element) ->
+      event.titleOrig = event.title
+      event.title = "
+        <span tabindex='0 class='ext-popover' role='button'
+        data-toggle='popover' data-id='#{event.eventId}'>{{event.title}}</span>"
+      content = Blaze.toHTMLWithData(Template.publicPerformanceDisplay,event)
+      element.popover(
+        html: true
+        container: 'body'
+        placement: 'top'
+        trigger: 'hover'
+        content: () -> content
+      )
+
 AutoForm.hooks
   insertPerformanceForm:
     onSuccess: () ->

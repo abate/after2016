@@ -110,6 +110,8 @@ Template.volunteersDraggable.onRendered () ->
     )
     this.$('#external-events-vol .ext-popover').each( () ->
       id = $(this).data('id')
+      # XXX
+      # content = Blaze.toHTMLWithData(Template.publicPerformanceDisplay,event)
       $(this).popover(
         html: true
         container: 'body'
