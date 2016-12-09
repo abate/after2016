@@ -115,8 +115,13 @@ Template.volunteerBackend.events
 Template.volunteerBackendAreasSlider.helpers
   'areas': () ->
     Areas.find().map((area) ->
+      _id: area._id
       name: area.name
-      arearef: _.map(getAreaLeads(s.areaId),(l) ->getUserName(l.userId))
+      hasLeads: getAreaLeads(area._id)
       crews: VolunteerCrew.find({areaId: area._id}).count()
       shifts: VolunteerShift.find({areaId: area._id}).count()
     )
+
+Template.volunteersStats.helpers
+  'usersTotal': () -> Meteor.users.find().count()
+  'volunteersTotal': () -> VolunteerForm.find().count()

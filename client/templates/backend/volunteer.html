@@ -83,6 +83,7 @@
 <template name="volunteerBackend">
   <div class="row">
     <div class="col-md-3">
+      {{> volunteersStats }}
       {{> volunteerBackendFilter}}
       {{> reactiveTable settings=VolunteerTableSettings }}
     </div>
@@ -114,15 +115,23 @@
   </div>
 </template>
 
+<template name="volunteersStats">
+  <h4>{{_ "numbers"}}</h4>
+  <ul>
+    <li>{{_ "users"}} : {{usersTotal}}</li>
+    <li>{{_ "volunteers"}} : {{volunteersTotal}}</li>
+  </ul>
+</template>
+
 <template name="volunteerBackendAreasSlider">
   <ul style="overflow-x:scroll;white-space:nowrap;" class="list-inline">
     {{#each areas}}
-      <li class="list-group-item {{#if arearef}}list-group-item-success{{else}}list-group-item-warning{{/if}}">
+      <li class="list-group-item {{#if hasLeads}}list-group-item-success{{else}}list-group-item-warning{{/if}}">
         <ul class="list-group">
           <li class="list-group-item"><strong>{{_ name}}</strong></li>
-          <li class="list-group-item">{{#if arearef}}{{arearef}}{{else}}{{_ "vacant"}}{{/if}}</li>
-          <li class="list-group-item">{{_ "assigned"}}: {{shifts}}</li>
-          <li class="list-group-item">{{_ "free" }}: {{crews}}</li>
+          <li class="list-group-item">{{> areasSettingsLeads _id=_id}}</li>
+          <li class="list-group-item">{{_ "volunteers"}} {{_ "assigned"}}: {{shifts}}</li>
+          <li class="list-group-item">{{_ "volunteers"}} {{_ "available" }}: {{crews}}</li>
         </ul>
       </li>
     {{/each}}

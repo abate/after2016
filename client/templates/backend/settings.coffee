@@ -84,6 +84,11 @@ Template.areasSettings.helpers
         tmpl: Template.areasSettingsLeads
       },
       {
+        key: 'volunteers',
+        label: (() -> TAPi18n.__("volunteers")),
+        fn: (val,row,label) -> VolunteerCrew.find({areaId:row._id}).count()
+      },
+      {
         key: 'teams',
         label: (() -> TAPi18n.__("teams")),
         tmpl: Template.areasSettingsTeams
@@ -105,7 +110,10 @@ Template.areasSettings.events
 
 Template.areasSettingsTeams.helpers
   'teams': (areaId) ->
-    Teams.find({areaId:areaId}).fetch()
+    Teams.find({areaId:areaId}).map((e) ->
+      name: e.name
+      number:VolunteerShift.find({areaId:areaId,teamId:e._id}).count()
+    )
 
 Template.areasSettingsLeads.helpers
   'leads': (areaId) ->

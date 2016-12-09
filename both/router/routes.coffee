@@ -104,6 +104,7 @@ Router.route '/admin/settings/areas',
   controller: 'AdminController'
   template: 'areasSettings'
   waitOn: () -> [
+    Meteor.subscribe('volunteerShift'),
     Meteor.subscribe('volunteerCrew'),
     Meteor.subscribe('userData')
   ]
