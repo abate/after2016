@@ -123,16 +123,17 @@ Router.route '/admin/volunteer/download',
     headers =
       'Content-type': 'text/csv',
       'Content-Disposition': "attachment; filename=" + filename
-    volunteers = VolunteerShift.find().map((e) -> {userId: e.userId, type: "V"})
+    volunteers =
+      VolunteerShift.find().map((e) ->
+        userId = VolunteerCrew.findOne(e.crewId).userId
+        {userId: userId, type: "V"})
     perf_sel = {status: {$in: ["accepted", "scheduled"]}}
     performers =
       PerformanceResource.find(perf_sel).map((e) ->
         {userId: e.userId, type: "P"})
     allIds = _.uniq((volunteers.concat performers),(e) -> e.userId)
     records = _.map(allIds,(e) ->
-      console.log e
       {name: getUserName(e.userId),type: e.type,email: getUserEmail(e.userId)})
-    console.log records
     fileData = ""
     records.forEach (res) ->
       fileData += res.name + "," + res.email + "," + res.type + "\r\n"
