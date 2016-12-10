@@ -124,4 +124,8 @@ Template.volunteerBackendAreasSlider.helpers
 
 Template.volunteersStats.helpers
   'usersTotal': () -> Meteor.users.find().count()
-  'volunteersTotal': () -> VolunteerForm.find().count()
+  'volunteersTotal': () ->
+    _.uniq(VolunteerShift.find().map((e) -> e._id)).length
+  'performersTotal': () ->
+    perf_sel = {status: {$in: ["accepted", "scheduled"]}}
+    _.uniq(PerformanceResource.find(perf_sel).map((e) -> e._id)).length

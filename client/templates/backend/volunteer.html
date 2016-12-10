@@ -116,10 +116,11 @@
 </template>
 
 <template name="volunteersStats">
-  <h4>{{_ "numbers"}}</h4>
+  <h4><a href="{{pathFor 'volunteersDownload'}}">{{_ "numbers"}}</a></h4>
   <ul>
     <li>{{_ "users"}} : {{usersTotal}}</li>
     <li>{{_ "volunteers"}} : {{volunteersTotal}}</li>
+    <li>{{_ "performers"}} : {{performersTotal}}</li>
   </ul>
 </template>
 

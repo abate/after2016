@@ -110,7 +110,34 @@ Router.route '/admin/users',
   template: 'allUsersList'
   waitOn: () -> [
     Meteor.subscribe('userData')
+    Meteor.subscribe('volunteerShift'),
+    Meteor.subscribe('volunteerCrew'),
+    Meteor.subscribe('performanceResource'),
   ]
+
+Router.route '/admin/volunteer/download',
+  name: 'volunteersDownload'
+  where: 'server'
+  action: () ->
+    filename = 'users-bys.csv'
+    headers =
+      'Content-type': 'text/csv',
+      'Content-Disposition': "attachment; filename=" + filename
+    volunteers = VolunteerShift.find().map((e) -> {userId: e.userId, type: "V"})
+    perf_sel = {status: {$in: ["accepted", "scheduled"]}}
+    performers =
+      PerformanceResource.find(perf_sel).map((e) ->
+        {userId: e.userId, type: "P"})
+    allIds = _.uniq((volunteers.concat performers),(e) -> e.userId)
+    records = _.map(allIds,(e) ->
+      console.log e
+      {name: getUserName(e.userId),type: e.type,email: getUserEmail(e.userId)})
+    console.log records
+    fileData = ""
+    records.forEach (res) ->
+      fileData += res.name + "," + res.email + "," + res.type + "\r\n"
+    this.response.writeHead(200, headers)
+    this.response.end(fileData)
 
 Router.route '/admin/settings/areas',
   name: 'areasSettings'

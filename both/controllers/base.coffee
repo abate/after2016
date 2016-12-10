@@ -19,10 +19,7 @@ BaseController = RouteController.extend(
 AuthenticatedController = AnonymousController.extend(
   fastRender: true
   onBeforeAction: ->
-    if Meteor.userId()
-      @next()
-    else
-      @render 'notFound'
+    if Meteor.userId() then @next() else @render 'notFound'
   waitOn: -> [
     Meteor.subscribe('profilePictures'),
     Meteor.subscribe('settings'),
