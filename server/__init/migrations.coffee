@@ -71,10 +71,18 @@ Migrations.add
     s = Settings.findOne()
     Settings.update(s._id,{$set: emails})
 
+Migrations.add
+  version: 9
+  name: "clean facebook no"
+  up: () ->
+    for user in Meteor.users.find().fetch()
+      if user.profile.facebook == "no"
+        Meteor.users.update(user._id,{$unset: {'profile.facebook': 0}})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(8)
+  Migrations.migrateTo(9)
 
 # Migrations.add
 #   version: 8
