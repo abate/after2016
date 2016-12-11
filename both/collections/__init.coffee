@@ -38,8 +38,9 @@ Shifts = new SimpleSchema(
         class: "col-lg-3"
         opts: () ->
           step: 15
-          datepicker:false
-          format:'H:mm'
+          # datepicker:false
+          format:'DD-MM-YYYY HH:mm'
+          defaultDate: Settings.findOne().dday
           defaultTime:'05:00'
   end:
     type: String
@@ -53,8 +54,10 @@ Shifts = new SimpleSchema(
         class: "col-lg-3"
         opts: () ->
           step: 15
-          datepicker:false
-          format:'H:mm'
+          # datepicker:false
+          defaultDate: Settings.findOne().dday
+          format:'DD-MM-YYYY HH:mm'
+          defaultTime:'05:00'
   minMembers:
     type: Number
     label: () -> TAPi18n.__("min_members")

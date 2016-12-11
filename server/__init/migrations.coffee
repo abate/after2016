@@ -79,10 +79,27 @@ Migrations.add
       if user.profile.facebook == "no"
         Meteor.users.update(user._id,{$unset: {'profile.facebook': 0}})
 
+Migrations.add
+  version: 10
+  name: "add date to teams shifts"
+  up: () ->
+    dday = "2016-12-18"
+    sid = Settings.findOne()._id
+    Settings.update(sid,{$set: {dday: dday}})
+    for team in Teams.find().fetch()
+      newshifts = []
+      if team.shifts
+        for shift in team.shifts
+          shift.start = "#{dday} #{shift.start}"
+          shift.end = "#{dday} #{shift.end}"
+          newshifts.push(shift)
+        console.log newshifts
+        Teams.update(team._id,{$set: {shifts: newshifts}})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(9)
+  Migrations.migrateTo(10)
 
 # Migrations.add
 #   version: 8

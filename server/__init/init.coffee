@@ -24,7 +24,7 @@ Meteor.startup ->
     console.log "Init Settings"
     Settings.insert
       availability: JSON.parse(Assets.getText('availability-volunteer.json'))
-      dday: moment("2016-12-18")
+      dday: "2016-12-18"
       emailVolunteers: 'Volunteer Coordinator <volunteers@bys2016.frenchburners.org>'
       emailPerformers: 'Performance Coordinator <performances@bys2016.frenchburners.org>'
       emailNoReplay: 'Volunteer Bot <no-replay@bys2016.frenchburners.org>'
