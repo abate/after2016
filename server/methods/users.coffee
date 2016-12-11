@@ -2,7 +2,8 @@ Meteor.methods 'Accounts.removeUser': (userId) ->
   console.log "Accounts.removeUser"
   check(userId,String)
   if Roles.userIsInRole(Meteor.userId(), [ 'admin' ])
-    Meteor.users.remove(userId)
+    unless Roles.userIsInRole(userId, [ 'super-admin' ])
+      Meteor.users.remove(userId)
 
 Meteor.methods 'Accounts.UpdateUser': (doc,id) ->
   check(doc,Schemas.User)
@@ -18,7 +19,7 @@ Meteor.methods 'Accounts.changeUserRole': (id, role) ->
   check(role,Match.Where (role) -> role in allRoles)
   user = Meteor.users.findOne(id)
   currentUser = Meteor.userId()
-  # a user cannot change his role
+  # a user cannot change his own role
   if user and !(user._id == currentUser)
     if Roles.userIsInRole(currentUser, 'super-admin')
       if role in ['admin';'manager';'user']

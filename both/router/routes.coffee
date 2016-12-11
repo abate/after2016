@@ -123,10 +123,7 @@ Router.route '/admin/volunteer/download',
     headers =
       'Content-type': 'text/csv',
       'Content-Disposition': "attachment; filename=" + filename
-    volunteers =
-      VolunteerShift.find().map((e) ->
-        userId = VolunteerCrew.findOne(e.crewId).userId
-        {userId: userId, type: "V"})
+    volunteers = VolunteerCrew.find().map((e) -> {userId: e.userId, type: "V"})
     perf_sel = {status: {$in: ["accepted", "scheduled"]}}
     performers =
       PerformanceResource.find(perf_sel).map((e) ->

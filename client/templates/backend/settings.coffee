@@ -1,18 +1,23 @@
 Template.allUsersProfile.helpers
   'displayRoles': (userId) ->
     if Roles.userIsInRole(userId, [ 'super-admin' ])
-      TAPi18n.__ "super-admin"
+      "super-admin"
     else if Roles.userIsInRole(userId, [ 'admin' ])
-      TAPi18n.__ "admin"
+      "admin"
     else if Roles.userIsInRole(userId, [ 'manager' ])
-      TAPi18n.__ "manager"
+      "manager"
     else if Roles.userIsInRole(userId, [ 'user' ])
-      TAPi18n.__ "user"
+      "user"
 
 Template.allUsersList.onCreated () ->
   this.currentResource = new ReactiveVar({})
 
 Template.allUsersList.events
+  'click [data-action="sudo-user"]': (event, template) ->
+    Impersonate.do (this._id), (err, userId) -> #   if not (err)
+      # Session.set("wasImpesonating", true)
+      Router.go('/dashboard')
+
   'click [data-action="enroll-account"]': (event, template) ->
     Modal.show('adminEnrollAccount')
 
@@ -49,18 +54,19 @@ Template.allUsersList.helpers
       {
         key: 'name',
         label: (() -> TAPi18n.__("name")),
-        fn: (val,row,label) -> getUserName(row._id),
+        fn: (val,row,label) ->
+          admin =
+            if Roles.userIsInRole(row._id, [ 'manager'])
+              '<i class="fa fa-user-circle" aria-hidden="true"></i>'
+            else ""
+          Spacebars.SafeString ("#{getUserName(row._id)} #{admin}"),
         sortable: false
       },
       { key: 'profile.firstName', hidden: true},
       { key: 'profile.lastName', hidden: true},
       { key: 'profile.playaName', hidden: true},
       { key: 'emails', fn: ((val,row,label) -> val[0].address), hidden: true},
-      {
-        key: 'createdAt',
-        hidden: true,
-        sortDirection: 'descending'
-      }
+      { key: 'createdAt', hidden: true, sortDirection: 'descending' }
     ]
 
 Template.areasSettings.helpers

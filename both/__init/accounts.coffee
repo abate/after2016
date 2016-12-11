@@ -89,3 +89,5 @@ Accounts.onLogin (conn) ->
   user = Meteor.users.findOne(userId)
   p = user.profile
   (p.firstName or p.lastName? or p.playaName?) and p.telephone
+
+Impersonate.admins = ["manager"]

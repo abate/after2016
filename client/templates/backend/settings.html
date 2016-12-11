@@ -106,10 +106,13 @@
       <i class="fa fa-user fa-fw"></i>{{_ "actions"}}
     </button>
     <ul class="dropdown-menu">
-      <!-- <li><a data-action="sudo-user">{{_ "impersonate"}}</a></li> -->
+      <li class="dropdown-item">
+        <a data-action="sudo-user">
+          {{ fa "user-secret"}} {{_ "impersonate"}}</a>
+      </li>
       <li class="dropdown-item">
         <a data-action="remove-user">
-          <i class="fa fa-trash-o fa-fw" aria-hidden="true"></i> {{_ "remove"}}
+          {{fa "trash-o"}} {{_ "remove"}}
         </a>
       </li>
       <li class="divider-divider"></li>
@@ -120,21 +123,21 @@
       {{#if isInRole 'super-admin'}}
         <li class="dropdown-item">
           <a data-action="admin-user">
-            <i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_admin"}}
+            {{fa "unlock"}} {{_ "make_admin"}}
           </a>
         </li>
       {{/if}}
       {{#if isInRole 'admin'}}
         <li class="dropdown-item">
           <a data-action="manager-user">
-            <i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_manager"}}
+            {{fa "unlock"}} {{_ "make_manager"}}
           </a>
         </li>
       {{/if}}
       {{#if isInRole 'manager'}}
         <li class="dropdown-item">
           <a data-action="normal-user">
-            <i class="fa fa-unlock" aria-hidden="true"></i> {{_ "make_user"}}
+            {{fa "unlock"}} {{_ "make_user"}}
           </a>
         </li>
       {{/if}}
@@ -164,7 +167,11 @@
               <tr><td>{{_ "facebook"}}</td><td>{{profile.facebook}}</td></tr>
               <tr><td>{{_ "createdAt"}}</td><td>{{createdAt}}</td></tr>
         		  <tr><td>{{_ "last_login"}}</td><td>{{lastLogin}}</td></tr>
-              <tr><td>{{_ "site_roles"}}</td><td>{{displayRoles _id}}</td></tr>
+              {{#if (displayRoles _id)}}
+                {{#unless ($eq (displayRoles _id) "user")}}
+                  <tr><td>{{_ "site_roles"}}</td><td>{{_ (displayRoles _id)}}</td></tr>
+                {{/unless}}
+              {{/if}}
             </tbody>
           </table>
         </div>
