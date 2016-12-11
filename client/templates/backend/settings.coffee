@@ -66,7 +66,7 @@ Template.allUsersList.helpers
       { key: 'profile.lastName', hidden: true},
       { key: 'profile.playaName', hidden: true},
       { key: 'emails', fn: ((val,row,label) -> val[0].address), hidden: true},
-      { key: 'createdAt', hidden: true, sortDirection: 'descending' }
+      { key: 'createdAt', hidden: true, sortDirection: 'descending', sortOrder: 1 }
     ]
 
 Template.areasSettings.helpers
