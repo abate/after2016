@@ -65,14 +65,13 @@
         <span tabindex="0" class="ext-popover" role="button" data-toggle="popover"
           data-id="{{userId}}">{{name}}</span>
         <span class="badge">{{shiftNumber}}</span>
-        {{> volunteerPopover (userInfo(userId)) }}
       </div>
     {{/each}}
   </div>
 </template>
 
 <template name="volunteerPopover">
-  <div id="popover-content-{{user._id}}" class="hide">
+  <div id="popover-content-{{user._id}}">
     <table class="table table-user-information">
       <tbody>
         <tr><td>{{_ "name"}}</td><td>{{getUserName(user._id)}}</td></tr>

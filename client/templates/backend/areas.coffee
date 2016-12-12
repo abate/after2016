@@ -95,12 +95,13 @@ Template.volunteersDraggable.onRendered () ->
     $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
   )
   this.$('#external-events-vol .ext-popover').each( () ->
-    id = $(this).data('id')
+    userId = $(this).data('id')
     $(this).popover(
       html: true
       container: 'body'
       trigger: 'hover'
-      content: () -> $("#popover-content-#{id}").html()
+      content: () ->
+        Blaze.toHTMLWithData(Template.volunteerPopover,userInfo(userId))
     )
   )
   # we set an observer to make sure we add bind the function again and again
@@ -109,14 +110,13 @@ Template.volunteersDraggable.onRendered () ->
       $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
     )
     this.$('#external-events-vol .ext-popover').each( () ->
-      id = $(this).data('id')
-      # XXX
-      # content = Blaze.toHTMLWithData(Template.publicPerformanceDisplay,event)
+      userId = $(this).data('id')
       $(this).popover(
         html: true
         container: 'body'
         trigger: 'hover'
-        content: () -> $("#popover-content-#{id}").html()
+        content: () ->
+          Blaze.toHTMLWithData(Template.volunteerPopover,userInfo(userId))
       )
     )
   )
