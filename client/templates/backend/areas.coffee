@@ -47,7 +47,7 @@ Template.volunteerAreaList.helpers
     # currentPage: Template.instance().currentPage
     id: "VolunteerAreaCrewTableID"
     class: "table table-bordered table-hover"
-    showNavigation: 'never'
+    showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: false
     # showFilter: false
@@ -152,6 +152,7 @@ Template.volunteerAreaCal.helpers
       color: AppRoles.findOne(res.roleId).color
     )
   'options': () ->
+    areaId = Session.get('volunteerAreaCalareaId')
     id: "volunteerAreaCal"
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     editable: true
@@ -217,6 +218,7 @@ Template.volunteerAreaCal.helpers
       # $(this).remove()
     eventReceive: (event) ->
       # console.log "eventReceive"
+      areaId = Session.get('volunteerAreaCalareaId')
       doc =
         start: event.start.format('DD-MM-YYYY H:mm')
         end: event.end.format('DD-MM-YYYY H:mm')
@@ -313,7 +315,8 @@ Template.performanceAreaCal.onRendered () ->
 
 Template.performanceAreaCal.helpers
   'performances': () ->
-    areaId = Template.currentData()._id
+    # areaId = Template.currentData()._id
+    areaId = Session.get('volunteerAreaCalareaId')
     PerformanceResource.find({areaId:areaId, status:"accepted"}).map((res) ->
       form = PerformanceForm.findOne(res.performanceId)
       name: form.title
@@ -321,8 +324,9 @@ Template.performanceAreaCal.helpers
       performanceId: res._id
       color: PerformanceType.findOne(form.kindId).color
     )
-  options: () ->
-    areaId = Template.currentData()._id
+  'options': () ->
+    # areaId = Template.currentData()._id
+    areaId = Session.get('volunteerAreaCalareaId')
     id: "performanceAreaCal"
     defaultView: 'agendaDay'
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
@@ -347,7 +351,8 @@ Template.performanceAreaCal.helpers
           $('#performanceAreaCal').fullCalendar( 'changeView', 'agendaDay' )
     header: {right:  'agendaFourDays, agendaDay, ddaybutton, prev,next'}
     events: (start, end, tz, callback) ->
-      areaId = Template.currentData()._id
+      # areaId = Template.currentData()._id
+      areaId = Session.get('volunteerAreaCalareaId')
       sel = {status: "scheduled", areaId: areaId}
       events = PerformanceResource.find(sel).map((res) ->
         form = PerformanceForm.findOne(res.performanceId)
