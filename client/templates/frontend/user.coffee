@@ -1,5 +1,5 @@
-Template.userDashboard.onCreated () ->
-  Session.set("currentTab",{template:"userHelp"})
+# Template.userDashboard.onCreated () ->
+  # Session.set("currentTab",{template:"userHelp"})
 
 Template.userDashboard.onRendered () ->
   if !isProfileComplete(Meteor.userId())
@@ -35,14 +35,14 @@ Template.userDashboard.events
     # updateActive(event)
     Session.set "currentTab", { template: "insertPerformanceForm" }
 
-  'click [data-template="userProfile"]': (event, template) ->
-    # updateActive(event)
-    event.stopImmediatePropagation()
-    Session.set "currentTab", {template: "userProfile", data: Meteor.user()}
+  # 'click [data-template="userProfile"]': (event, template) ->
+  #   # updateActive(event)
+  #   event.stopImmediatePropagation()
+  #   Session.set "currentTab", {template: "userProfile", data: Meteor.user()}
 
-  'click [data-template="volunteerCal"]': (event, template) ->
-    # updateActive(event)
-    Session.set "currentTab", {template: "publicVolunteerCal"}
+  # 'click [data-template="volunteerCal"]': (event, template) ->
+  #   # updateActive(event)
+  #   Session.set "currentTab", {template: "publicVolunteerCal"}
 
   'click [data-template]': (event, template) ->
     # updateActive(event)

@@ -8,7 +8,6 @@ Template.volunteerBackendFilter.onCreated () ->
 
 Template.volunteerBackendFilter.events
   'change #user-cooking-filter': (event, template) ->
-    console.log $(event.target)
     if $(event.target).is(':checked')
       template.cookingFilter.set 'true'
     else
@@ -42,8 +41,8 @@ Template.volunteerBackend.helpers
     showFilter: false
     rowClass: rowApplicationStatus
     filters: [
-      "checkbox-car-filter",
-      "checkbox-cooking-filter",
+      # "checkbox-car-filter",
+      # "checkbox-cooking-filter",
       "username-filter"
     ]
     fields: [

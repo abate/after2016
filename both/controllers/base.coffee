@@ -1,50 +1,97 @@
+Router.plugin('auth',
+  authenticate:
+    route: 'atSignIn'
+  except: ['atSignIn']
+)
+Router.plugin('dataNotFound', { notFoundTemplate: 'notFound' })
 
 BaseController = RouteController.extend(
   loadingTemplate: 'loadingTemplate'
-# onAfterAction: ->
-  # routeName = Router.current().route.getName()
-  # $('.nav-active').removeClass 'nav-active'
-  # selector = '.nav a[href="/' + routeName + '"]'
-  # $(selector).addClass 'nav-active'
 )
 
 @AnonymousController = BaseController.extend(
   layoutTemplate: 'userLayout'
-  # onAfterAction: ->
   waitOn: -> [
     Meteor.subscribe('settings'),
     Meteor.subscribe('staticContent'),
   ]
 )
 
-AuthenticatedController = AnonymousController.extend(
+@AuthenticatedController = AnonymousController.extend(
   fastRender: true
-  onBeforeAction: ->
-    if Meteor.userId() then @next() else @render 'notFound'
-  waitOn: -> [
-    Meteor.subscribe('profilePictures'),
-    Meteor.subscribe('areas'),
-    Meteor.subscribe('skills'),
-    Meteor.subscribe('teams'),
-    Meteor.subscribe('approles'),
-    Meteor.subscribe('performanceType'),
-   ]
+  onBeforeAction: ['authenticate']
+  waitOn: ->
+    if Meteor.user()
+      [
+        Meteor.subscribe('settings'),
+        Meteor.subscribe('staticContent'),
+        Meteor.subscribe('profilePictures'),
+        Meteor.subscribe('areas'),
+        Meteor.subscribe('skills'),
+        Meteor.subscribe('teams'),
+        Meteor.subscribe('approles'),
+        Meteor.subscribe('performanceType'),
+       ]
 )
 
 @UserController = AuthenticatedController.extend(
-  # onAfterAction: ->
+  waitOn: () ->
+    if Meteor.user()
+      [
+        Meteor.subscribe('settings'),
+        Meteor.subscribe('staticContent'),
+        Meteor.subscribe('profilePictures'),
+        Meteor.subscribe('areas'),
+        Meteor.subscribe('skills'),
+        Meteor.subscribe('teams'),
+        Meteor.subscribe('approles'),
+        Meteor.subscribe('performanceType'),
+        Meteor.subscribe('performanceForm'),
+        Meteor.subscribe('PerformanceImages'),
+        Meteor.subscribe('performanceResource'),
+        Meteor.subscribe('volunteerShift'),
+        Meteor.subscribe('volunteerCrew'),
+        Meteor.subscribe('volunteerShiftPublic'),
+        Meteor.subscribe('volunteerCrewPublic'),
+        Meteor.subscribe('userDataPublic'),
+        Meteor.subscribe('volunteerForm'),
+        Meteor.subscribe('userData'),
+      ]
 )
 
 UserController.events 'click [data-action=logout]': ->
   AccountsTemplates.logout()
 
 @AdminController = AuthenticatedController.extend(
+  waitOn: () ->
+    if Meteor.user()
+      [
+        Meteor.subscribe('settings'),
+        Meteor.subscribe('staticContent'),
+        Meteor.subscribe('profilePictures'),
+        Meteor.subscribe('areas'),
+        Meteor.subscribe('skills'),
+        Meteor.subscribe('teams'),
+        Meteor.subscribe('approles'),
+        Meteor.subscribe('performanceType'),
+        Meteor.subscribe('performanceForm'),
+        Meteor.subscribe('PerformanceImages'),
+        Meteor.subscribe('performanceResource'),
+        Meteor.subscribe('volunteerShift'),
+        Meteor.subscribe('volunteerCrew'),
+        Meteor.subscribe('volunteerShiftPublic'),
+        Meteor.subscribe('volunteerCrewPublic'),
+        Meteor.subscribe('userDataPublic'),
+        Meteor.subscribe('volunteerForm'),
+        Meteor.subscribe('userData'),
+        Meteor.subscribe('emailQueue')
+      ]
   onBeforeAction: ->
-    if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
-      @next()
+    if Meteor.user()
+      if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
+        @next()
+      else
+        @render 'notFound'
     else
-      @render 'notFound'
-  # waitOn: ->
-  #   userId = Meteor.userId()
-  #   if userId [ ]
+      Router.go('login')
 )

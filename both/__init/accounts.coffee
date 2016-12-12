@@ -1,3 +1,5 @@
+Impersonate.admins = ["manager"]
+
 AccountsTemplates.configure
   defaultLayout: 'userLayout'
   enablePasswordChange: true
@@ -16,7 +18,7 @@ AccountsTemplates.configure
 #   AccountsTemplates.configure({forbidClientAccountCreation: false})
 # else
 #   AccountsTemplates.configure({forbidClientAccountCreation: true})
- 
+
 AccountsTemplates.configureRoute 'signIn', {redirect: '/dashboard'}
 AccountsTemplates.configureRoute 'changePwd', { redirect: '/dashboard' }
 AccountsTemplates.configureRoute 'resetPwd'
@@ -91,8 +93,7 @@ Accounts.onLogin (conn) ->
   VolunteerCrew.find(crewSel).map((e) -> {userId: e.userId, roleId: e.roleId})
 
 @isProfileComplete = (userId) ->
-  user = Meteor.users.findOne(userId)
-  p = user.profile
-  (p.firstName or p.lastName? or p.playaName?) and p.telephone
-
-Impersonate.admins = ["manager"]
+  if userId
+    user = Meteor.users.findOne(userId)
+    p = user.profile
+    (p.firstName or p.lastName? or p.playaName?) and p.telephone

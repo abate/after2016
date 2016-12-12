@@ -84,7 +84,8 @@
   <div class="row">
     <div class="col-md-3">
       {{> volunteersStats }}
-      {{> volunteerBackendFilter}}
+      <!-- {{> volunteerBackendFilter}} -->
+      {{> reactiveTableFilter id="username-filter" fields=usernameFilterFields }}
       {{> reactiveTable settings=VolunteerTableSettings }}
     </div>
     <div class="col-md-9">

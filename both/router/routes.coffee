@@ -4,7 +4,8 @@ Router.route '/',
   template: 'home'
   onBeforeAction: () ->
     if Meteor.user()
-      if isProfileComplete(Meteor.userId()) then Router.go('userDashboard')
+      if isProfileComplete(Meteor.userId())
+        Router.go('userDashboard')
       else Router.go('profile')
     else this.next()
 
@@ -49,7 +50,7 @@ Router.route '/sm/:_name',
 
 Router.route '/profile',
   name: 'profile'
-  controller: 'UserController'
+  controller: 'AuthenticatedController'
   template: 'userProfile'
   data: () ->
     if this.ready()
@@ -59,18 +60,43 @@ Router.route '/dashboard',
   name: 'userDashboard'
   controller: 'UserController'
   template: 'userDashboard'
-  waitOn: () -> [
-    Meteor.subscribe('performanceForm'),
-    Meteor.subscribe('PerformanceImages'),
-    Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('volunteerShiftPublic'),
-    Meteor.subscribe('volunteerCrewPublic'),
-    Meteor.subscribe('userDataPublic'),
-    Meteor.subscribe('volunteerForm'),
-    Meteor.subscribe('userData'),
-  ]
+  onAfterAction: () ->
+    Session.set("currentTab",{template:"userHelp"})
+
+Router.route '/dashboard/profile',
+  name: 'userDashboardProfile'
+  controller: 'UserController'
+  template: 'userDashboard'
+  onAfterAction: () ->
+    Session.set "currentTab", {template: "userProfile", data: Meteor.user()}
+
+Router.route '/dashboard/help',
+  name: 'userDashboardHelp'
+  controller: 'UserController'
+  template: 'userDashboard'
+  onAfterAction: () ->
+    Session.set "currentTab", {template: "userHelp"}
+
+Router.route '/dashboard/performance',
+  name: 'userDashboardPerformance'
+  controller: 'UserController'
+  template: 'userDashboard'
+  onAfterAction: () ->
+    Session.set "currentTab", {template: "performanceList"}
+
+Router.route '/dashboard/volunteer',
+  name: 'userDashboardVolunteer'
+  controller: 'UserController'
+  template: 'userDashboard'
+  onAfterAction: () ->
+    Session.set "currentTab", {template: "volunteerList"}
+
+Router.route '/dashboard/planning',
+  name: 'userDashboardPlanning'
+  controller: 'UserController'
+  template: 'userDashboard'
+  onAfterAction: () ->
+    Session.set "currentTab", {template: "publicVolunteerCal"}
 
 Router.route '/admin/translations',
   name: 'translations'
@@ -81,13 +107,6 @@ Router.route '/admin/emailQueue',
   name: 'emailQueue'
   controller: 'AdminController'
   template: 'emailQueueTable'
-  waitOn: () -> [
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('performanceForm'),
-    Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('userData'),
-    Meteor.subscribe('emailQueue') ]
 
 Router.route '/admin/content',
   name: 'staticContentBackend'
@@ -100,19 +119,11 @@ Router.route '/admin/users/:_id',
   template: 'allUsersProfile'
   data: () ->
     Meteor.users.findOne(this.params._id)
-  waitOn: () -> [
-    Meteor.subscribe('userData')
-  ]
 
 Router.route '/admin/users',
   name: 'allUsersList'
   controller: 'AdminController'
   template: 'allUsersList'
-  waitOn: () -> [
-    Meteor.subscribe('userData')
-    Meteor.subscribe('volunteerForm'),
-    Meteor.subscribe('performanceForm'),
-  ]
 
 Router.route '/admin/volunteer/download',
   name: 'volunteersDownload'
@@ -140,11 +151,6 @@ Router.route '/admin/settings/areas',
   name: 'areasSettings'
   controller: 'AdminController'
   template: 'areasSettings'
-  waitOn: () -> [
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('userData')
-  ]
 
 Router.route '/admin/settings/skills',
   name: 'skillsSettings'
@@ -155,12 +161,6 @@ Router.route '/admin/performance',
   name: 'performanceBackend'
   controller: 'AdminController'
   template: 'performanceBackend'
-  waitOn: () -> [
-    Meteor.subscribe('performanceForm'),
-    Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('PerformanceImages'),
-    Meteor.subscribe('userData')
-  ]
 
 Router.route '/admin/performance/:_id',
   name: 'performanceBackendForm'
@@ -171,23 +171,11 @@ Router.route '/admin/performance/:_id',
     if f
       r = PerformanceResource.findOne({performanceId: this.params._id})
       _.extend(f,{performanceResource: r})
-  waitOn: () -> [
-    Meteor.subscribe('performanceForm'),
-    Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('PerformanceImages'),
-    Meteor.subscribe('userData')
-  ]
 
   Router.route '/admin/volunteer',
   name: 'volunteerBackend'
   controller: 'AdminController'
   template: 'volunteerBackend'
-  waitOn: () -> [
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('volunteerForm'),
-    Meteor.subscribe('userData')
-  ]
 
   Router.route '/admin/areas/:name',
   name: 'areasDashboard'
@@ -198,13 +186,3 @@ Router.route '/admin/performance/:_id',
       area = Areas.findOne({name:this.params.name})
       Session.set('volunteerAreaCalareaId',area._id)
       area
-  waitOn: () -> [
-    #XXX this should be only for this area ...
-    Meteor.subscribe('performanceForm'),
-    Meteor.subscribe('performanceResource'),
-    Meteor.subscribe('PerformanceImages'),
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('volunteerForm'),
-    Meteor.subscribe('userData')
-  ]

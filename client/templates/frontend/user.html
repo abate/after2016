@@ -3,13 +3,13 @@
     <div class="col-md-3">
       <div class="nav nav-pills nav-stacked">
         <span class="list-group-item">
-          {{fa "user" ""}} <a data-template="userProfile">{{_ "profile"}}</a>
+          {{fa "user" ""}} <a href='{{ pathFor "userDashboardProfile"}}' >{{_ "profile"}}</a>
           {{#unless isProfileComplete}}
             <span class="text-danger"> {{fa "exclamation-triangle" ""}}</span>
           {{/unless}}
         </span>
         <span class="list-group-item">
-          {{fa "heart" ""}} <a data-template="volunteerList">{{_ "volunteering"}}</a>
+          {{fa "heart" ""}} <a href='{{pathFor "userDashboardVolunteer"}}' >{{_ "volunteering"}}</a>
           {{#if isVolunteer}}
             <a class="badge btn-small">{{fa "pencil" "updateVolunteerForm"}}</a>
             <a class="badge btn-small">{{fa "trash" "removeVolunteerForm"}}</a>
@@ -18,14 +18,14 @@
           {{/if}}
         </span>
         <span class="list-group-item">
-          {{fa "list" ""}} <a data-template="publicVolunteerCal">{{_ "planning"}}</a>
+          {{fa "list" ""}} <a href='{{pathFor "userDashboardPlanning"}}' >{{_ "planning"}}</a>
         </span>
         <span class="list-group-item">
-          {{fa "star" ""}} <a data-template="performanceList">{{_ "performance"}}</a>
+          {{fa "star" ""}} <a href='{{pathFor "userDashboardPerformance"}}' >{{_ "performance"}}</a>
           <a class="badge btn-small">{{fa "plus-square" "insertPerformanceForm"}}</a>
         </span>
         <span class="list-group-item">
-          {{fa "question" ""}} <a data-template="userHelp">{{_ "help"}}</a>
+          {{fa "question" ""}} <a href='{{pathFor "userDashboardHelp"}}' >{{_ "help"}}</a>
         </span>
       </div>
     </div>
