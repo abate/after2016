@@ -33,7 +33,8 @@ Schemas.PerformanceResource = new SimpleSchema(
     # custom: () -> if this.field('status').value == "accepted" then "required"
     autoform:
       type: () ->
-        if AutoForm.getFieldValue("status") == "accepted" then "" else "hidden"
+        status = AutoForm.getFieldValue("status")
+        if status == "accepted" or status == "scheduled" then "" else "hidden"
       options: () ->
         Areas.find({performance: true}).map(
           (e) -> {label: TAPi18n.__(e.name), value: e._id}
