@@ -110,9 +110,8 @@ Router.route '/admin/users',
   template: 'allUsersList'
   waitOn: () -> [
     Meteor.subscribe('userData')
-    Meteor.subscribe('volunteerShift'),
-    Meteor.subscribe('volunteerCrew'),
-    Meteor.subscribe('performanceResource'),
+    Meteor.subscribe('volunteerForm'),
+    Meteor.subscribe('performanceForm'),
   ]
 
 Router.route '/admin/volunteer/download',

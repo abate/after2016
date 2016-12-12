@@ -36,6 +36,11 @@ Template.allUsersList.events
   'click #AllUsersTableID.reactive-table tbody tr': (event, template) ->
     template.currentResource.set Meteor.users.findOne(this._id)
 
+rowUserStatus = (user) ->
+  vf = VolunteerForm.findOne({userId: user._id})
+  pf = PerformanceForm.findOne({userId: user._id})
+  unless vf or pf then "bg-warning" else "bg-success"
+
 Template.allUsersList.helpers
   'currentResource': () -> Template.instance().currentResource.get()
   'usernameFilterFields': () ->
@@ -48,6 +53,7 @@ Template.allUsersList.helpers
     showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: true
+    rowClass: rowUserStatus
     showFilter: false
     filters: ["username-filter"]
     fields: [
@@ -61,6 +67,14 @@ Template.allUsersList.helpers
             else ""
           Spacebars.SafeString ("#{getUserName(row._id)} #{admin}"),
         sortable: false
+      },
+      {
+        key: 'job',
+        label: (() -> TAPi18n.__("job")),
+        fn: (val,row,label) ->
+          if VolunteerForm.findOne({userId: row._id}) then "V"
+          else if PerformanceForm.findOne({userId: row._id}) then "P"
+          else "W"
       },
       { key: 'profile.firstName', hidden: true},
       { key: 'profile.lastName', hidden: true},
