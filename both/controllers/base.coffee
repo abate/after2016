@@ -12,6 +12,7 @@ BaseController = RouteController.extend(
   layoutTemplate: 'userLayout'
   # onAfterAction: ->
   waitOn: -> [
+    Meteor.subscribe('settings'),
     Meteor.subscribe('staticContent'),
   ]
 )
@@ -22,7 +23,6 @@ AuthenticatedController = AnonymousController.extend(
     if Meteor.userId() then @next() else @render 'notFound'
   waitOn: -> [
     Meteor.subscribe('profilePictures'),
-    Meteor.subscribe('settings'),
     Meteor.subscribe('areas'),
     Meteor.subscribe('skills'),
     Meteor.subscribe('teams'),

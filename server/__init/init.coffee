@@ -29,6 +29,7 @@ Meteor.startup ->
       emailPerformers: 'Performance Coordinator <performances@bys2016.frenchburners.org>'
       emailNoReplay: 'Volunteer Bot <no-replay@bys2016.frenchburners.org>'
       emailTech: 'Tech Assistance <help@bys2016.frenchburners.org>'
+      registrationClosed: false
       revision: Meteor.settings.revision
       init: Meteor.settings.init
 

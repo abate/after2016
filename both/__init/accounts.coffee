@@ -11,8 +11,13 @@ AccountsTemplates.configure
   # onLogoutHook: onSignOut
   # termsUrl: 'terms-of-use'
 
+# unless Settings.findOne().registrationClosed
+#   AccountsTemplates.configureRoute 'signUp', { redirect: '/profile' }
+#   AccountsTemplates.configure({forbidClientAccountCreation: false})
+# else
+#   AccountsTemplates.configure({forbidClientAccountCreation: true})
+ 
 AccountsTemplates.configureRoute 'signIn', {redirect: '/dashboard'}
-AccountsTemplates.configureRoute 'signUp', { redirect: '/profile' }
 AccountsTemplates.configureRoute 'changePwd', { redirect: '/dashboard' }
 AccountsTemplates.configureRoute 'resetPwd'
 AccountsTemplates.configureRoute 'forgotPwd'

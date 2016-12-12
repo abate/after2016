@@ -107,10 +107,17 @@ Migrations.add
         console.log "Remove dandling", shift._id
         VolunteerShift.remove(shift._id)
 
+Migrations.add
+  version: 12
+  name: 'registrationClosed'
+  up: () ->
+    sid = Settings.findOne()
+    Settings.update(sid,{$set: {registrationClosed: true}})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(11)
+  Migrations.migrateTo(12)
 
 # Migrations.add
 #   version: 8

@@ -2,14 +2,24 @@
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">{{_ "signup"}}</a></li>
+        <li role="presentation" class="active">
+          {{#unless registrationClosed}}
+            <a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">{{_ "signup"}}</a>
+          {{else}}
+            <a href="#" data-action="registrationClosedModal">{{_ "registration_closed"}}</a>
+          {{/unless}}
+        </li>
+        {{#unless registrationClosed}}
         <li role="presentation"><a href="#signin" aria-controls="signin" role="tab" data-toggle="tab">{{_ "signin"}}</a></li>
+        {{/unless}}
       </ul>
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="signup">
-          {{> atForm state="signUp"}}
-        </div>
-        <div role="tabpanel" class="tab-pane" id="signin">
+        {{#unless registrationClosed}}
+          <div role="tabpanel" class="tab-pane active" id="signup">
+            {{> atForm state="signUp"}}
+          </div>
+        {{/unless}}
+        <div role="tabpanel" class="tab-pane {{#if registrationClosed}}active{{/if}}" id="signin">
           {{> atForm state="signIn"}}
         </div>
       </div>
