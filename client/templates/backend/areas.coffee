@@ -153,6 +153,7 @@ Template.volunteerAreaCal.helpers
     )
   'options': () ->
     areaId = Template.currentData()._id
+    Session.set('volunteerAreaCalareaId',areaId)
     id: "volunteerAreaCal"
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     editable: true
@@ -169,19 +170,19 @@ Template.volunteerAreaCal.helpers
         text: TAPi18n.__ ("addteam")
         click: () ->
           Modal.show("insertAreaCalTeamFormModal", {areaId:areaId})
-    defaultView: 'timelineThreeDays'
-    views:
-      timelineThreeDays:
-        type: 'timeline'
-        duration: { days: 3 }
+    defaultView: 'timelineDay'
+    # views:
+    #   timelineThreeDays:
+    #     type: 'timeline'
+    #     duration: { days: 3 }
     header:
-      right: 'timelineThreeDays, timelineDay, prev,next'
+      right: 'timelineDay, prev,next'
       center: 'title'
       left: 'addteam'
     resourceLabelText: TAPi18n.__ "teams"
     resourceAreaWidth: "20%"
     resources: (callback) ->
-      areaId = Template.currentData()._id
+      areaId = Session.get('volunteerAreaCalareaId')
       businessHours = (team) ->
         _.map(team.shifts, (shift) -> {
           start: shift.start,
@@ -200,7 +201,7 @@ Template.volunteerAreaCal.helpers
         )
       callback(resources)
     events: (start, end, tz, callback) ->
-      areaId = Template.currentData()._id
+      areaId = Session.get('volunteerAreaCalareaId')
       if areaId
         events = VolunteerShift.find({areaId:areaId}).map((res) ->
           crew = VolunteerCrew.findOne(res.crewId)
