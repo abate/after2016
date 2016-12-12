@@ -96,10 +96,21 @@ Migrations.add
         console.log newshifts
         Teams.update(team._id,{$set: {shifts: newshifts}})
 
+Migrations.add
+  version: 11
+  name: "remove all dandling shifts"
+  up: () ->
+    for shift in VolunteerShift.find().fetch()
+      crew = VolunteerCrew.findOne(shift.crewId)
+      area = Areas.findOne(shift.areaId)
+      unless (crew and area)
+        console.log "Remove dandling", shift._id
+        VolunteerShift.remove(shift._id)
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(10)
+  Migrations.migrateTo(11)
 
 # Migrations.add
 #   version: 8

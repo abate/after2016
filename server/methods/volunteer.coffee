@@ -49,8 +49,10 @@ Meteor.methods 'VolunteerBackend.removeCrewForm': (formId) ->
   check(formId,String)
   userId = Meteor.userId()
   if Roles.userIsInRole(userId, [ 'manager' ])
-    console.log "Remove all pending emails for ", formId
+    console.log "Remove all pending emails associated to ", formId
     EmailQueue.remove({ref: formId})
+    console.log "Remove all shifts associated to ", formId
+    VolunteerShift.remove({crewId: formId})
     VolunteerCrew.remove(formId)
 
 Meteor.methods 'VolunteerBackend.updateCrewForm': (doc,formId) ->

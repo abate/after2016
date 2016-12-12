@@ -138,7 +138,7 @@ Template.volunteerAreaCal.onRendered () ->
 Template.volunteerAreaCal.helpers
   'volunteers': () ->
     helper = AppRoles.findOne({name: "helper"})
-    areaId = Template.currentData()._id
+    areaId = Session.get('volunteerAreaCalareaId')
     sel = {areaId:this._id,roleId:helper._id}
     teamIds = Session.get("teamFilter")
     if teamIds and teamIds.length > 0
@@ -152,8 +152,6 @@ Template.volunteerAreaCal.helpers
       color: AppRoles.findOne(res.roleId).color
     )
   'options': () ->
-    areaId = Template.currentData()._id
-    Session.set('volunteerAreaCalareaId',areaId)
     id: "volunteerAreaCal"
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'
     editable: true
@@ -171,10 +169,6 @@ Template.volunteerAreaCal.helpers
         click: () ->
           Modal.show("insertAreaCalTeamFormModal", {areaId:areaId})
     defaultView: 'timelineDay'
-    # views:
-    #   timelineThreeDays:
-    #     type: 'timeline'
-    #     duration: { days: 3 }
     header:
       right: 'timelineDay, prev,next'
       center: 'title'

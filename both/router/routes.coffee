@@ -195,7 +195,9 @@ Router.route '/admin/performance/:_id',
   template: 'areasDashboard'
   data: () ->
     if this.ready()
-      Areas.findOne({name:this.params.name})
+      area = Areas.findOne({name:this.params.name})
+      Session.set('volunteerAreaCalareaId',area._id)
+      area
   waitOn: () -> [
     #XXX this should be only for this area ...
     Meteor.subscribe('performanceForm'),
