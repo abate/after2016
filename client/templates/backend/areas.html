@@ -59,7 +59,7 @@
   <div id="external-events-vol">
     <h4>{{_ "volunteers"}}</h4>
     {{#each volunteers}}
-      <div style="background-color:{{color}};" class="ext-event ui-draggable ui-draggable-handle grabbable"
+      <div class="ext-event ui-draggable ui-draggable-handle grabbable {{color}}"
         data-event='{"title":"{{name}}","userId":"{{userId}}","crewId":"{{crewId}}"}'
         data-stick="true">
         <span tabindex="0" class="ext-popover" role="button" data-toggle="popover"

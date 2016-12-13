@@ -135,6 +135,25 @@ Template.volunteerAreaCal.onRendered () ->
     $('#volunteerAreaCal').fullCalendar('refetchEvents')
     $('#volunteerAreaCal').fullCalendar('refetchResources')
 
+multipleShiftsAreas = (userId,areaId) ->
+  helper = AppRoles.findOne({name: "helper"})
+  crews = VolunteerCrew.find({userId: userId,roleId:helper._id}).fetch()
+  crewGroupsbyArea = _.groupBy(crews,'areaId')
+  crewGroups = (v[0] for k,v of crewGroupsbyArea)
+  shiftGroups =
+    _.chain(crewGroups)
+    .map((e) ->
+      n = VolunteerShift.find({crewId:e._id}).count()
+      {areaId: e.areaId, n: n})
+    .filter((e) -> e.n > 0)
+    .value()
+  if shiftGroups.length == 1 and shiftGroups[0].areaId == areaId
+    "bg-success"
+  else if shiftGroups.length == 1
+    "bg-info"
+  else
+    "bg-warning"
+
 Template.volunteerAreaCal.helpers
   'volunteers': () ->
     helper = AppRoles.findOne({name: "helper"})
@@ -149,7 +168,7 @@ Template.volunteerAreaCal.helpers
       userId: res.userId
       crewId: res._id
       shiftNumber: VolunteerShift.find({crewId:res._id}).count()
-      color: AppRoles.findOne(res.roleId).color
+      color: multipleShiftsAreas(res.userId, areaId)
     )
   'options': () ->
     areaId = Session.get('volunteerAreaCalareaId')
