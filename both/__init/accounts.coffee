@@ -8,6 +8,7 @@ AccountsTemplates.configure
   continuousValidation: true
   enforceEmailVerification: true
   privacyUrl: '/s/privacy'
+  forbidClientAccountCreation: true
   # showResendVerificationEmailLink: true
   # postSignUpHook: postSignUpHook
   # onLogoutHook: onSignOut

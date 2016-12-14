@@ -1,7 +1,9 @@
 Router.plugin('auth',
   authenticate:
     route: 'atSignIn'
-  except: ['atSignIn']
+  except: [
+    'atSignIn','atSignUp','changePwd','resetPwd','forgotPwd','enrollAccount',
+  'publicPerformanceCal','main','staticContentDisplay', ]
 )
 Router.plugin('dataNotFound', { notFoundTemplate: 'notFound' })
 
