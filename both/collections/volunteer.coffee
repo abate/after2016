@@ -99,6 +99,12 @@ Schemas.VolunteerForm = new SimpleSchema(
     autoValue: () -> Meteor.userId()
     autoform:
       omit: true
+  createdAt:
+    type: Date
+    optional: true
+    autoValue: () ->
+      if this.isInsert then return new Date
+      else this.unset()
   availability:
     type: [String]
     label: () -> TAPi18n.__("availability")
