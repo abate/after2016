@@ -1,20 +1,3 @@
-Template.areasDashboard.onCreated () ->
-  Session.set("currentTab",{template:"volunteerAreaCal"})
-
-Template.areasDashboard.helpers
-  "tab": () -> Session.get("currentTab")
-
-Template.areasDashboard.events
-  'click [data-template="areaSettings"]': (event, template) ->
-    # updateActive(event)
-    event.stopImmediatePropagation()
-    Session.set "currentTab", {template: "areaSettings"}
-
-  'click [data-template]': (event, template) ->
-    # updateActive(event)
-    currentTab = $(event.target)
-    Session.set "currentTab", {template: currentTab.data('template')}
-
 userInfo = (userId) ->
   user = Meteor.users.findOne(userId)
   roleId = AppRoles.findOne({name: "helper"})._id

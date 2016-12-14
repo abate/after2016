@@ -185,4 +185,44 @@ Router.route '/admin/performance/:_id',
     if this.ready()
       area = Areas.findOne({name:this.params.name})
       Session.set('volunteerAreaCalareaId',area._id)
-      area
+      _.extend(area, {template: "volunteerAreaCal"})
+
+  Router.route '/admin/areas/:name/planning',
+  name: 'areasDashboardPlanning'
+  controller: 'AdminController'
+  template: 'areasDashboard'
+  data: () ->
+    if this.ready()
+      area = Areas.findOne({name:this.params.name})
+      Session.set('volunteerAreaCalareaId',area._id)
+      _.extend(area, {template: "volunteerAreaCal"})
+
+Router.route '/admin/areas/:name/list',
+  name: 'areasDashboardList'
+  controller: 'AdminController'
+  template: 'areasDashboard'
+  data: () ->
+    if this.ready()
+      area = Areas.findOne({name:this.params.name})
+      Session.set('volunteerAreaCalareaId',area._id)
+      _.extend(area, {template: "volunteerAreaList"})
+
+Router.route '/admin/areas/:name/performance',
+  name: 'areasDashboardPerformance'
+  controller: 'AdminController'
+  template: 'areasDashboard'
+  data: () ->
+    if this.ready()
+      area = Areas.findOne({name:this.params.name})
+      Session.set('volunteerAreaCalareaId',area._id)
+      _.extend(area, {template: "performanceAreaCal"})
+
+Router.route '/admin/areas/:name/help',
+  name: 'areasDashboardHelp'
+  controller: 'AdminController'
+  template: 'areasDashboard'
+  data: () ->
+    if this.ready()
+      area = Areas.findOne({name:this.params.name})
+      Session.set('volunteerAreaCalareaId',area._id)
+      _.extend(area,{template: "areaHelp"})

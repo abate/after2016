@@ -4,7 +4,7 @@
       <div class="nav nav-pills nav-stacked">
         <span class="list-group-item">
           <h3>{{_ name}}</h3>
-          {{> areasSettingsLeads _id=this._id}}
+          {{> areasSettingsLeads _id=_id}}
         </span>
         <!-- <span class="list-group-item">
           {{fa "cog" ""}}
@@ -12,26 +12,26 @@
         </span> -->
         <span class="list-group-item">
           {{fa "calendar-o" ""}}
-          <a href="#" data-template="volunteerAreaCal">{{_ "volunteering_planner"}}</a>
+          <a href='{{pathFor "areasDashboardPlanning" _id=name}}' >{{_ "volunteering_planner"}}</a>
         </span>
         <span class="list-group-item">
           {{fa "list" ""}}
-          <a href="#" data-template="volunteerAreaList">{{_ "volunteering_table"}}</a>
+          <a href='{{pathFor "areasDashboardList" _id=name}}'>{{_ "volunteering_table"}}</a>
         </span>
         <span class="list-group-item">
           {{fa "calendar-o" ""}}
-          <a href="#" data-template="performanceAreaCal">{{_ "performance_planner"}}</a>
+          <a href='{{pathFor "areasDashboardPerformance" _id=name}}'>{{_ "performance_planner"}}</a>
         </span>
         <span class="list-group-item">
           {{fa "question" ""}}
-          <a href="#" data-template="areaHelp">{{_ "area_help"}}</a>
+          <a href='{{pathFor "areasDashboardHelp" _id=name}}'>{{_ "area_help"}}</a>
         </span>
       </div>
     </div>
     <div class="col-md-10">
         <div class="panel panel-default">
           <div class="panel-body">
-            {{> Template.dynamic template=tab.template data=this }}
+            {{> Template.dynamic template=template data=this }}
             {{ content}}
           </div>
         </div>
