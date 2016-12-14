@@ -30,7 +30,7 @@
     </div>
     <div class="col-md-10">
         <div class="panel panel-default">
-          <div class="panel-body">
+          <div id="dashboardDynamicTab" class="panel-body">
             {{> Template.dynamic template=template data=this }}
             {{ content}}
           </div>
@@ -124,7 +124,7 @@
 <template name="volunteerAreaCal">
   <div class="row row-no-padding">
     <div class="col-md-2">
-      {{> volunteersDraggable volunteers=volunteers}}
+      {{> volunteersDraggable }}
     </div>
     <div class="col-md-10">
       {{> fullcalendar options }}
@@ -255,7 +255,7 @@
 <template name="performanceAreaCal">
   <div class="row row-no-padding">
     <div class="col-md-2">
-      {{> performancesDraggable performances=performances}}
+      {{> performancesDraggable }}
     </div>
     <div class="col-md-10">
       {{> fullcalendar options }}

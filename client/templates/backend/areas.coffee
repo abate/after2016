@@ -57,55 +57,50 @@ Template.volunteerShiftsRow.helpers
   'shifts': (userId) -> userInfo(userId).shifts
   'role': (roleId) -> AppRoles.findOne(roleId).name
 
-observeDOM = do ->
-  MutationObserver = window.MutationObserver or window.WebKitMutationObserver
-  eventListenerSupported = window.addEventListener
-  (obj, callback) ->
-    if MutationObserver
-      obs = new MutationObserver((mutations, observer) ->
-        if mutations[0].addedNodes.length or mutations[0].removedNodes.length
-          callback())
-      obs.observe obj,
-        childList: true
-        subtree: true
-    else if eventListenerSupported
-      obj.addEventListener 'DOMNodeInserted', callback, false
-      obj.addEventListener 'DOMNodeRemoved', callback, false
+Template.volunteersDraggable.onCreated () ->
+  this.volunteersUpdated = new Tracker.Dependency
 
 Template.volunteersDraggable.onRendered () ->
-  # first time init
-  this.$('#external-events-vol .ext-event').each(() ->
-    $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
-  )
-  this.$('#external-events-vol .ext-popover').each( () ->
-    userId = $(this).data('id')
-    $(this).popover(
-      html: true
-      container: 'body'
-      trigger: 'hover'
-      content: () ->
-        Blaze.toHTMLWithData(Template.volunteerPopover,userInfo(userId))
-    )
-  )
-  # we set an observer to make sure we add bind the function again and again
-  observeDOM(document.getElementById('external-events-vol'), () ->
-    this.$('#external-events-vol .ext-event').each(() ->
-      $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
-    )
-    this.$('#external-events-vol .ext-popover').each( () ->
-      userId = $(this).data('id')
-      $(this).popover(
-        html: true
-        container: 'body'
-        trigger: 'hover'
-        content: () ->
-          Blaze.toHTMLWithData(Template.volunteerPopover,userInfo(userId))
+  template = this
+  template.autorun () ->
+    Session.get('volunteerAreaCalareaId')
+    template.volunteersUpdated.depend()
+    Tracker.afterFlush () ->
+      template.$('#external-events-vol .ext-event').each(() ->
+        $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
       )
-    )
-  )
 
 Template.volunteersDraggable.helpers
   'userInfo': (userId) -> userInfo (userId)
+  'volunteers': () ->
+    helper = AppRoles.findOne({name: "helper"})
+    areaId = Session.get('volunteerAreaCalareaId')
+    sel = {areaId:this._id,roleId:helper._id}
+    teamIds = Session.get("teamFilter")
+    if teamIds and teamIds.length > 0
+      usersIds = VolunteerForm.find({teams: {$in: teamIds}}).map((u)-> u.userId)
+      sel = _.extend(sel,{userId: {$in: usersIds}})
+    VolunteerCrew.find(sel).map((res) ->
+      Template.instance().volunteersUpdated.changed()
+      name: getUserName(res.userId)
+      userId: res.userId
+      crewId: res._id
+      shiftNumber: VolunteerShift.find({crewId:res._id}).count()
+      color: multipleShiftsAreas(res.userId, areaId)
+    )
+
+Template.volunteersDraggable.events
+  'mouseleave .ext-popover': (event,template) ->
+    $(event.target).popover("destroy")
+  'mouseenter .ext-popover': (event,template) ->
+    userId = event.target.dataset.id
+    $(event.target).popover(
+      html: true
+      container: 'body'
+      trigger: 'none'
+      content: () ->
+        Blaze.toHTMLWithData(Template.volunteerPopover,userInfo(userId))
+    ).popover('show')
 
 shiftCount = (team) ->
   count=0
@@ -138,21 +133,6 @@ multipleShiftsAreas = (userId,areaId) ->
     "bg-warning"
 
 Template.volunteerAreaCal.helpers
-  'volunteers': () ->
-    helper = AppRoles.findOne({name: "helper"})
-    areaId = Session.get('volunteerAreaCalareaId')
-    sel = {areaId:this._id,roleId:helper._id}
-    teamIds = Session.get("teamFilter")
-    if teamIds and teamIds.length > 0
-      usersIds = VolunteerForm.find({teams: {$in: teamIds}}).map((u)-> u.userId)
-      sel = _.extend(sel,{userId: {$in: usersIds}})
-    VolunteerCrew.find(sel).map((res) ->
-      name: getUserName(res.userId)
-      userId: res.userId
-      crewId: res._id
-      shiftNumber: VolunteerShift.find({crewId:res._id}).count()
-      color: multipleShiftsAreas(res.userId, areaId)
-    )
   'options': () ->
     areaId = Session.get('volunteerAreaCalareaId')
     id: "volunteerAreaCal"
@@ -301,33 +281,38 @@ Template.volunteerUserProfileModal.events
       Modal.hide("volunteerUserProfileModal")
       $('#volunteerAreaCal').fullCalendar('removeEvents',[fcEventId])
 
+Template.performancesDraggable.onCreated () ->
+  this.performanceUpdated =  new Tracker.Dependency
+
 Template.performancesDraggable.onRendered () ->
-  this.$('#external-events-perf .ext-event').each(() ->
-    $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
-  )
-  observeDOM(document.getElementById('external-events-perf'), () ->
-    this.$('#external-events-perf .ext-event').each(() ->
-      $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
-    )
-  )
+  template = this
+  template.autorun () ->
+    # rerun when change area or when PerformanceResource is updated
+    Session.get('volunteerAreaCalareaId')
+    template.performanceUpdated.depend()
+    Tracker.afterFlush () ->
+      this.$('#external-events-perf .ext-event').each(() ->
+        $(this).draggable({ zIndex: 999, revert: true, revertDuration: 0 })
+      )
 
-Template.performanceAreaCal.onRendered () ->
-  this.autorun () ->
-    $('#performanceAreaCal').fullCalendar('refetchEvents')
-
-Template.performanceAreaCal.helpers
+Template.performancesDraggable.helpers
   'performances': () ->
-    # areaId = Template.currentData()._id
     areaId = Session.get('volunteerAreaCalareaId')
     PerformanceResource.find({areaId:areaId, status:"accepted"}).map((res) ->
+      Template.instance().performanceUpdated.changed()
       form = PerformanceForm.findOne(res.performanceId)
       name: form.title
       userId: res.userId
       performanceId: res._id
       color: PerformanceType.findOne(form.kindId).color
     )
+
+Template.performanceAreaCal.onRendered () ->
+  this.autorun () ->
+    $('#performanceAreaCal').fullCalendar('refetchEvents')
+
+Template.performanceAreaCal.helpers
   'options': () ->
-    # areaId = Template.currentData()._id
     areaId = Session.get('volunteerAreaCalareaId')
     id: "performanceAreaCal"
     defaultView: 'agendaDay'
@@ -353,7 +338,6 @@ Template.performanceAreaCal.helpers
           $('#performanceAreaCal').fullCalendar( 'changeView', 'agendaDay' )
     header: {right:  'agendaFourDays, agendaDay, ddaybutton, prev,next'}
     events: (start, end, tz, callback) ->
-      # areaId = Template.currentData()._id
       areaId = Session.get('volunteerAreaCalareaId')
       sel = {status: "scheduled", areaId: areaId}
       events = PerformanceResource.find(sel).map((res) ->
