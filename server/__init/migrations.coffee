@@ -122,7 +122,29 @@ Migrations.add
     EmailQueue.remove({templateName:null})
     EmailQueue.remove({templateName: {$exists: false}})
 
+Migrations.add
+  version: 14
+  name: "add emailTeamLeads for all team leads"
+  up: () ->
+    Teams.find().forEach((t) ->
+      if t.leads
+        for userId in t.leads
+          sel = {userId: userId, templateName:'emailTeamLeads'}
+          email =
+            templateName: 'emailTeamLeads'
+            userId: userId
+            sent: false
+          EmailQueue.upsert(sel,{$set: email},{validate:false})
+    )
+
+Migrations.add
+  version: 15
+  name: "fix emailBuildersSat and emailBuildersSun tpyes"
+  up: () ->
+    StaticContent.update({name: "emailBuildersSat"},{$set: {type: "teamEmail"}})
+    StaticContent.update({name: "emailBuildersSun"},{$set: {type: "teamEmail"}})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo("13,rerun")
+  Migrations.migrateTo(15)

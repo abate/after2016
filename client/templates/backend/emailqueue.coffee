@@ -1,6 +1,6 @@
 previewEmail = (email) ->
   user = Meteor.users.findOne(email.userId)
-  sel = {name:email.templateName,language:user.profile.language}
+  sel = {name:email.templateName,language:'en'}
   emailTemplate = StaticContent.findOne(sel)
   if emailTemplate
     context =
@@ -21,12 +21,13 @@ previewEmail = (email) ->
           performances:
             PerformanceResource.find(
               {userId:email.userId, status: "scheduled"}).map((p) ->
+                title = PerformanceForm.findOne(p.performanceId).title
                 area = Areas.findOne(p.areaId)
-                name: PerformanceForm.findOne(p.performanceId).name
-                area: area.name
-                leads: _.map(getAreaLeads(p.areaId),(l) ->getUserName(l.userId))
                 mstasrt = moment(p.start, "DD-MM-YYYY H:mm")
                 mend = moment(p.end, "DD-MM-YYYY H:mm")
+                title: PerformanceForm.findOne(p.performanceId).title
+                area: area.name
+                leads: _.map(getAreaLeads(p.areaId),(l) ->getUserName(l.userId))
                 day: mstasrt.format("DD-MM-YYYY")
                 start: mstasrt.format("H:mm")
                 end: mend.format("H:mm")
@@ -35,14 +36,41 @@ previewEmail = (email) ->
         when email.templateName == "emailLeads"
           rolesSel = {name: {$in: ["lead","co-lead"]}}
           rolesId = AppRoles.find(rolesSel).map((e) -> e._id)
+          crewSel = {userId: email.userId,roleId: {$in: rolesId}}
           username: getUserName(user._id)
           site_url: Meteor.absoluteUrl()
           profile: Meteor.users.findOne(email.userId).profile
           crews:
-            VolunteerCrew.find(
-              {userId: email.userId,roleId: {$in: rolesId}}).map((c) ->
-                role: AppRoles.findOne(c.roleId).name
-                area: Areas.findOne(c.areaId).name
+            VolunteerCrew.find(crewSel).map((c) ->
+              role: AppRoles.findOne(c.roleId).name
+              area: Areas.findOne(c.areaId).name
+              teams :
+                Teams.find({areaId: c.areaId}).map((t) ->
+                  name: t.name
+                  leads: _.map(t.leads,(u) -> getUserName(u))
+                  description: t.description
+                )
+            )
+        when email.templateName == "emailTeamLeads"
+          teamSel = {leads: email.userId}
+          username: getUserName(user._id)
+          site_url: Meteor.absoluteUrl()
+          profile: Meteor.users.findOne(email.userId).profile
+          teams:
+            Teams.find(teamSel).map((t) ->
+              areaLeads:_.map(getAreaLeads(t.areaId),(l)->getUserName(l.userId))
+              name: t.name
+              description: t.description
+              shifts:
+                VolunteerShift.find({teamId: t._id}).map((s) ->
+                  mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
+                  mend = moment(s.end, "DD-MM-YYYY H:mm")
+                  crew = VolunteerCrew.findOne(s.crewId)
+                  username: getUserName(crew.userId)
+                  day: mstasrt.format("DD-MM-YYYY")
+                  start: mstasrt.format("H:mm")
+                  end: mend.format("H:mm")
+                )
             )
         when email.templateName == "emailHelpers"
           roleId = AppRoles.findOne({name: "helper"})._id
@@ -66,6 +94,10 @@ previewEmail = (email) ->
               areaLeads: _.map(getAreaLeads(s.areaId),(l) -> getUserName(l.userId))
               teamLeads: _.map(team.leads,(l) -> getUserName(l))
             )
+        else
+          username: getUserName(user._id)
+          site_url: Meteor.absoluteUrl()
+          profile: user.profile
     compiled = SpacebarsCompiler.compile(emailTemplate.body, isBody: true)
     content = Blaze.toHTML Blaze.With(context, eval(compiled))
     {subject: emailTemplate.title, content: content}

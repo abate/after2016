@@ -50,6 +50,15 @@ Meteor.methods 'Backend.updateTeam': (doc,formId) ->
         sel = {userId: crew.userId, templateName:doc['$set'].emailTemplate}
         mod = {$set: {sent: false}}
         EmailQueue.upsert(sel,mod)
+    if doc['$set'].leads
+      for userId in doc['$set'].leads
+        console.log "Enqueue Team Lead email for ",userId
+        sel = {userId: userId, templateName:'emailTeamLeads'}
+        email =
+          templateName: 'emailTeamLeads'
+          userId: userId
+          sent: false
+        EmailQueue.upsert(sel,{$set: email},{validate:false})
     formId
 
 Meteor.methods "Backend.saveTeams": () ->
