@@ -77,5 +77,5 @@ Meteor.methods 'Backend.sendEmailQueue': (id, content) ->
       from: Settings.findOne().emailVolunteers
       # cc: "" bcc: "" replayTo: ""
       subject: email.subject
-      text: content
+      html: content
     EmailQueue.update(id,{$set: {sent: true}})

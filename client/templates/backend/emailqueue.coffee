@@ -14,18 +14,6 @@ previewEmail = (email) ->
               {userId:email.userId, status: "refused"}).map((p) ->
                 name: PerformanceForm.findOne(p.performanceId).name
             )
-        when email.templateName == "emailPerformerAccepted"
-          username: getUserName(user._id)
-          site_url: Meteor.absoluteUrl()
-          profile: user.profile
-          performances:
-            PerformanceResource.find(
-              {userId:email.userId, status: "accepted"}).map((p) ->
-                area = Areas.findOne(p.areaId)
-                name: PerformanceForm.findOne(p.performanceId).name
-                area: area.name
-                leads: _.map(getAreaLeads(p.areaId),(l) ->getUserName(l.userId))
-            )
         when email.templateName == "emailPerformerScheduled"
           username: getUserName(user._id)
           site_url: Meteor.absoluteUrl()
@@ -88,7 +76,7 @@ Template.emailQueueTable.helpers
     # currentPage: Template.instance().currentPage
     id: "EmailQueueTableID"
     class: "table table-bordered table-hover"
-    showNavigation: 'never'
+    showNavigation: 'auto'
     rowsPerPage: 20
     showRowCount: false
     showFilter: false

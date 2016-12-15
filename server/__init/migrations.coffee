@@ -114,46 +114,14 @@ Migrations.add
     sid = Settings.findOne()
     Settings.update(sid,{$set: {registrationClosed: true}})
 
+Migrations.add
+  version: 13
+  name: 'remove emailPerformerAccepted emails'
+  up: () ->
+    EmailQueue.remove({templateName:'emailPerformerAccepted'})
+    EmailQueue.remove({templateName:null})
+
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(12)
-
-# Migrations.add
-#   version: 8
-#   up: () ->
-#     console.log "shift begin", VolunteerShift.find().count()
-#     for shift in VolunteerShift.find().fetch()
-#       crew = VolunteerCrew.findOne(shift.crewId)
-#       unless crew
-#         console.log remove "crew not found", shift
-#         VolunteerShift.remove(shift._id)
-#       area = Areas.findOne(shift.areaId)
-#       unless area
-#         console.log remove "area not found", shift
-#         VolunteerShift.remove(shift._id)
-#       team = Teams.findOne(shift.teamId)
-#       unless team
-#         console.log remove "team not found", shift
-#         VolunteerShift.remove(shift._id)
-#     console.log "shift end", VolunteerShift.find().count()
-#     console.log "crew begin", VolunteerCrew.find().count()
-#     VolunteerCrew.find().forEach((crew) ->
-#       VolunteerCrew.remove({
-#         _id: {$ne: crew._id},
-#         areaId: crew.areaId,
-#         userId: crew.userId,
-#         roleId: crew.roleId
-#       })
-#     )
-#     console.log "crew end", VolunteerCrew.find().count()
-    # console.log "email begin", EmailQueue.find().count()
-    # EmailQueue.find().forEach((email) ->
-    #   console.log email
-    #   EmailQueue.remove({
-    #     _id: {$ne: email._id},
-    #     templateName: email.templateName,
-    #     userId: email.userId
-    #   })
-    # )
-    # console.log "email end", EmailQueue.find().count()
+  Migrations.migrateTo(13)

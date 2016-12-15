@@ -1,17 +1,17 @@
 emailPerformer = (doc,status) ->
-  console.log ["Queue emailPerformerAccepted",doc]
   templateName =
     switch
-      when doc.status == "accepted" then "emailPerformerAccepted"
       when doc.status == "refused" then "emailPerformerRefused"
       when doc.status == "scheduled" then "emailPerformerScheduled"
-  user = Meteor.users.findOne(doc.userId)
-  sel = {userId: user._id, templateName:templateName}
-  email =
-    templateName: templateName
-    userId: user._id
-    sent: false
-  EmailQueue.upsert(sel,{$set: email},{validate:false})
+  if templateName
+    console.log ["Queue emailPerformerAccepted",doc]
+    user = Meteor.users.findOne(doc.userId)
+    sel = {userId: user._id, templateName:templateName}
+    email =
+      templateName: templateName
+      userId: user._id
+      sent: false
+    EmailQueue.upsert(sel,{$set: email},{validate:false})
 
 Meteor.methods 'Performance.removeForm': (doc) ->
   console.log "Performance.removeForm"
@@ -19,6 +19,7 @@ Meteor.methods 'Performance.removeForm': (doc) ->
   userId = Meteor.userId()
   if (userId == doc.userId) || Roles.userIsInRole(userId, [ 'manager' ])
     PerformanceForm.remove(doc._id)
+    PerformanceResource.remove({performanceId:doc._id})
 
 Meteor.methods 'Performance.bailoutForm': (doc) ->
   console.log "Performance.bailoutForm"
