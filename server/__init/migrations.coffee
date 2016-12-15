@@ -120,8 +120,9 @@ Migrations.add
   up: () ->
     EmailQueue.remove({templateName:'emailPerformerAccepted'})
     EmailQueue.remove({templateName:null})
+    EmailQueue.remove({templateName: {$exists: false}})
 
 Meteor.startup () ->
   if process.env.UNLOCK_MIGRATE
     Migrations._collection.update({_id: "control"}, {$set: {locked: false}})
-  Migrations.migrateTo(13)
+  Migrations.migrateTo("13,rerun")

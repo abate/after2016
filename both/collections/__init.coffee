@@ -254,10 +254,13 @@ Schemas.EmailQueue = new SimpleSchema(
     optional: true
     autoform:
       rows: 7
-  lastModified:
+  sentAt:
     type: Date
-    label: () -> TAPi18n.__("last_modified")
-    autoValue: () -> new Date
+    optional: true
+    # custom: () -> if this.field('sent').value == true then "required"
+    autoValue: () ->
+      if this.field('sent').value == true then new Date
+      else this.unset()
     autoform:
       omit: true
   createdAt:

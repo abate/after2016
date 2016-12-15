@@ -55,6 +55,16 @@
   {{/if}}
 </template>
 
+<template name="volunteerEmailRow">
+  <ul class="list-group">
+    {{#each (emails(userId))}}
+      <li class="list-group-item">
+        {{templateName}} : {{#if sent}} {{_ "sent"}} {{#if sent}}{{sentAt}}{{/if}} {{else}} {{_ "not_sent"}}{{/if}}
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
 <template name="volunteersDraggable">
   <div id="external-events-vol">
     <h4>{{_ "volunteers"}}</h4>

@@ -115,7 +115,18 @@ Template.emailQueueForm.events
     emailId = $(event.target).data('id')
     Meteor.call 'Backend.removeEmailQueue', emailId
 
-  'click [data-action="sendEmail"]': (event, template) ->
-    emailId = $(event.target).data('id')
-    content = previewEmail().content
-    Meteor.call 'Backend.sendEmailQueue', emailId, content
+Template.emailAllSend.helpers
+  'options': () ->
+    sel = {type: {$in: ['email','teamEmail']}}
+    l = _.uniq(StaticContent.find(sel).map((e) -> e.name))
+    _.map(l,(e) -> {label:e, value:e})
+
+Template.emailAllSend.events
+  'submit form': (event, template) ->
+    event.preventDefault()
+    templateName = $( "#templateName" ).val()
+    sel = {templateName:templateName, sent: false}
+    for email in EmailQueue.find(sel).fetch()
+      console.log "send email", getUserName(email.userId)
+      content = previewEmail(email)
+      Meteor.call 'Backend.sendEmailQueue', email._id, content.content

@@ -50,8 +50,17 @@ Template.volunteerAreaList.helpers
         label: (() -> TAPi18n.__("shifts")),
         tmpl: Template.volunteerShiftsRow,
         sortable: false
+      },
+      {
+        key: 'email',
+        label: (() -> TAPi18n.__("email")),
+        tmpl: Template.volunteerEmailRow,
+        sortable: false
       }
     ]
+
+Template.volunteerEmailRow.helpers
+  'emails': (userId) -> EmailQueue.find({userId:userId}).fetch()
 
 Template.volunteerShiftsRow.helpers
   'shifts': (userId) -> userInfo(userId).shifts
