@@ -3,24 +3,24 @@ emailLeads = (doc) ->
   console.log ["Queue emailLeads",doc]
   user = Meteor.users.findOne(doc.userId)
   sel = {userId: doc.userId, templateName:"emailLeads"}
-  # email =
-    # templateName: "emailLeads"
-    # userId: user._id
-    # sent: false
   mod = {$set: {sent: false}}
   EmailQueue.upsert(sel,mod)
 
 emailHelpers = (doc) ->
   console.log ["Queue emailHelpers",doc]
+  team = Teams.findOne(doc.teamId)
   crew = VolunteerCrew.findOne(doc.crewId)
   user = Meteor.users.findOne(crew.userId)
   sel = {userId: user._id, templateName:"emailHelpers"}
-  # email =
-    # templateName: "emailHelpers"
-    # userId: user._id
-    # sent: false
   mod = {$set: {sent: false}}
+  # first we send a generic mail as helper
   EmailQueue.upsert(sel,mod)
+  if team.emailTemplate
+    console.log "Queue Team Email"
+    sel = {userId: user._id, templateName:team.emailTemplate}
+    mod = {$set: {sent: false}}
+    # if the team specify a template, then we also send an email for the team
+    EmailQueue.upsert(sel,mod)
 
 Meteor.methods 'Volunteer.removeForm': (doc) ->
   console.log "Volunteer.removeForm"

@@ -108,6 +108,14 @@ Schemas.Teams = new SimpleSchema(
     type: String
     optional: true
     label: () -> TAPi18n.__("description")
+  emailTemplate:
+    type: String
+    optional: true
+    label: () -> TAPi18n.__("email_template")
+    autoform:
+      options: () ->
+        l = StaticContent.find({type: 'teamEmail'}).map((e) -> e.name)
+        _.map(_.uniq(l),(e) -> {label: e, value: e})
 )
 
 Teams.attachSchema(Schemas.Teams)
@@ -162,7 +170,7 @@ PerformanceType.attachSchema(Schemas.PerformanceType)
 
 @StaticContent = new Mongo.Collection 'staticContent'
 
-contentTypes = ["public","private","email"]
+contentTypes = ["public","private","email","teamEmail"]
 Schemas.StaticContent = new SimpleSchema(
   name:
     type: String

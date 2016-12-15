@@ -43,6 +43,13 @@ Meteor.methods 'Backend.updateTeam': (doc,formId) ->
   check(formId,String)
   if Roles.userIsInRole(Meteor.userId(), [ 'manager' ])
     Teams.update(formId,doc)
+    if doc['$set'].emailTemplate
+      for shift in VolunteerShift.find({teamId:formId}).fetch()
+        crew = VolunteerCrew.findOne(shift.crewId)
+        console.log "Enqueue email for ",crew.userId
+        sel = {userId: crew.userId, templateName:doc['$set'].emailTemplate}
+        mod = {$set: {sent: false}}
+        EmailQueue.upsert(sel,mod)
     formId
 
 Meteor.methods "Backend.saveTeams": () ->
