@@ -57,7 +57,7 @@ BaseController = RouteController.extend(
         Meteor.subscribe('volunteerCrewPublic'),
         Meteor.subscribe('userDataPublic'),
         Meteor.subscribe('volunteerForm'),
-        Meteor.subscribe('userData'),
+        # Meteor.subscribe('userData'),
       ]
 )
 
@@ -83,7 +83,6 @@ UserController.events 'click [data-action=logout]': ->
         Meteor.subscribe('volunteerCrew'),
         Meteor.subscribe('volunteerShiftPublic'),
         Meteor.subscribe('volunteerCrewPublic'),
-        Meteor.subscribe('userDataPublic'),
         Meteor.subscribe('volunteerForm'),
         Meteor.subscribe('userData'),
         Meteor.subscribe('emailQueue')

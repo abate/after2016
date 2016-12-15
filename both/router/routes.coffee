@@ -129,7 +129,7 @@ Router.route '/admin/volunteer/download',
   name: 'volunteersDownload'
   where: 'server'
   action: () ->
-    filename = 'users-bys.csv'
+    filename = 'users.csv'
     headers =
       'Content-type': 'text/csv',
       'Content-Disposition': "attachment; filename=" + filename
