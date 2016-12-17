@@ -22,6 +22,42 @@ userInfo = (userId) ->
       teamLeads: _.map(team.leads,(l) -> getUserName(l))
     )
 
+Template.volunteersDownloadShifts.helpers
+  'areas': () -> Areas.find().fetch()
+  'teams': (area) -> Teams.find({areaId:area._id}).fetch()
+  'volunteerTableSettings': (area,team) ->
+    l = VolunteerShift.find({areaId: area._id, teamId: team._id}).fetch()
+    ll = _.map(l,(s) ->
+      mstasrt = moment(s.start, "DD-MM-YYYY H:mm")
+      mend = moment(s.end, "DD-MM-YYYY H:mm")
+      crew = VolunteerCrew.findOne(s.crewId)
+      _.extend(s,
+        lead: _.contains(team.leads,crew.userId)
+        day: mstasrt.format("DD-MM-YYYY")
+        start: mstasrt.format("H:mm")
+        end: mend.format("H:mm")
+      )
+    )
+    collection: ({crewId:k, shifts:v} for k,v of _.groupBy(ll,"crewId"))
+    id: "VolunteerAreaCrewTableID"
+    class: "table table-condensed table-bordered table-hover"
+    showNavigation: 'never'
+    showRowCount: false
+    showFilter: false
+    fields: [
+      {
+        key: 'crewId',
+        label: (() -> TAPi18n.__("name"))
+        fn: (val,row,key) -> getUserName(VolunteerCrew.findOne(val).userId)
+      },
+      {
+        key: 'shifts',
+        label: (() -> TAPi18n.__("shifts")),
+        tmpl: Template.volunteerShiftsRowDownload,
+        sortable: false
+      },
+    ]
+
 Template.volunteerAreaList.helpers
   'volunteerAreaTableSettings': () ->
     collection: VolunteerCrew.find({areaId: this._id}).map((e) ->

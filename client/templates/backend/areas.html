@@ -39,8 +39,35 @@
   </div>
 </template>
 
+
+<template name="volunteersDownloadShifts">
+  {{#each area in areas}}
+    <div class="panel panel-default">
+      <div class="panel-heading">{{area.name}}</div>
+      <div class="panel-body">
+        {{#each team in (teams(area))}}
+          <h3>{{team.name}}</h3>
+          {{> reactiveTable settings=(volunteerTableSettings area team) }}
+        {{/each}}
+      </div>
+    </div>
+  {{/each}}
+</template>
+
+<template name="volunteerShiftsRowDownload">
+  <ul class="list-group">
+    {{#each shifts}}
+      <li class="list-group-item">
+        {{day}} {{start}} - {{end}} {{#if lead}}({{_ "lead"}}){{/if}}
+      </li>
+    {{/each}}
+  </ul>
+</template>
+
 <template name="volunteerAreaList">
-  {{> reactiveTable settings=volunteerAreaTableSettings }}
+  <div class="panel panel-default">
+    {{> reactiveTable settings=volunteerAreaTableSettings }}
+  </div>
 </template>
 
 <template name="volunteerShiftsRow">

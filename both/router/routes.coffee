@@ -125,6 +125,11 @@ Router.route '/admin/users',
   controller: 'AdminController'
   template: 'allUsersList'
 
+Router.route '/admin/volunteer/shifts',
+  name: 'volunteersDownloadiShifts'
+  controller: 'AdminController'
+  template: 'volunteersDownloadShifts'
+
 Router.route '/admin/volunteer/download',
   name: 'volunteersDownload'
   where: 'server'
